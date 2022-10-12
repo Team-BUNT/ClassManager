@@ -11,8 +11,15 @@ struct EnrollmentListView: View {
     let enrolledClass = Class(ID: "id1234", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, repetition: nil, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil)
     
     var body: some View {
-        VStack(spacing: 17) {
+        VStack(alignment: .leading, spacing: 17) {
             classBanner
+            VStack(alignment: .leading, spacing: 6) {
+                Text("신청내역")
+                    .fontWeight(.bold)
+            }
+            .padding(.leading, 24)
+            .padding(.trailing, 9)
+                
         }
         .navigationTitle(enrolledClass.title ?? "기본 타이틀")
         .navigationBarTitleDisplayMode(.inline)
