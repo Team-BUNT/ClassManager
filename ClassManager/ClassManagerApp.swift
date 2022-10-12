@@ -29,7 +29,7 @@ struct YourApp: App {
                 OnboardingMain()
             } else {
                 NavigationView {
-                    ContentView()
+                    ClassCalendarView()
                 }
             }
         }
