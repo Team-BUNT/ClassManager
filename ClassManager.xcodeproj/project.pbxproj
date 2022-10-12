@@ -102,12 +102,10 @@
 		C0552C2728F69541005D0E67 /* ClassManager */ = {
 			isa = PBXGroup;
 			children = (
-				C0552C5A28F69973005D0E67 /* Info.plist */,
-				C0552C5328F6965A005D0E67 /* GoogleService-Info.plist */,
+				C0552C5B28F699C8005D0E67 /* Config */,
 				C0552C2828F69541005D0E67 /* ClassManagerApp.swift */,
 				C0552C2A28F69541005D0E67 /* ContentView.swift */,
 				C0552C2C28F69542005D0E67 /* Assets.xcassets */,
-				C0552C2E28F69542005D0E67 /* ClassManager.entitlements */,
 				C0552C2F28F69542005D0E67 /* Preview Content */,
 			);
 			path = ClassManager;
@@ -136,6 +134,16 @@
 				C0552C4628F69542005D0E67 /* ClassManagerUITestsLaunchTests.swift */,
 			);
 			path = ClassManagerUITests;
+			sourceTree = "<group>";
+		};
+		C0552C5B28F699C8005D0E67 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				C0552C5A28F69973005D0E67 /* Info.plist */,
+				C0552C5328F6965A005D0E67 /* GoogleService-Info.plist */,
+				C0552C2E28F69542005D0E67 /* ClassManager.entitlements */,
+			);
+			name = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
