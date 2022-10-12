@@ -30,13 +30,13 @@ struct Toast: ViewModifier {
             if isShowing {
                 Group {
                     Text(message)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .foregroundColor(config.textColor)
                         .font(config.font)
-                        .padding(8)
+                        .padding(13)
                 }
                 .background(config.backgroundColor)
-                .cornerRadius(8)
+                .cornerRadius(10)
                 .onTapGesture {
                     isShowing = false
                 }
@@ -47,7 +47,7 @@ struct Toast: ViewModifier {
                 }
             }
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 20)
         .padding(.bottom, 18)
         .animation(config.animation, value: isShowing)
         .transition(config.transition)
@@ -63,7 +63,7 @@ struct Toast: ViewModifier {
         
         init(textColor: Color = .black,
              font: Font = .system(size: 16),
-             backgroundColor: Color = Color.black,
+             backgroundColor: Color = Color("Del"),
              duration: TimeInterval = Toast.short,
              transition: AnyTransition = .opacity,
              animation: Animation = .linear(duration: 0.3)) {
