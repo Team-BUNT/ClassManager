@@ -10,6 +10,19 @@ import SwiftUI
 struct EnrollmentListView: View {
     let enrolledClass = Class(ID: "id1234", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, repetition: nil, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil)
     
+    let dummyData = [
+        Enrollment(ID: "1", classID: "1", number: 1, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: false),
+        Enrollment(ID: "2", classID: "1", number: 2, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "3", classID: "1", number: 3, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "4", classID: "1", number: 4, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "5", classID: "1", number: 5, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "6", classID: "1", number: 6, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "7", classID: "1", number: 7, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "8", classID: "1", number: 8, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "9", classID: "1", number: 9, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+        Enrollment(ID: "10", classID: "1", number: 10, userName: "강지인", phoneNumber: "01012345678", enrolledDate: Date(), paid: true),
+    ]
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 17) {
             classBanner
