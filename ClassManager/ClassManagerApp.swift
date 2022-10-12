@@ -28,9 +28,7 @@ struct ClassManagerApp: App {
             if isOnboardingActive {
                 OnboardingMain()
             } else {
-                NavigationView {
-                    ClassCalendarView()
-                }
+                ClassCalendarView()
             }
         }
     }
