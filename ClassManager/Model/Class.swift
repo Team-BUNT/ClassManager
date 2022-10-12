@@ -14,7 +14,6 @@ struct Class: Codable {
     let instructorName: String?
     let date: Date?
     let durationMinute: Int?
-    let repetition: Int?
     let hall: Hall?
     let applicantsCount: Int?
 }
