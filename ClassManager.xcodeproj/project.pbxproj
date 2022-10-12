@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB2A426C28F6DF5600B314B9 /* Enrollment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2A426B28F6DF5600B314B9 /* Enrollment.swift */; };
 		C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0552C2828F69541005D0E67 /* ClassManagerApp.swift */; };
 		C0552C2D28F69542005D0E67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0552C2C28F69542005D0E67 /* Assets.xcassets */; };
 		C0552C3128F69542005D0E67 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0552C3028F69542005D0E67 /* Preview Assets.xcassets */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AB2A426B28F6DF5600B314B9 /* Enrollment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enrollment.swift; sourceTree = "<group>"; };
 		C0552C2528F69541005D0E67 /* ClassManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0552C2828F69541005D0E67 /* ClassManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManagerApp.swift; sourceTree = "<group>"; };
 		C0552C2C28F69542005D0E67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				C79E13BF28F6B1780010C4BA /* Class.swift */,
 				C79E13C128F6B2990010C4BA /* Hall.swift */,
 				C79E13C328F6B2BD0010C4BA /* Applicant.swift */,
+				AB2A426B28F6DF5600B314B9 /* Enrollment.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				C79E13D928F6BD540010C4BA /* Toast.swift in Sources */,
 				C79E13BC28F6AF8B0010C4BA /* Studio.swift in Sources */,
 				C79E13C928F6BBBC0010C4BA /* AddClassView.swift in Sources */,
+				AB2A426C28F6DF5600B314B9 /* Enrollment.swift in Sources */,
 				C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */,
 				C79E13CB28F6BC010010C4BA /* OnboardingView.swift in Sources */,
 				C79E13C428F6B2BD0010C4BA /* Applicant.swift in Sources */,
