@@ -14,7 +14,6 @@ struct OnboardingFirst: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Text("신청폼, 매번 고칠 필요 없어요.")
-
                 .font(.system(size: 24, weight: .semibold))
             Text("일정만 등록해도, 신청폼이 자동으로 업데이트")
                 .font(.system(size: 17, weight: .regular))
@@ -24,7 +23,9 @@ struct OnboardingFirst: View {
                 .padding()
             
             Button(action: {
-                mode = .second
+                withAnimation(.spring()) {
+                    mode = .second
+                }
             }, label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
