@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EnrollmentListView: View {
-    let enrolledClass = Class(ID: "id1234", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, repetition: nil, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil)
+    let enrolledClass = Class(ID: "id1234", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil)
     
     let dummyData = [
         Enrollment(ID: "1", classID: "1", number: 1, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: false),
