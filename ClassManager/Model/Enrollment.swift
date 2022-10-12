@@ -11,6 +11,8 @@ struct Enrollment {
     let ID: String
     let classID: String?
     let number: Int?
+    let userName: String?
+    let phoneNumber: String?
     let enrolledDate: Date?
     let paid: Bool?
 }
