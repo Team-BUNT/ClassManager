@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		378D4E1028F7147E0094F277 /* OnboardingFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E0F28F7147E0094F277 /* OnboardingFirst.swift */; };
+		378D4E1228F7148B0094F277 /* OnboardingSecond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E1128F7148B0094F277 /* OnboardingSecond.swift */; };
+		378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E1428F714990094F277 /* OnboardingMain.swift */; };
+		378D4E1828F719EF0094F277 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E1728F719EF0094F277 /* Color.swift */; };
 		C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0552C2828F69541005D0E67 /* ClassManagerApp.swift */; };
 		C0552C2B28F69541005D0E67 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0552C2A28F69541005D0E67 /* ContentView.swift */; };
 		C0552C2D28F69542005D0E67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0552C2C28F69542005D0E67 /* Assets.xcassets */; };
@@ -37,6 +41,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		378D4E0F28F7147E0094F277 /* OnboardingFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirst.swift; sourceTree = "<group>"; };
+		378D4E1128F7148B0094F277 /* OnboardingSecond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSecond.swift; sourceTree = "<group>"; };
+		378D4E1428F714990094F277 /* OnboardingMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMain.swift; sourceTree = "<group>"; };
+		378D4E1728F719EF0094F277 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		C0552C2528F69541005D0E67 /* ClassManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0552C2828F69541005D0E67 /* ClassManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManagerApp.swift; sourceTree = "<group>"; };
 		C0552C2A28F69541005D0E67 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,6 +87,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		378D4E0D28F714600094F277 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				378D4E0E28F714690094F277 /* Onboarding */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		378D4E0E28F714690094F277 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				378D4E0F28F7147E0094F277 /* OnboardingFirst.swift */,
+				378D4E1128F7148B0094F277 /* OnboardingSecond.swift */,
+				378D4E1428F714990094F277 /* OnboardingMain.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		378D4E1628F719E30094F277 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				378D4E1728F719EF0094F277 /* Color.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C0552C1C28F69541005D0E67 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +136,8 @@
 		C0552C2728F69541005D0E67 /* ClassManager */ = {
 			isa = PBXGroup;
 			children = (
+				378D4E1628F719E30094F277 /* Extensions */,
+				378D4E0D28F714600094F277 /* Views */,
 				C0552C5B28F699C8005D0E67 /* Config */,
 				C0552C2828F69541005D0E67 /* ClassManagerApp.swift */,
 				C0552C2A28F69541005D0E67 /* ContentView.swift */,
@@ -284,8 +320,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				378D4E1228F7148B0094F277 /* OnboardingSecond.swift in Sources */,
 				C0552C2B28F69541005D0E67 /* ContentView.swift in Sources */,
 				C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */,
+				378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */,
+				378D4E1028F7147E0094F277 /* OnboardingFirst.swift in Sources */,
+				378D4E1828F719EF0094F277 /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
