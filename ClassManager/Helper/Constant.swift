@@ -8,7 +8,7 @@
 import Foundation
 
 class Constant {
-    static let shared = Constants()
+    static let shared = Constant()
     
     var studio: Studio?
     var classes: [Class]?
