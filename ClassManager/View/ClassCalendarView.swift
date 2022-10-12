@@ -86,7 +86,6 @@ struct ClassCalendarView: View {
             classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
             }
         }
-        .padding(.top, -190)
     }
 }
 
