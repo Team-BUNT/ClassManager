@@ -113,6 +113,7 @@ struct AddClassView: View {
     }
     
     struct repetitionRow: View {
+        // TODO: 반복 옵션을 어떻게 해야할까
         let repetitionOptions = ["안함", "2회", "4회", "8회"]
 
         @Binding var repetition: Int

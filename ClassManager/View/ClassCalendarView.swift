@@ -10,64 +10,36 @@ import SwiftUI
 struct ClassCalendarView: View {
     @State var isShowingAddSheet = false
     @State var isShowingSaveToast = false
+    @State var isShowingLinkToast = false
     
-    @State private var date = Date()
-    @State var dummyClass = Class(
-        ID: "classID",
-        studioID: "studioID",
-        title: "팝업 클래스",
-        instructorName: "Narae",
-        date: Calendar.current.date(
-            from: DateComponents(year: 2022, month: 10, day: 14, hour: 20, minute: 0)
-        ),
-        durationMinute: 60,
-        hall: Hall(name: "Hall A", capacity: 40),
-        applicantsCount: 30
-    )
+    @State private var selectedDate = Date()
+    @State private var classesToday = [Class]()
+    
+    // TODO: 신청폼 링크 실제 데이터로 교체
+    let link = "https://this.is.sample.link"
     
     var body: some View {
         NavigationView {
             VStack {
-                DatePicker(
-                    "Pick a class date",
-                    selection: $date,
-                    displayedComponents: [.date]
-                )
-                .padding()
-                .datePickerStyle(.graphical)
-                .accentColor(Color("Del"))
-                .background(
-                    Color("Box"),
-                    in: RoundedRectangle(cornerRadius: 13)
-                ).padding(.bottom, 10)
-
+                DatePicker("", selection: $selectedDate, displayedComponents: [.date])
+                    .padding(16)
+                    .datePickerStyle(.graphical)
+                    .accentColor(Color("Del"))
+                    .background(RoundedRectangle(cornerRadius: 13).foregroundColor(Color("Box")))
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 10)
 
                 ScrollView {
-                    NavigationLink(
-                        destination: Text("asdf"),
-                        label: {
-                            ClassInfoBox(danceClass: $dummyClass)
-                        })
-                    Divider()
-
-                    NavigationLink(
-                        destination: Text("asdf"),
-                        label: {
-                            ClassInfoBox(danceClass: $dummyClass)
-                        })
-                    Divider()
-
-                    NavigationLink(
-                        destination: Text("asdf"),
-                        label: {
-                            ClassInfoBox(danceClass: $dummyClass)
-                        })
-                    Divider()
-
+                    ForEach(classesToday, id: \.self.ID) { danceClass in
+                        ClassInfoBox(danceClass: danceClass)
+                    }
                 }
+                .padding(.horizontal, 24)
+
                 Spacer()
             }
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
+            .toast(message: "신청폼 링크가 복사되었습니다", isShowing: $isShowingLinkToast, duration: Toast.short)
             .sheet(isPresented: $isShowingAddSheet) {
                 AddClassView(isShowingAddSheet: $isShowingAddSheet, isShowingToast: $isShowingSaveToast)
             }
@@ -77,16 +49,17 @@ struct ClassCalendarView: View {
                     Text("CLASS 관리")
                         .accessibilityAddTraits(.isHeader)
                 }
-                
+
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        print("링크 복사하기")
+                        UIPasteboard.general.string = link
+                        isShowingLinkToast.toggle()
                     } label: {
                         Image(systemName: "link")
                             .foregroundColor(.white)
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         isShowingAddSheet.toggle()
@@ -97,14 +70,23 @@ struct ClassCalendarView: View {
                 }
             }
         }
+        .onChange(of: selectedDate) { date in
+            if Constant.shared.classes != nil {
+                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            }
+        }
         .task {
             do {
+                // TODO: studioID 실제 데이터로 교체
                 Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: "SampleID")
                 Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: "SampleID")
             } catch {
                 print(error)
             }
+            classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
+            }
         }
+        .padding(.top, -190)
     }
 }
 
