@@ -72,13 +72,13 @@ struct EnrollmentListView: View {
                 .padding(.bottom, 6)
             HStack(spacing: 0) {
                 Text("No.")
-                    .padding(.trailing, 22)
+                    .padding(.trailing, 27)
                 Text("성명")
-                    .padding(.trailing, 44)
+                    .padding(.trailing, 47)
                 Text("연락처")
-                    .padding(.trailing, 41)
+                    .padding(.trailing, 38)
                 Text("신청시각")
-                    .padding(.trailing, 41)
+                    .padding(.trailing, 35)
                 Text("상태")
             }
             .padding(.bottom, 12)
