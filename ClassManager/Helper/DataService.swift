@@ -14,6 +14,7 @@ struct DataService {
     
     let studioRef = Firestore.firestore().collection("studios")
     let classRef = Firestore.firestore().collection("classes")
+    let linkRef = Firestore.firestore().collection("link")
     
     func createStudio(ID: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
         let studio = Studio(ID: ID, name: name, location: location, notice: notice, halls: halls)
@@ -48,12 +49,26 @@ struct DataService {
         return try? document.data(as: Studio.self)
     }
     
+    func requestAllClasses() async throws -> [Class]? {
+        let snapshot = try await classRef.getDocuments()
+        
+        return snapshot.documents.compactMap { document in
+            try? document.data(as: Class.self)
+        }
+    }
+    
     func requestAllClassesBy(studioID: String) async throws -> [Class]? {
         let snapshot = try await classRef.whereField("studioID", isEqualTo: studioID).getDocuments()
         
         return snapshot.documents.compactMap { document in
             try? document.data(as: Class.self)
         }
+    }
+    
+    func requestLink() async throws -> Link? {
+        let document = try await linkRef.document("sampleLink").getDocument()
+        
+        return try? document.data(as: Link.self)
     }
 }
 

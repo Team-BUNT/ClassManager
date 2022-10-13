@@ -16,7 +16,8 @@ struct ClassCalendarView: View {
     @State private var classesToday = [Class]()
     
     // TODO: 신청폼 링크 실제 데이터로 교체
-    let link = "https://this.is.sample.link"
+    @State var link = "https://this.is.sample.link"
+    @State var studioID = ""
     
     var body: some View {
         NavigationView {
@@ -83,9 +84,16 @@ struct ClassCalendarView: View {
         }
         .task {
             do {
-                // TODO: studioID 실제 데이터로 교체
-                Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: "aD9ZfkdxSYrHCJy8ts2n")
-                Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: "aD9ZfkdxSYrHCJy8ts2n")
+                // 임시 테스트 플라이트용 함수
+                let linkStruct = try await DataService.shared.requestLink()
+                if linkStruct != nil {
+                    link = linkStruct!.link!
+                    studioID = linkStruct!.studioID!
+                }
+                if !studioID.isEmpty {
+                    Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: studioID)
+                    Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: studioID)
+                }
             } catch {
                 print(error)
             }
