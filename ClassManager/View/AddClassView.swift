@@ -15,7 +15,7 @@ struct AddClassView: View {
     @State var title = ""
     @State var instructorName = ""
     
-    @State var date = Date()
+    @State var date: Date
     @State var duration = ""
     @State var repetition = 0
     @State var selectedHall = 0
@@ -58,7 +58,7 @@ struct AddClassView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if !title.isEmpty && !instructorName.isEmpty && !duration.isEmpty {
-                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: Int(duration) ?? 0, repetition: 1, hall: Constant.shared.studio?.halls?[selectedHall])
+                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: Int(duration) ?? 0, repetition: repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall])
                             isShowingAddSheet.toggle()
                             isShowingToast.toggle()
                         } else {
@@ -70,6 +70,16 @@ struct AddClassView: View {
                     }
                 }
             }
+        }
+    }
+    
+    func repetitionNumber(repetition: Int) -> Int {
+        switch repetition {
+        case 0: return 1
+        case 1: return 2
+        case 2: return 4
+        case 3: return 8
+        default: return 0
         }
     }
     
@@ -113,14 +123,13 @@ struct AddClassView: View {
     }
     
     struct repetitionRow: View {
-        // TODO: 반복 옵션을 어떻게 해야할까
-        let repetitionOptions = ["안함", "2회", "4회", "8회"]
+        let repetitionOptions = ["1회", "2회", "4회", "8회"]
 
         @Binding var repetition: Int
         
         var body: some View {
             HStack {
-                Text("반복")
+                Text("수업 횟수")
                 Picker("", selection: $repetition) {
                     ForEach(0 ..< repetitionOptions.count, id: \.self) {
                         Text(repetitionOptions[$0]).tag($0)
@@ -151,6 +160,6 @@ struct AddClassView: View {
 
 struct AddClassView_Previews: PreviewProvider {
     static var previews: some View {
-        AddClassView(isShowingAddSheet: .constant(true), isShowingToast: .constant(false))
+        AddClassView(isShowingAddSheet: .constant(true), isShowingToast: .constant(false), date: Date())
     }
 }

@@ -41,7 +41,7 @@ struct ClassCalendarView: View {
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
             .toast(message: "신청폼 링크가 복사되었습니다", isShowing: $isShowingLinkToast, duration: Toast.short)
             .sheet(isPresented: $isShowingAddSheet) {
-                AddClassView(isShowingAddSheet: $isShowingAddSheet, isShowingToast: $isShowingSaveToast)
+                AddClassView(isShowingAddSheet: $isShowingAddSheet, isShowingToast: $isShowingSaveToast, date: selectedDate)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -68,6 +68,11 @@ struct ClassCalendarView: View {
                             .foregroundColor(.white)
                     }
                 }
+            }
+        }
+        .onAppear {
+            if Constant.shared.classes != nil {
+                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .onChange(of: selectedDate) { date in

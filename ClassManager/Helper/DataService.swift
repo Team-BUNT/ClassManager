@@ -30,6 +30,11 @@ struct DataService {
                 let classDate = Calendar.current.date(byAdding: .day, value: idx * 7, to: date)
                 let classID = UUID().uuidString
                 let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0)
+                if Constant.shared.classes == nil {
+                    Constant.shared.classes = [Class]()
+                    
+                }
+                Constant.shared.classes!.append(danceClass)
                 try classRef.document("\(classID)").setData(from: danceClass)
             }
         } catch let error {
