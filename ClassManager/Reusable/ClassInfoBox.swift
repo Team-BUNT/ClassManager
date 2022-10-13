@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct ClassInfoBox: View {
-    @Binding var danceClass: Class
+    @State var danceClass: Class
+    
     var body: some View {
-        VStack {
+        VStack(spacing: 5) {
             HStack {
                 Text(danceClass.hall?.name ?? "연습실")
                     .font(.subheadline)
@@ -18,6 +19,7 @@ struct ClassInfoBox: View {
                 Spacer()
                 
                 Text(get24Hour(date: danceClass.date))
+                    .font(.subheadline)
             }
             
             HStack {
@@ -31,11 +33,14 @@ struct ClassInfoBox: View {
                 Spacer()
                 
                 Text(get24Hour(date: addMinute(date: danceClass.date, minute: danceClass.durationMinute)))
+                    .font(.subheadline)
             }
+            
+            Divider()
+                .padding(.top, 15)
         }
         .foregroundColor(.gray)
-        
-            
+        .padding(.top, 15)
     }
     
     // MARK: 24시간 형태로 시간을 반환

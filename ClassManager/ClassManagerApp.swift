@@ -18,7 +18,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 @main
-struct YourApp: App {
+struct ClassManagerApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @AppStorage("onboarding") var isOnboardingActive: Bool = true
@@ -28,9 +28,7 @@ struct YourApp: App {
             if isOnboardingActive {
                 OnboardingMain()
             } else {
-                NavigationView {
-                    ClassCalendarView()
-                }
+                ClassCalendarView()
             }
         }
     }
