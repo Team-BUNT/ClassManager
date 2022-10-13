@@ -67,7 +67,7 @@ struct AddClassView: View {
                         }
                     } label: {
                         Text("추가")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color("Del"))
                     }
                 }
             }

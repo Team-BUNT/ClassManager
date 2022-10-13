@@ -10,7 +10,7 @@ import SwiftUI
 struct Toast: ViewModifier {
     // these correspond to Android values f
     // or DURATION_SHORT and DURATION_LONG
-    static let short: TimeInterval = 2
+    static let short: TimeInterval = 1
     static let long: TimeInterval = 3.5
     
     let message: String
@@ -29,11 +29,15 @@ struct Toast: ViewModifier {
             Spacer()
             if isShowing {
                 Group {
-                    Text(message)
-                        .multilineTextAlignment(.leading)
-                        .foregroundColor(config.textColor)
-                        .font(config.font)
-                        .padding(13)
+                    HStack {
+                        Text(message)
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(config.textColor)
+                            .font(config.font)
+                            .padding(13)
+                        Spacer()
+                    }
+                    .frame(height: 50)
                 }
                 .background(config.backgroundColor)
                 .cornerRadius(10)
@@ -62,7 +66,7 @@ struct Toast: ViewModifier {
         let animation: Animation
         
         init(textColor: Color = .black,
-             font: Font = .system(size: 16),
+             font: Font = .system(size: 14, weight: .semibold),
              backgroundColor: Color = Color("Del"),
              duration: TimeInterval = Toast.short,
              transition: AnyTransition = .opacity,
