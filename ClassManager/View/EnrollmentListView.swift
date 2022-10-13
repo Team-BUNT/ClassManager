@@ -148,6 +148,9 @@ struct EnrollmentListView: View {
                     return
                 }
                 enrollmentList = documents.map { Enrollment(documentSnapShot: $0) }
+                    .sorted(by: {
+                        $0.enrolledDate ?? Date() > $1.enrolledDate ?? Date()
+                    })
             }
     }
 }
