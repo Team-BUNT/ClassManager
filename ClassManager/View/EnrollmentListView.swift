@@ -61,40 +61,41 @@ struct EnrollmentListView: View {
             Divider()
                 .padding(.trailing, 15)
                 .padding(.bottom, 6)
-            HStack(spacing: 0) {
+            HStack(spacing: 22) {
                 Text("No.")
-                    .padding(.trailing, 27)
+                    .frame(width: 27)
                 Text("성명")
-                    .padding(.trailing, 47)
+                    .frame(width: 50)
                 Text("연락처")
-                    .padding(.trailing, 38)
+                    .frame(width: 70)
                 Text("신청시각")
-                    .padding(.trailing, 35)
+                    .frame(width: 60)
                 Text("상태")
+                    .frame(width: 60)
             }
             .padding(.bottom, 12)
             tableRows
         }
+        .font(.system(size: 15))
     }
     
     var tableRows: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 20) {
                 ForEach(enrollmentList, id: \.ID) { enrollment in
-                    HStack(spacing: 0) {
+                    HStack(spacing: 22) {
                         Text("\(enrollment.number ?? 0)")
-                            .frame(width: 25)
-                            .padding(.trailing, 14)
+                            .frame(width: 27)
                         Text(enrollment.userName ?? "익명")
                             .frame(width: 50)
-                            .padding(.trailing, 27)
                         Text(getFormattedPhoneNumberString(from: enrollment.phoneNumber ?? "xxx-xxxx-xxxx"))
                             .multilineTextAlignment(.trailing)
-                            .padding(.trailing, 29)
+                            .frame(width: 70)
                         Text("\(getMinutesAgo(from: enrollment.enrolledDate))분 전")
-                            .padding(.trailing, 28)
+                            .frame(width: 60)
                         Text(getPaidStatusString(from: enrollment.paid))
                             .foregroundColor((enrollment.paid ?? false) ? Color("Del") : Color(uiColor: UIColor.label))
+                            .frame(width: 60)
                     }
                 }
             }
