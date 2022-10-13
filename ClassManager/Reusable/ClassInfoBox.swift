@@ -22,7 +22,7 @@ struct ClassInfoBox: View {
                     .font(.subheadline)
             }
             
-            HStack {
+            HStack(spacing: 3) {
                 Text(danceClass.instructorName ?? "댄서님")
                     .font(.custom(FontManager.Montserrat.semibold, size: 16))
                     .foregroundColor(.white)
