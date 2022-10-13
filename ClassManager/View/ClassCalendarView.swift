@@ -84,8 +84,8 @@ struct ClassCalendarView: View {
         .task {
             do {
                 // TODO: studioID 실제 데이터로 교체
-                Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: "SampleID")
-                Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: "SampleID")
+                Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: "aD9ZfkdxSYrHCJy8ts2n")
+                Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: "aD9ZfkdxSYrHCJy8ts2n")
             } catch {
                 print(error)
             }
