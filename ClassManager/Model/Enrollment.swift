@@ -33,7 +33,7 @@ struct Enrollment {
         self.number = documentSnapShot["number"] as? Int
         self.userName = documentSnapShot["userName"] as? String
         self.phoneNumber = documentSnapShot["phoneNumber"] as? String
-        self.enrolledDate = documentSnapShot["enrolledDate"] as? Date
+        self.enrolledDate = (documentSnapShot["enrolledDate"] as? Timestamp)!.dateValue()
         self.paid = documentSnapShot["paid"] as? Bool
     }
 }
