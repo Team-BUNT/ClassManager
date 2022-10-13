@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct Enrollment {
     let ID: String
@@ -15,4 +16,24 @@ struct Enrollment {
     let phoneNumber: String?
     let enrolledDate: Date?
     let paid: Bool?
+    
+    init(ID: String, classID: String?, number: Int?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?) {
+        self.ID = ID
+        self.classID = classID
+        self.number = number
+        self.userName = userName
+        self.phoneNumber = phoneNumber
+        self.enrolledDate = enrolledDate
+        self.paid = paid
+    }
+    
+    init(documentSnapShot: DocumentSnapshot) {
+        self.ID = documentSnapShot["ID"] as? String ?? ""
+        self.classID = documentSnapShot["classID"] as? String
+        self.number = documentSnapShot["number"] as? Int
+        self.userName = documentSnapShot["userName"] as? String
+        self.phoneNumber = documentSnapShot["phoneNumber"] as? String
+        self.enrolledDate = documentSnapShot["enrolledDate"] as? Date
+        self.paid = documentSnapShot["paid"] as? Bool
+    }
 }

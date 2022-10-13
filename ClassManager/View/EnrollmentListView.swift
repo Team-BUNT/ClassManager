@@ -6,22 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct EnrollmentListView: View {
-    let enrolledClass = Class(ID: "id1234", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil)
+    let enrolledClass: Class
     
-    let dummyData = [
-        Enrollment(ID: "1", classID: "1", number: 1, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: false),
-        Enrollment(ID: "2", classID: "1", number: 2, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date() - 60.0, paid: true),
-        Enrollment(ID: "3", classID: "1", number: 3, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date() - 120.0, paid: true),
-        Enrollment(ID: "4", classID: "1", number: 4, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-        Enrollment(ID: "5", classID: "1", number: 5, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-        Enrollment(ID: "6", classID: "1", number: 6, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-        Enrollment(ID: "7", classID: "1", number: 7, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-        Enrollment(ID: "8", classID: "1", number: 8, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-        Enrollment(ID: "9", classID: "1", number: 9, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-        Enrollment(ID: "10", classID: "1", number: 10, userName: "강지인", phoneNumber: "010-1234-5678", enrolledDate: Date(), paid: true),
-    ]
+    @State private var enrollmentList = [Enrollment]()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 17) {
@@ -37,6 +27,7 @@ struct EnrollmentListView: View {
         }
         .navigationTitle(enrolledClass.title ?? "기본 타이틀")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { attachListener() }
     }
     
     var classBanner: some View {
@@ -89,7 +80,7 @@ struct EnrollmentListView: View {
     var tableRows: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 20) {
-                ForEach(dummyData, id: \.ID) { enrollment in
+                ForEach(enrollmentList, id: \.ID) { enrollment in
                     HStack(spacing: 0) {
                         Text("\(enrollment.number ?? 0)")
                             .frame(width: 25)
@@ -148,12 +139,26 @@ struct EnrollmentListView: View {
         
         return paid ? "결제완료" : "결제대기"
     }
+    
+    private func attachListener() {
+        Firestore.firestore().collection("enrollment").whereField("classID", isEqualTo: enrolledClass.ID)
+            .addSnapshotListener { querySnapshot, error in
+                guard let documents = querySnapshot?.documents else {
+                    print("Error fetching documents: \(error!)")
+                    return
+                }
+                enrollmentList = documents.map { Enrollment(documentSnapShot: $0) }
+                    .sorted(by: {
+                        $0.enrolledDate ?? Date() > $1.enrolledDate ?? Date()
+                    })
+            }
+    }
 }
 
 struct EnrollmentListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            EnrollmentListView()
+            EnrollmentListView(enrolledClass: Class(ID: "07172CCF-CE6B-48EE-94F6-983CE4CF4185", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil))
         }
     }
 }
