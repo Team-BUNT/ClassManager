@@ -91,8 +91,16 @@ struct EnrollmentListView: View {
                         Text(getFormattedPhoneNumberString(from: enrollment.phoneNumber ?? "xxx-xxxx-xxxx"))
                             .multilineTextAlignment(.trailing)
                             .frame(width: 70)
-                        Text("\(getMinutesAgo(from: enrollment.enrolledDate))분 전")
-                            .frame(width: 60)
+                        if getMinutesAgo(from: enrollment.enrolledDate) < 60 {
+                            Text("\(getMinutesAgo(from: enrollment.enrolledDate))분 전")
+                                .frame(width: 60)
+                        } else if getMinutesAgo(from: enrollment.enrolledDate) / 60 < 24 {
+                            Text("\(getMinutesAgo(from: enrollment.enrolledDate) / 60)시간 전")
+                                .frame(width: 60)
+                        } else {
+                            Text("\(getMinutesAgo(from: enrollment.enrolledDate) / 1440)일 전")
+                                .frame(width: 60)
+                        }
                         Text(getPaidStatusString(from: enrollment.paid))
                             .foregroundColor((enrollment.paid ?? false) ? Color("Del") : Color(uiColor: UIColor.label))
                             .frame(width: 60)
