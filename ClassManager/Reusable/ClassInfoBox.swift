@@ -24,12 +24,11 @@ struct ClassInfoBox: View {
             
             HStack {
                 Text(danceClass.instructorName ?? "댄서님")
+                    .font(.custom(FontManager.Montserrat.semibold, size: 16))
                     .foregroundColor(.white)
-                    .fontWeight(.semibold)
                 Text("의 \(danceClass.title ?? "클래스")")
                     .foregroundColor(.white)
                     .font(.callout)
-                
                 Spacer()
                 
                 Text(get24Hour(date: addMinute(date: danceClass.date, minute: danceClass.durationMinute)))
@@ -39,7 +38,7 @@ struct ClassInfoBox: View {
             Divider()
                 .padding(.top, 15)
         }
-        .foregroundColor(.gray)
+        .foregroundColor(Color("Gray"))
         .padding(.top, 15)
     }
     

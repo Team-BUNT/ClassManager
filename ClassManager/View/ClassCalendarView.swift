@@ -47,6 +47,7 @@ struct ClassCalendarView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("CLASS 관리")
+                        .font(.custom(FontManager.Montserrat.semibold, size: 15))
                         .accessibilityAddTraits(.isHeader)
                 }
 

@@ -8,8 +8,7 @@
 import Foundation
 
 class FontManager {
-    struct Example {
-        static let regular = "regular"
-        static let bold = "bold"
+    struct Montserrat {
+        static let semibold = "Montserrat-SemiBold"
     }
 }

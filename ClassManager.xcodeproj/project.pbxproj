@@ -23,6 +23,7 @@
 		C0552C5428F6965A005D0E67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0552C5328F6965A005D0E67 /* GoogleService-Info.plist */; };
 		C0552C5728F69762005D0E67 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C0552C5628F69762005D0E67 /* FirebaseFirestore */; };
 		C0552C5928F69762005D0E67 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C0552C5828F69762005D0E67 /* FirebaseFirestoreSwift */; };
+		C701B4BB28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */; };
 		C79E13BC28F6AF8B0010C4BA /* Studio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BB28F6AF8B0010C4BA /* Studio.swift */; };
 		C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BD28F6B0DC0010C4BA /* Notice.swift */; };
 		C79E13C028F6B1780010C4BA /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BF28F6B1780010C4BA /* Class.swift */; };
@@ -74,6 +75,7 @@
 		C0552C4628F69542005D0E67 /* ClassManagerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManagerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C0552C5328F6965A005D0E67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C0552C5A28F69973005D0E67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		C79E13BB28F6AF8B0010C4BA /* Studio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Studio.swift; sourceTree = "<group>"; };
 		C79E13BD28F6B0DC0010C4BA /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		C79E13BF28F6B1780010C4BA /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 		C79E13D528F6BCE60010C4BA /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */,
 				C79E13D628F6BCFD0010C4BA /* FontManager.swift */,
 			);
 			path = Font;
@@ -369,6 +372,7 @@
 			files = (
 				C0552C3128F69542005D0E67 /* Preview Assets.xcassets in Resources */,
 				C0552C2D28F69542005D0E67 /* Assets.xcassets in Resources */,
+				C701B4BB28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf in Resources */,
 				C0552C5428F6965A005D0E67 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

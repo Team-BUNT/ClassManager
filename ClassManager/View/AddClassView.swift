@@ -45,6 +45,7 @@ struct AddClassView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("NEW CLASS")
+                        .font(.custom(FontManager.Montserrat.semibold, size: 15))
                         .accessibilityAddTraits(.isHeader)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
