@@ -29,7 +29,6 @@
 		C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BD28F6B0DC0010C4BA /* Notice.swift */; };
 		C79E13C028F6B1780010C4BA /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BF28F6B1780010C4BA /* Class.swift */; };
 		C79E13C228F6B2990010C4BA /* Hall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13C128F6B2990010C4BA /* Hall.swift */; };
-		C79E13C428F6B2BD0010C4BA /* Applicant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13C328F6B2BD0010C4BA /* Applicant.swift */; };
 		C79E13C728F6BBB00010C4BA /* ClassCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13C628F6BBB00010C4BA /* ClassCalendarView.swift */; };
 		C79E13C928F6BBBC0010C4BA /* AddClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13C828F6BBBC0010C4BA /* AddClassView.swift */; };
 		C79E13CB28F6BC010010C4BA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13CA28F6BC010010C4BA /* OnboardingView.swift */; };
@@ -82,7 +81,6 @@
 		C79E13BD28F6B0DC0010C4BA /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		C79E13BF28F6B1780010C4BA /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
 		C79E13C128F6B2990010C4BA /* Hall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hall.swift; sourceTree = "<group>"; };
-		C79E13C328F6B2BD0010C4BA /* Applicant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Applicant.swift; sourceTree = "<group>"; };
 		C79E13C628F6BBB00010C4BA /* ClassCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassCalendarView.swift; sourceTree = "<group>"; };
 		C79E13C828F6BBBC0010C4BA /* AddClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassView.swift; sourceTree = "<group>"; };
 		C79E13CA28F6BC010010C4BA /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -216,7 +214,6 @@
 				C79E13BD28F6B0DC0010C4BA /* Notice.swift */,
 				C79E13BF28F6B1780010C4BA /* Class.swift */,
 				C79E13C128F6B2990010C4BA /* Hall.swift */,
-				C79E13C328F6B2BD0010C4BA /* Applicant.swift */,
 				AB2A426B28F6DF5600B314B9 /* Enrollment.swift */,
 				C701B4BC28F8037200C94DE3 /* Link.swift */,
 			);
@@ -413,7 +410,6 @@
 				AB2A426C28F6DF5600B314B9 /* Enrollment.swift in Sources */,
 				C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */,
 				C79E13CB28F6BC010010C4BA /* OnboardingView.swift in Sources */,
-				C79E13C428F6B2BD0010C4BA /* Applicant.swift in Sources */,
 				AB2A427028F6E2D000B314B9 /* EnrollmentListView.swift in Sources */,
 				C79E13C228F6B2990010C4BA /* Hall.swift in Sources */,
 				C701B4BD28F8037200C94DE3 /* Link.swift in Sources */,
@@ -577,7 +573,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ClassManager/Preview Content\"";
-				DEVELOPMENT_TEAM = 4DC5UF7YA9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -620,7 +616,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ClassManager/Preview Content\"";
-				DEVELOPMENT_TEAM = 4DC5UF7YA9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
