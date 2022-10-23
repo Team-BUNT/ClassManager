@@ -14,19 +14,18 @@ struct EnrollmentListView: View {
     @State private var enrollmentList = [Enrollment]()
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 17) {
+        VStack(alignment: .leading, spacing: 23) {
             classBanner
-            VStack(alignment: .leading, spacing: 6) {
+                .padding(.top, 18)
+            VStack(alignment: .leading, spacing: 12) {
                 Text("신청내역")
                     .fontWeight(.bold)
                 table
             }
-            .padding(.leading, 24)
-            .padding(.trailing, 9)
-                
         }
         .navigationTitle(enrolledClass.title ?? "기본 타이틀")
         .navigationBarTitleDisplayMode(.inline)
+        .padding(.horizontal, 20)
         .onAppear { attachListener() }
     }
     
@@ -37,8 +36,10 @@ struct EnrollmentListView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text((enrolledClass.hall?.name ?? "기본") + " 홀")
+                        .font(.subheadline)
                     Spacer()
                     Text(enrolledClass.title ?? "기본 타이틀")
+                        .font(.callout)
                         .bold()
                 }
                 Spacer()
@@ -47,20 +48,19 @@ struct EnrollmentListView: View {
                     Spacer()
                     Text(getTimeString(from: (enrolledClass.date ?? Date()) + Double(enrolledClass.durationMinute ?? 0) * 60))
                 }
+                .font(.system(size: 15))
             }
             .padding(.top, 14)
             .padding(.bottom, 17)
-            .padding(.horizontal, 17)
+            .padding(.horizontal, 20)
         }
         .frame(height: 77)
-        .padding(.horizontal, 24)
     }
     
     var table: some View {
         VStack(alignment: .leading, spacing: 0) {
             Divider()
-                .padding(.trailing, 15)
-                .padding(.bottom, 6)
+                .padding(.bottom, 12)
             HStack(spacing: 22) {
                 Text("No.")
                     .frame(width: 27)
@@ -73,7 +73,7 @@ struct EnrollmentListView: View {
                 Text("상태")
                     .frame(width: 60)
             }
-            .padding(.bottom, 12)
+            .padding(.bottom, 20)
             tableRows
         }
         .font(.system(size: 15))
@@ -81,9 +81,9 @@ struct EnrollmentListView: View {
     
     var tableRows: some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 20) {
+            LazyVStack(spacing: 15) {
                 ForEach(enrollmentList, id: \.ID) { enrollment in
-                    HStack(spacing: 22) {
+                    HStack(alignment: .top, spacing: 22) {
                         Text("\(enrollment.number ?? 0)")
                             .frame(width: 27)
                         Text(enrollment.userName ?? "익명")
@@ -167,7 +167,7 @@ struct EnrollmentListView: View {
 struct EnrollmentListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            EnrollmentListView(enrolledClass: Class(ID: "07172CCF-CE6B-48EE-94F6-983CE4CF4185", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil))
+            EnrollmentListView(enrolledClass: Class(ID: "10725BA3-0919-47E1-A2F4-1433EF293055", studioID: "studio1111", title: "레이븐의 힙합 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: nil))
         }
     }
 }
