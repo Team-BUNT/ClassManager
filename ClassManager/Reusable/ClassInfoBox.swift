@@ -13,7 +13,7 @@ struct ClassInfoBox: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 5) {
-                Text(danceClass.hall?.name ?? "연습실")
+                Text("Hall \(danceClass.hall?.name ?? "A")")
                     .font(.subheadline)
                 
                 HStack(spacing: 3) {
