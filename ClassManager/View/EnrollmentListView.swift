@@ -89,7 +89,7 @@ struct EnrollmentListView: View {
                         Text(enrollment.userName ?? "익명")
                             .frame(width: 50)
                         Text(getFormattedPhoneNumberString(from: enrollment.phoneNumber ?? "xxx-xxxx-xxxx"))
-                            .multilineTextAlignment(.trailing)
+                            .multilineTextAlignment(.leading)
                             .frame(width: 70)
                         if getMinutesAgo(from: enrollment.enrolledDate) < 60 {
                             Text("\(getMinutesAgo(from: enrollment.enrolledDate))분 전")
