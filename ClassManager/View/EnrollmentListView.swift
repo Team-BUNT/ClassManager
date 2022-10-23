@@ -36,7 +36,7 @@ struct EnrollmentListView: View {
                 .foregroundColor(Color("Box"))
             HStack {
                 VStack(alignment: .leading) {
-                    Text(enrolledClass.hall?.name ?? "기본 홀")
+                    Text((enrolledClass.hall?.name ?? "기본") + " 홀")
                     Spacer()
                     Text(enrolledClass.title ?? "기본 타이틀")
                         .bold()
