@@ -101,7 +101,7 @@ struct EnrollmentListView: View {
                             .frame(width: 27)
                         Text(enrollment.userName ?? "익명")
                             .frame(width: 50)
-                        Text(getFormattedPhoneNumberString(from: enrollment.phoneNumber ?? "xxx-xxxx-xxxx"))
+                        Text(enrollment.phoneNumber ?? "xxx-xxxx-xxxx")
                             .multilineTextAlignment(.leading)
                             .frame(width: 70)
                         if getMinutesAgo(from: enrollment.enrolledDate) < 60 {
@@ -132,16 +132,6 @@ struct EnrollmentListView: View {
         } else {
             return "xx:xx"
         }
-    }
-    
-    private func getFormattedPhoneNumberString(from phoneNumber: String?) -> String {
-        guard let phoneNumber else {
-            return "xxx-xxxx-\nxxxx"
-        }
-        
-        let arr = phoneNumber.components(separatedBy: "-")
-        
-        return "\(arr[0])-\(arr[1])\n-\(arr[2])"
     }
     
     private func getMinutesAgo(from date: Date?) -> Int {
