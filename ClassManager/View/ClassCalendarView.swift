@@ -84,6 +84,11 @@ struct ClassCalendarView: View {
                 classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
+        .onChange(of: isShowingAddSheet) { _ in
+            if Constant.shared.classes != nil {
+                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            }
+        }
         .task {
             do {
                 // 임시 테스트 플라이트용 함수
