@@ -33,28 +33,27 @@ struct EnrollmentListView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 13, style: .circular)
                 .foregroundColor(Color("Box"))
-            HStack {
-                VStack(alignment: .leading) {
-                    Text((enrolledClass.hall?.name ?? "기본") + " 홀")
-                        .font(.subheadline)
-                    Spacer()
-                    Text(enrolledClass.title ?? "기본 타이틀")
-                        .font(.callout)
-                        .bold()
+            LazyVStack(alignment: .leading, spacing: 4) {
+                Text((enrolledClass.hall?.name ?? "기본") + " 홀")
+                    .foregroundColor(Color("Gray"))
+                    .font(.subheadline)
+                HStack(spacing: 0) {
+                    if let instructorName = enrolledClass.instructorName {
+                        Text("\(instructorName)")
+                            .fontWeight(.semibold)
+                    }
+                    if let title = enrolledClass.title {
+                        Text("의 \(title)")
+                    }
                 }
-                Spacer()
-                VStack {
-                    Text(getTimeString(from: enrolledClass.date))
-                    Spacer()
-                    Text(getTimeString(from: (enrolledClass.date ?? Date()) + Double(enrolledClass.durationMinute ?? 0) * 60))
-                }
-                .font(.system(size: 15))
+                Text("\(getTimeString(from: enrolledClass.date)) - \(getTimeString(from: (enrolledClass.date ?? Date()) + TimeInterval(enrolledClass.durationMinute ?? 0) * 60))")
+                    .foregroundColor(Color("Gray"))
+                    .font(.system(size: 15))
             }
-            .padding(.top, 14)
-            .padding(.bottom, 17)
+            .padding(.vertical, 16)
             .padding(.horizontal, 20)
         }
-        .frame(height: 77)
+        .frame(maxHeight: 106)
     }
     
     var table: some View {
@@ -162,12 +161,20 @@ struct EnrollmentListView: View {
                     })
             }
     }
+    
+    var classDescription: String {
+        guard let instructorName = enrolledClass.instructorName else {
+            return enrolledClass.title ?? "수업"
+        }
+        
+        return "\(instructorName)의 \(enrolledClass.title ?? "수업")"
+    }
 }
 
 struct EnrollmentListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            EnrollmentListView(enrolledClass: Class(ID: "10725BA3-0919-47E1-A2F4-1433EF293055", studioID: "studio1111", title: "레이븐의 힙합 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: nil))
+            EnrollmentListView(enrolledClass: Class(ID: "10725BA3-0919-47E1-A2F4-1433EF293055", studioID: "studio1111", title: "힙합 클래스", instructorName: "레이븐", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: nil))
         }
     }
 }
