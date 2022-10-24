@@ -65,9 +65,9 @@ struct Toast: ViewModifier {
         let transition: AnyTransition
         let animation: Animation
         
-        init(textColor: Color = .black,
+        init(textColor: Color = .white,
              font: Font = .system(size: 14, weight: .semibold),
-             backgroundColor: Color = Color("Del"),
+             backgroundColor: Color = Color("Toast"),
              duration: TimeInterval = Toast.short,
              transition: AnyTransition = .opacity,
              animation: Animation = .linear(duration: 0.3)) {

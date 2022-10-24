@@ -61,6 +61,7 @@ struct ClassCalendarView: View {
                     } label: {
                         Image(systemName: "link")
                             .foregroundColor(.white)
+                            .padding(.leading, 14)
                     }
                 }
 
@@ -70,6 +71,7 @@ struct ClassCalendarView: View {
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.white)
+                            .padding(.trailing, 14)
                     }
                 }
             }
