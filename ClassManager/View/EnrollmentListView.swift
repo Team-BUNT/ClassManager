@@ -12,6 +12,7 @@ struct EnrollmentListView: View {
     let enrolledClass: Class
     
     @State private var enrollmentList = [Enrollment]()
+    @Environment(\.presentationMode) private var presentationMode
     
     var body: some View {
         VStack(alignment: .leading, spacing: 23) {
@@ -27,6 +28,18 @@ struct EnrollmentListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .padding(.horizontal, 20)
         .onAppear { attachListener() }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.init(uiColor: .label))
+                }
+
+            }
+        }
     }
     
     var classBanner: some View {
