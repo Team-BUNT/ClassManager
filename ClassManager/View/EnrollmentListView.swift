@@ -85,6 +85,7 @@ struct EnrollmentListView: View {
                 Text("상태")
                     .frame(width: 60)
             }
+            .foregroundColor(Color("Gray"))
             .padding(.bottom, 20)
             tableRows
         }
@@ -93,7 +94,7 @@ struct EnrollmentListView: View {
     
     var tableRows: some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 15) {
+            LazyVStack(spacing: 16) {
                 ForEach(enrollmentList, id: \.ID) { enrollment in
                     HStack(alignment: .top, spacing: 22) {
                         Text("\(enrollment.number ?? 0)")
