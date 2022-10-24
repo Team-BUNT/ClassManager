@@ -29,7 +29,7 @@ struct DataService {
         do {
             for idx in 0..<repetition {
                 let classDate = Calendar.current.date(byAdding: .day, value: idx * 7, to: date)
-                let classID = UUID().uuidString
+                let classID = instructorName + dateIdString(from: classDate) // UUID().uuidString
                 let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0)
                 if Constant.shared.classes == nil {
                     Constant.shared.classes = [Class]()
@@ -69,6 +69,17 @@ struct DataService {
         let document = try await linkRef.document("sampleLink").getDocument()
         
         return try? document.data(as: Link.self)
+    }
+    
+    private func dateIdString(from date: Date?) -> String {
+        if let date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM-dd-HH:mm"
+            
+            return dateFormatter.string(from: date)
+        } else {
+            return "xx:xx"
+        }
     }
 }
 
