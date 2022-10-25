@@ -12,55 +12,67 @@ struct EnrollmentListView: View {
     let enrolledClass: Class
     
     @State private var enrollmentList = [Enrollment]()
+    @Environment(\.presentationMode) private var presentationMode
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 17) {
+        VStack(alignment: .leading, spacing: 23) {
             classBanner
-            VStack(alignment: .leading, spacing: 6) {
+                .padding(.top, 18)
+            VStack(alignment: .leading, spacing: 12) {
                 Text("신청내역")
                     .fontWeight(.bold)
                 table
             }
-            .padding(.leading, 24)
-            .padding(.trailing, 9)
-                
         }
         .navigationTitle(enrolledClass.title ?? "기본 타이틀")
         .navigationBarTitleDisplayMode(.inline)
+        .padding(.horizontal, 20)
         .onAppear { attachListener() }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.init(uiColor: .label))
+                }
+
+            }
+        }
     }
     
     var classBanner: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 13, style: .circular)
                 .foregroundColor(Color("Box"))
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(enrolledClass.hall?.name ?? "기본 홀")
-                    Spacer()
-                    Text(enrolledClass.title ?? "기본 타이틀")
-                        .bold()
+            LazyVStack(alignment: .leading, spacing: 4) {
+                Text((enrolledClass.hall?.name ?? "기본") + " 홀")
+                    .foregroundColor(Color("Gray"))
+                    .font(.subheadline)
+                HStack(spacing: 0) {
+                    if let instructorName = enrolledClass.instructorName {
+                        Text("\(instructorName)")
+                            .fontWeight(.semibold)
+                    }
+                    if let title = enrolledClass.title {
+                        Text("의 \(title)")
+                    }
                 }
-                Spacer()
-                VStack {
-                    Text(getTimeString(from: enrolledClass.date))
-                    Spacer()
-                    Text(getTimeString(from: (enrolledClass.date ?? Date()) + Double(enrolledClass.durationMinute ?? 0) * 60))
-                }
+                Text("\(getTimeString(from: enrolledClass.date)) - \(getTimeString(from: (enrolledClass.date ?? Date()) + TimeInterval(enrolledClass.durationMinute ?? 0) * 60))")
+                    .foregroundColor(Color("Gray"))
+                    .font(.system(size: 15))
             }
-            .padding(.top, 14)
-            .padding(.bottom, 17)
-            .padding(.horizontal, 17)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 20)
         }
-        .frame(height: 77)
-        .padding(.horizontal, 24)
+        .frame(maxHeight: 106)
     }
     
     var table: some View {
         VStack(alignment: .leading, spacing: 0) {
             Divider()
-                .padding(.trailing, 15)
-                .padding(.bottom, 6)
+                .padding(.bottom, 12)
             HStack(spacing: 22) {
                 Text("No.")
                     .frame(width: 27)
@@ -73,7 +85,8 @@ struct EnrollmentListView: View {
                 Text("상태")
                     .frame(width: 60)
             }
-            .padding(.bottom, 12)
+            .foregroundColor(Color("Gray"))
+            .padding(.bottom, 20)
             tableRows
         }
         .font(.system(size: 15))
@@ -81,15 +94,15 @@ struct EnrollmentListView: View {
     
     var tableRows: some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 20) {
+            LazyVStack(spacing: 16) {
                 ForEach(enrollmentList, id: \.ID) { enrollment in
-                    HStack(spacing: 22) {
+                    HStack(alignment: .top, spacing: 22) {
                         Text("\(enrollment.number ?? 0)")
                             .frame(width: 27)
                         Text(enrollment.userName ?? "익명")
                             .frame(width: 50)
-                        Text(getFormattedPhoneNumberString(from: enrollment.phoneNumber ?? "xxx-xxxx-xxxx"))
-                            .multilineTextAlignment(.trailing)
+                        Text(enrollment.phoneNumber ?? "xxx-xxxx-xxxx")
+                            .multilineTextAlignment(.leading)
                             .frame(width: 70)
                         if getMinutesAgo(from: enrollment.enrolledDate) < 60 {
                             Text("\(getMinutesAgo(from: enrollment.enrolledDate))분 전")
@@ -121,16 +134,6 @@ struct EnrollmentListView: View {
         }
     }
     
-    private func getFormattedPhoneNumberString(from phoneNumber: String?) -> String {
-        guard let phoneNumber else {
-            return "xxx-xxxx-\nxxxx"
-        }
-        
-        let arr = phoneNumber.components(separatedBy: "-")
-        
-        return "\(arr[0])-\(arr[1])\n-\(arr[2])"
-    }
-    
     private func getMinutesAgo(from date: Date?) -> Int {
         guard let date else {
             return 0
@@ -158,16 +161,28 @@ struct EnrollmentListView: View {
                 }
                 enrollmentList = documents.map { Enrollment(documentSnapShot: $0) }
                     .sorted(by: {
-                        $0.enrolledDate ?? Date() > $1.enrolledDate ?? Date()
+                        if $0.paid ?? false != $1.paid ?? false {
+                            return $0.paid == false
+                        }
+                        
+                        return $0.number ?? 0 > $1.number ?? 0
                     })
             }
+    }
+    
+    var classDescription: String {
+        guard let instructorName = enrolledClass.instructorName else {
+            return enrolledClass.title ?? "수업"
+        }
+        
+        return "\(instructorName)의 \(enrolledClass.title ?? "수업")"
     }
 }
 
 struct EnrollmentListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            EnrollmentListView(enrolledClass: Class(ID: "07172CCF-CE6B-48EE-94F6-983CE4CF4185", studioID: "studio1111", title: "Narae의 팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "Hall A", capacity: 30), applicantsCount: nil))
+            EnrollmentListView(enrolledClass: Class(ID: "10725BA3-0919-47E1-A2F4-1433EF293055", studioID: "studio1111", title: "힙합 클래스", instructorName: "레이븐", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: nil))
         }
     }
 }
