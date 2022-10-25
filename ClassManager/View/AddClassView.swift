@@ -31,8 +31,8 @@ struct AddClassView: View {
                 .onTapGesture { hideKeyboard() }
                 
                 Section {
-                    startDateRow(date: $date)
-                    durationRow(tenTimesDuration: $tenTimesDuration)
+                    StartDateRow(date: $date)
+                    DurationRow(tenTimesDuration: $tenTimesDuration)
                 }
                 .onTapGesture { hideKeyboard() }
                 
@@ -106,15 +106,12 @@ struct AddClassView: View {
         @Binding var value: String
         
         var body: some View {
-            TextField("", text: $value)
+            TextField(label, text: $value)
                 .textInputAutocapitalization(.never)
-                .placeholder(when: value.isEmpty) {
-                    Text(label).foregroundColor(.gray)
-                }
         }
     }
     
-    struct startDateRow: View {
+    struct StartDateRow: View {
         @Binding var date: Date
         
         var body: some View {
@@ -127,9 +124,9 @@ struct AddClassView: View {
         }
     }
     
-    struct durationRow: View {
-//        @Binding var duration: String
+    struct DurationRow: View {
         @Binding var tenTimesDuration: Int
+        
         var body: some View {
             HStack {
                 Text("시간")
@@ -186,20 +183,6 @@ struct AddClassView: View {
             }
         }
     }
-}
-
-//MARK: TextField의 placeholder를 커스텀 해준다.
-extension View {
-    func placeholder<Content: View>(
-        when shouldShow: Bool,
-        alignment: Alignment = .leading,
-        @ViewBuilder placeholder: () -> Content) -> some View {
-            
-            ZStack(alignment: alignment) {
-                placeholder().opacity(shouldShow ? 1 : 0)
-                self
-            }
-        }
 }
 
 //MARK: 키보드를 내리는 메소드. View에서 사용하기 위함
