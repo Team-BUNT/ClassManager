@@ -47,7 +47,7 @@ struct EnrollmentListView: View {
             RoundedRectangle(cornerRadius: 13, style: .circular)
                 .foregroundColor(Color("Box"))
             LazyVStack(alignment: .leading, spacing: 4) {
-                Text((enrolledClass.hall?.name ?? "기본") + " 홀")
+                Text("Hall " + (enrolledClass.hall?.name ?? "A"))
                     .foregroundColor(Color("Gray"))
                     .font(.subheadline)
                 HStack(spacing: 0) {
@@ -94,7 +94,7 @@ struct EnrollmentListView: View {
     
     var tableRows: some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 16) {
+            LazyVStack(spacing: 18) {
                 ForEach(enrollmentList, id: \.ID) { enrollment in
                     HStack(alignment: .top, spacing: 22) {
                         Text("\(enrollment.number ?? 0)")
