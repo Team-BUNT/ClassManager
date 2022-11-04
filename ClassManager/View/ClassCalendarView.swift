@@ -43,7 +43,7 @@ struct ClassCalendarView: View {
             }
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
             .toast(message: "신청폼 링크가 복사되었습니다", isShowing: $isShowingLinkToast, duration: Toast.short)
-            .sheet(isPresented: $isShowingAddSheet) {
+            .fullScreenCover(isPresented: $isShowingAddSheet) {
                 AddClassView(isShowingAddSheet: $isShowingAddSheet, isShowingToast: $isShowingSaveToast, date: selectedDate)
             }
             .navigationBarTitleDisplayMode(.inline)
