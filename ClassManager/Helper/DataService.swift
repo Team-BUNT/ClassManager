@@ -34,7 +34,6 @@ struct DataService {
                 let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0)
                 if Constant.shared.classes == nil {
                     Constant.shared.classes = [Class]()
-                    
                 }
                 Constant.shared.classes!.append(danceClass)
                 try classRef.document("\(classID)").setData(from: danceClass)
@@ -77,6 +76,18 @@ struct DataService {
         
         return snapshot.documents.compactMap { document in
             try? document.data(as: Enrollment.self)
+        }
+    }
+    
+    func updateAttendance(enrollments: [Enrollment]) {
+        enrollments.forEach { enrollment in
+            enrollmentRef.document("\(enrollment.ID)").updateData([
+                "attendance": enrollment.attendance ?? false
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
         }
     }
     

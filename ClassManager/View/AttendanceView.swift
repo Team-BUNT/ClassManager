@@ -33,7 +33,9 @@ struct AttendanceView: View {
                 enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
                 enrollments = enrollments.filter( { $0.paid ?? false } )
                 sortEnrollments()
-                print(enrollments)
+                if attendanceCount() == enrollments.count {
+                    isAllChecked = true
+                }
             } catch {
                 print(error)
             }
@@ -92,7 +94,8 @@ struct AttendanceView: View {
                 saveButton
                     .padding(.trailing, 20)
                     .onTapGesture {
-                        // TODO: Update attendance status to firebase
+                        // TODO: Toast message or something
+                        DataService.shared.updateAttendance(enrollments: enrollments)
                     }
             }
             .font(.montserrat(.semibold, size: 15))
@@ -164,7 +167,6 @@ struct AttendanceView: View {
                     }
                     .frame(width: (geometry.size.width - 30) * columnRatio[3])
                     .onTapGesture {
-                        // TODO: Change all attendance status
                         isAllChecked.toggle()
                         if isAllChecked {
                             allChecked()
@@ -195,6 +197,11 @@ struct AttendanceView: View {
                         .onTapGesture {
                             enrollment.attendance?.toggle()
                             enrollments = enrollments.map { $0 }
+                            if attendanceCount() == enrollments.count {
+                                isAllChecked = true
+                            } else {
+                                isAllChecked = false
+                            }
                         }
                             .frame(width: (geometry.size.width - 30) * columnRatio[3])
                     }
