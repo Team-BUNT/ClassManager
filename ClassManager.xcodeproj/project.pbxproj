@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		11039A4828F6F9B80056F6F1 /* ClassInfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11039A4728F6F9B80056F6F1 /* ClassInfoBox.swift */; };
+		11EBAFBC2914FE4000286AFE /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EBAFBB2914FE4000286AFE /* Font.swift */; };
 		378D4E1028F7147E0094F277 /* OnboardingFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E0F28F7147E0094F277 /* OnboardingFirst.swift */; };
 		378D4E1228F7148B0094F277 /* OnboardingSecond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E1128F7148B0094F277 /* OnboardingSecond.swift */; };
 		378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D4E1428F714990094F277 /* OnboardingMain.swift */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		11039A4728F6F9B80056F6F1 /* ClassInfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassInfoBox.swift; sourceTree = "<group>"; };
+		11EBAFBB2914FE4000286AFE /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		378D4E0F28F7147E0094F277 /* OnboardingFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirst.swift; sourceTree = "<group>"; };
 		378D4E1128F7148B0094F277 /* OnboardingSecond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSecond.swift; sourceTree = "<group>"; };
 		378D4E1428F714990094F277 /* OnboardingMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMain.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				378D4E1728F719EF0094F277 /* Color.swift */,
+				11EBAFBB2914FE4000286AFE /* Font.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -410,6 +413,7 @@
 				AB2A426C28F6DF5600B314B9 /* Enrollment.swift in Sources */,
 				C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */,
 				C79E13CB28F6BC010010C4BA /* OnboardingView.swift in Sources */,
+				11EBAFBC2914FE4000286AFE /* Font.swift in Sources */,
 				AB2A427028F6E2D000B314B9 /* EnrollmentListView.swift in Sources */,
 				C79E13C228F6B2990010C4BA /* Hall.swift in Sources */,
 				C701B4BD28F8037200C94DE3 /* Link.swift in Sources */,
