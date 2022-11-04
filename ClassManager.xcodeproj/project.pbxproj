@@ -26,6 +26,7 @@
 		C0552C5928F69762005D0E67 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C0552C5828F69762005D0E67 /* FirebaseFirestoreSwift */; };
 		C701B4BB28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */; };
 		C701B4BD28F8037200C94DE3 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = C701B4BC28F8037200C94DE3 /* Link.swift */; };
+		C76DC5FA291500DC004E5894 /* AttendanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5F9291500DC004E5894 /* AttendanceView.swift */; };
 		C79E13BC28F6AF8B0010C4BA /* Studio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BB28F6AF8B0010C4BA /* Studio.swift */; };
 		C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BD28F6B0DC0010C4BA /* Notice.swift */; };
 		C79E13C028F6B1780010C4BA /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BF28F6B1780010C4BA /* Class.swift */; };
@@ -79,6 +80,7 @@
 		C0552C5A28F69973005D0E67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		C701B4BC28F8037200C94DE3 /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
+		C76DC5F9291500DC004E5894 /* AttendanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceView.swift; sourceTree = "<group>"; };
 		C79E13BB28F6AF8B0010C4BA /* Studio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Studio.swift; sourceTree = "<group>"; };
 		C79E13BD28F6B0DC0010C4BA /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		C79E13BF28F6B1780010C4BA /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				C79E13C828F6BBBC0010C4BA /* AddClassView.swift */,
 				C79E13CA28F6BC010010C4BA /* OnboardingView.swift */,
 				AB2A426F28F6E2D000B314B9 /* EnrollmentListView.swift */,
+				C76DC5F9291500DC004E5894 /* AttendanceView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 				378D4E1228F7148B0094F277 /* OnboardingSecond.swift in Sources */,
 				C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */,
 				378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */,
+				C76DC5FA291500DC004E5894 /* AttendanceView.swift in Sources */,
 				378D4E1028F7147E0094F277 /* OnboardingFirst.swift in Sources */,
 				378D4E1828F719EF0094F277 /* Color.swift in Sources */,
 				C79E13D928F6BD540010C4BA /* Toast.swift in Sources */,
