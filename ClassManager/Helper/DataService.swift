@@ -85,7 +85,7 @@ struct DataService {
 
 extension DataService {
     struct DummyData {
-        static let notice = Notice(imageURL: "dummyimageURL", description: "sampledescription")
+        static let notice = Notice(imageURL: "dummyimageURL", description: "sampledescription", bankAccount: nil)
         static let halls = [Hall(name: "hall A", capacity: 20), Hall(name: "hall B", capacity: 40)]
         static let hall = Hall(name: "hall A", capacity: 20)
     }

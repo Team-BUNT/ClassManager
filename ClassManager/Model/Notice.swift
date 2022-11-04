@@ -10,4 +10,5 @@ import Foundation
 struct Notice: Codable {
     let imageURL: String?
     let description: String?
+    let bankAccount: String?
 }

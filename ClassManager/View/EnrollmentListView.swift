@@ -97,7 +97,7 @@ struct EnrollmentListView: View {
             LazyVStack(spacing: 18) {
                 ForEach(enrollmentList, id: \.ID) { enrollment in
                     HStack(alignment: .top, spacing: 22) {
-                        Text("\(enrollment.number ?? 0)")
+                        Text("0")
                             .frame(width: 27)
                         Text(enrollment.userName ?? "익명")
                             .frame(width: 50)
@@ -160,13 +160,6 @@ struct EnrollmentListView: View {
                     return
                 }
                 enrollmentList = documents.map { Enrollment(documentSnapShot: $0) }
-                    .sorted(by: {
-                        if $0.paid ?? false != $1.paid ?? false {
-                            return $0.paid == false
-                        }
-                        
-                        return $0.number ?? 0 > $1.number ?? 0
-                    })
             }
     }
     
