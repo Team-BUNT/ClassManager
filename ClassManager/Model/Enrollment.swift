@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 
-struct Enrollment {
+struct Enrollment: Codable {
     let ID: String
     let classID: String?
     let userName: String?
@@ -16,10 +16,10 @@ struct Enrollment {
     let enrolledDate: Date?
     var paid: Bool?
     let paymentType: String?
-    let attendence: Bool?
+    let attendance: Bool?
     let info: String?
     
-    init(ID: String, classID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendence: Bool? = nil, info: String? = nil) {
+    init(ID: String, classID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil) {
         self.ID = ID
         self.classID = classID
         self.userName = userName
@@ -27,7 +27,7 @@ struct Enrollment {
         self.enrolledDate = enrolledDate
         self.paid = paid
         self.paymentType = paymentType
-        self.attendence = attendence
+        self.attendance = attendance
         self.info = info
     }
     
@@ -39,7 +39,7 @@ struct Enrollment {
         self.enrolledDate = (documentSnapShot["enrolledDate"] as? Timestamp)?.dateValue() ?? Date()
         self.paid = documentSnapShot["paid"] as? Bool
         self.paymentType = documentSnapShot["paymentType"] as? String
-        self.attendence = documentSnapShot["attendence"] as? Bool
+        self.attendance = documentSnapShot["attendance"] as? Bool
         self.info = documentSnapShot["info"] as? String
     }
 }

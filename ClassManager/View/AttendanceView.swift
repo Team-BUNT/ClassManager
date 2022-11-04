@@ -13,6 +13,8 @@ struct AttendanceView: View {
     @State var isPresentingConfirm = false
     @State var isAllChecked = false
     
+    @State var enrollments = [Enrollment]()
+    
     let columnRatio: [Double] = [5/32, 7/32, 7/16, 3/16]
     
     var body: some View {
@@ -27,7 +29,13 @@ struct AttendanceView: View {
         }
         .navigationTitle("출석부")
         .task {
-            // TODO: Fetch enrollments
+            do {
+                enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
+                enrollments = enrollments.filter( { $0.paid ?? false } )
+                print(enrollments)
+            } catch {
+                print(error)
+            }
         }
     }
     
@@ -82,7 +90,7 @@ struct AttendanceView: View {
                 Spacer()
                 saveButton
                     .onTapGesture {
-                        // TODO: Update attendance status
+                        // TODO: Update attendance status to firebase
                     }
             }
             .font(.montserrat(.semibold, size: 15))
@@ -100,12 +108,12 @@ struct AttendanceView: View {
             HStack(spacing: 0) {
                 Text("출석 ")
                     .font(.system(size: 15))
-                Text("11")
+                Text("\(attendanceCount())")
             }
             HStack(spacing: 0) {
                 Text("미출석 ")
                     .font(.system(size: 15))
-                Text("5")
+                Text("\(enrollments.count - attendanceCount())")
             }
             .foregroundColor(Color("Accent"))
         }
@@ -155,6 +163,7 @@ struct AttendanceView: View {
                     }
                     .frame(width: (geometry.size.width - 30) * columnRatio[3])
                     .onTapGesture {
+                        // TODO: Change attendance status
                         isAllChecked.toggle()
                     }
                 }
@@ -173,6 +182,17 @@ struct AttendanceView: View {
         Image(systemName: "square")
             .font(.system(size: 20))
             .foregroundColor(Color("CheckGray"))
+    }
+    
+    private func attendanceCount() -> Int {
+        if enrollments.count > 0 {
+            var count = 0
+            enrollments.forEach { enrollment in
+                if enrollment.attendance ?? false { count += 1 }
+            }
+            return count
+        }
+        return 0
     }
 }
 
