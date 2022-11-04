@@ -12,6 +12,8 @@ struct AttendanceView: View {
     
     @State var isPresentingConfirm = false
     @State var isAllChecked = false
+    @State var isShowingFailAlert = false
+    @State var isShowingDeleteAlert = false
     
     @State var enrollments = [Enrollment]()
     
@@ -29,6 +31,19 @@ struct AttendanceView: View {
             .padding(20)
             .foregroundColor(.white)
         }
+        .alert("삭제하기", isPresented: $isShowingFailAlert, actions: {
+            Button("확인", role: .cancel) {}
+        }, message: {
+            Text("수강생이 있어 삭제가 불가능합니다.\n‘휴강하기’를 선택해주세요.")
+        })
+        .alert("삭제하기", isPresented: $isShowingDeleteAlert, actions: {
+            Button("취소", role: .cancel) {}
+            Button("확인", role: .destructive) {
+                // TODO: Remove this class
+            }
+        }, message: {
+            Text("클래스를 삭제하시겠습니까?")
+        })
         .navigationTitle("출석부")
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -74,10 +89,14 @@ struct AttendanceView: View {
                                 // TODO: Push EditClassView
                             }
                             Button("삭제하기", role: .none) {
-                                // TODO: Remove this class
+                                if enrollments.count > 0 {
+                                    isShowingFailAlert = true
+                                } else {
+                                    isShowingDeleteAlert = true
+                                }
                             }
                             Button("휴강하기", role: .destructive) {
-                                // TODO: Make this class suspended
+                                // TODO: Push SuspendView
                             }
                         }
                 }
