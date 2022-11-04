@@ -32,6 +32,7 @@ struct AttendanceView: View {
             do {
                 enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
                 enrollments = enrollments.filter( { $0.paid ?? false } )
+                sortEnrollments()
                 print(enrollments)
             } catch {
                 print(error)
@@ -89,6 +90,7 @@ struct AttendanceView: View {
                 attendanceStatus
                 Spacer()
                 saveButton
+                    .padding(.trailing, 20)
                     .onTapGesture {
                         // TODO: Update attendance status to firebase
                     }
@@ -153,7 +155,6 @@ struct AttendanceView: View {
                         .frame(width: (geometry.size.width - 30) * columnRatio[1])
                     Text("")
                         .frame(width: (geometry.size.width - 30) * columnRatio[2])
-                    
                     ZStack {
                         if isAllChecked {
                             boxChecked
@@ -163,9 +164,41 @@ struct AttendanceView: View {
                     }
                     .frame(width: (geometry.size.width - 30) * columnRatio[3])
                     .onTapGesture {
-                        // TODO: Change attendance status
+                        // TODO: Change all attendance status
                         isAllChecked.toggle()
+                        if isAllChecked {
+                            allChecked()
+                        } else {
+                            allUnchecked()
+                        }
                     }
+                }
+                
+                ForEach(Array(enrollments.enumerated()), id: \.offset) { index, enrollment in
+                    HStack(spacing: 10) {
+                        Text("\(index + 1)")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[0])
+                            .font(.montserrat(.semibold, size: 15))
+                        Text(enrollment.userName ?? "")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[1])
+                        Text(enrollment.phoneNumber ?? "")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[2])
+                            .font(.montserrat(.semibold, size: 15))
+                        ZStack {
+                            if enrollment.attendance ?? false {
+                                boxChecked
+                            } else {
+                                boxUnchecked
+                            }
+                        }
+                        .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                        .onTapGesture {
+                            enrollment.attendance?.toggle()
+                            enrollments = enrollments.map { $0 }
+                        }
+                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                    }
+                    .font(.system(size: 15))
                 }
             }
             .padding(.top, 20)
@@ -193,6 +226,22 @@ struct AttendanceView: View {
             return count
         }
         return 0
+    }
+    
+    private func allChecked() {
+        enrollments.forEach { enrollment in
+            enrollment.attendance = true
+        }
+    }
+    
+    private func allUnchecked() {
+        enrollments.forEach { enrollment in
+            enrollment.attendance = false
+        }
+    }
+    
+    private func sortEnrollments() {
+        enrollments.sort(by: { $0.enrolledDate ?? Date() < $1.enrolledDate ?? Date() })
     }
 }
 

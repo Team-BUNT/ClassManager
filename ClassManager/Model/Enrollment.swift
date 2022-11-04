@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 
-struct Enrollment: Codable {
+class Enrollment: Codable {
     let ID: String
     let classID: String?
     let userName: String?
@@ -16,7 +16,7 @@ struct Enrollment: Codable {
     let enrolledDate: Date?
     var paid: Bool?
     let paymentType: String?
-    let attendance: Bool?
+    var attendance: Bool?
     let info: String?
     
     init(ID: String, classID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil) {
