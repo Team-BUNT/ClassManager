@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SuspendView: View {
+    let currentClass: Class
+    
     @Environment(\.presentationMode) private var presentationMode
     
     @State var selectedReason = ""
@@ -70,13 +72,9 @@ struct SuspendView: View {
         .onAppear {
             UITextView.appearance().backgroundColor = .clear
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle("휴강 사유")
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("휴강 사유")
-                    .font(.system(size: 16))
-                    .accessibilityAddTraits(.isHeader)
-            }
-            
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     presentationMode.wrappedValue.dismiss()
@@ -109,11 +107,5 @@ struct SuspendView: View {
     var unselected: some View {
         Image(systemName: "circle")
             .foregroundColor(Color("Radio"))
-    }
-}
-
-struct SuspendView_Previews: PreviewProvider {
-    static var previews: some View {
-        SuspendView()
     }
 }

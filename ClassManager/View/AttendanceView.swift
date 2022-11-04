@@ -14,6 +14,7 @@ struct AttendanceView: View {
     @State var isAllChecked = false
     @State var isShowingFailAlert = false
     @State var isShowingDeleteAlert = false
+    @State var isNavigationLinkActive = false
     
     @State var enrollments = [Enrollment]()
     
@@ -22,6 +23,10 @@ struct AttendanceView: View {
     @Environment(\.presentationMode) private var presentationMode
     
     var body: some View {
+        if isNavigationLinkActive {
+            NavigationLink("", destination: SuspendView(currentClass: currentClass), isActive: $isNavigationLinkActive)
+        }
+        
         ScrollView {
             VStack(spacing: 0) {
                 classCard
@@ -99,7 +104,7 @@ struct AttendanceView: View {
                                 }
                             }
                             Button("휴강하기", role: .destructive) {
-                                // TODO: Push SuspendView
+                                isNavigationLinkActive = true
                             }
                         }
                 }
