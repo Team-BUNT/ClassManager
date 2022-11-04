@@ -91,6 +91,16 @@ struct DataService {
         }
     }
     
+    func deleteClass(classID: String) {
+        classRef.document(classID).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+    }
+    
     private func dateIdString(from date: Date?) -> String {
         if let date {
             let dateFormatter = DateFormatter()

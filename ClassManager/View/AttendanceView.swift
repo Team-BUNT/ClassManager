@@ -40,6 +40,9 @@ struct AttendanceView: View {
             Button("취소", role: .cancel) {}
             Button("확인", role: .destructive) {
                 // TODO: Remove this class
+                presentationMode.wrappedValue.dismiss()
+                Constant.shared.classes = Constant.shared.classes!.filter( { $0.ID != currentClass.ID } )
+                DataService.shared.deleteClass(classID: currentClass.ID)
             }
         }, message: {
             Text("클래스를 삭제하시겠습니까?")
