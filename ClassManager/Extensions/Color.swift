@@ -7,6 +7,5 @@
 import SwiftUI
 
 extension Color {
-    static let accent = Color("accent")
-    
+    static let accent = Color("Accent")
 }
