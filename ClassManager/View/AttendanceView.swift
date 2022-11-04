@@ -17,6 +17,8 @@ struct AttendanceView: View {
     
     let columnRatio: [Double] = [5/32, 7/32, 7/16, 3/16]
     
+    @Environment(\.presentationMode) private var presentationMode
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -28,6 +30,17 @@ struct AttendanceView: View {
             .foregroundColor(.white)
         }
         .navigationTitle("출석부")
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.white)
+                }
+            }
+        }
         .task {
             do {
                 enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
