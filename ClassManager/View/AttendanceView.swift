@@ -52,7 +52,7 @@ struct AttendanceView: View {
                     Text("의 \(currentClass.title ?? "")")
                         .font(.callout)
                 }
-                Text("18:00 - 19:00")
+                Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
                     .font(.system(size: 15, weight: .regular))
                     .foregroundColor(Color("DarkGray"))
             }
