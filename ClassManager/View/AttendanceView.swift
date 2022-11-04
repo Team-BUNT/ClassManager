@@ -10,6 +10,8 @@ import SwiftUI
 struct AttendanceView: View {
     let currentClass: Class
     
+    @State var isPresentingConfirm = false
+    
     var body: some View {
         VStack {
             classCard
@@ -29,6 +31,20 @@ struct AttendanceView: View {
                         .foregroundColor(Color("Gray"))
                     Spacer()
                     Image(systemName: "ellipsis")
+                        .onTapGesture {
+                            isPresentingConfirm = true
+                        }
+                        .confirmationDialog("", isPresented: $isPresentingConfirm) {
+                            Button("수정하기", role: .none) {
+                                // TODO: Push EditClassView
+                            }
+                            Button("삭제하기", role: .none) {
+                                // TODO: Remove this class
+                            }
+                            Button("휴강하기", role: .destructive) {
+                                // TODO: Make this class suspended
+                            }
+                        }
                 }
                 HStack(spacing: 4) {
                     Text(currentClass.instructorName ?? "")

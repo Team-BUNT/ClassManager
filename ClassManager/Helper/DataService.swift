@@ -66,7 +66,7 @@ struct DataService {
     }
     
     func requestLink() async throws -> Link? {
-        let document = try await linkRef.document("nfdance").getDocument()
+        let document = try await linkRef.document("sampleLink").getDocument()
         
         return try? document.data(as: Link.self)
     }
