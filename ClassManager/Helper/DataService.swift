@@ -15,6 +15,7 @@ struct DataService {
     let studioRef = Firestore.firestore().collection("studios")
     let classRef = Firestore.firestore().collection("classes")
     let linkRef = Firestore.firestore().collection("link")
+    let enrollmentRef = Firestore.firestore().collection("enrollment")
     
     func createStudio(ID: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
         let studio = Studio(ID: ID, name: name, location: location, notice: notice, halls: halls)
@@ -33,7 +34,6 @@ struct DataService {
                 let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0)
                 if Constant.shared.classes == nil {
                     Constant.shared.classes = [Class]()
-                    
                 }
                 Constant.shared.classes!.append(danceClass)
                 try classRef.document("\(classID)").setData(from: danceClass)
@@ -66,9 +66,39 @@ struct DataService {
     }
     
     func requestLink() async throws -> Link? {
-        let document = try await linkRef.document("nfdance").getDocument()
+        let document = try await linkRef.document("sampleLink").getDocument()
         
         return try? document.data(as: Link.self)
+    }
+    
+    func requestEnrollmentsBy(classID: String) async throws -> [Enrollment]? {
+        let snapshot = try await enrollmentRef.whereField("classID", isEqualTo: classID).getDocuments()
+        
+        return snapshot.documents.compactMap { document in
+            try? document.data(as: Enrollment.self)
+        }
+    }
+    
+    func updateAttendance(enrollments: [Enrollment]) {
+        enrollments.forEach { enrollment in
+            enrollmentRef.document("\(enrollment.ID)").updateData([
+                "attendance": enrollment.attendance ?? false
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
+        }
+    }
+    
+    func deleteClass(classID: String) {
+        classRef.document(classID).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
     }
     
     private func dateIdString(from date: Date?) -> String {

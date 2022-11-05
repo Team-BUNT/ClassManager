@@ -1,0 +1,299 @@
+//
+//  AttendanceView.swift
+//  ClassManager
+//
+//  Created by Jiyoung Park on 2022/11/04.
+//
+
+import SwiftUI
+
+struct AttendanceView: View {
+    let currentClass: Class
+    
+    @State var isPresentingConfirm = false
+    @State var isAllChecked = false
+    @State var isShowingFailAlert = false
+    @State var isShowingDeleteAlert = false
+    @State var isNavigationLinkActive = false
+    
+    @State var enrollments = [Enrollment]()
+    
+    let columnRatio: [Double] = [5/32, 7/32, 7/16, 3/16]
+    
+    @Environment(\.presentationMode) private var presentationMode
+    
+    var body: some View {
+        if isNavigationLinkActive {
+            NavigationLink("", destination: SuspendView(currentClass: currentClass), isActive: $isNavigationLinkActive)
+        }
+        
+        ScrollView {
+            VStack(spacing: 0) {
+                classCard
+                studentList
+                    .padding(.top, 32)
+            }
+            .padding(20)
+            .foregroundColor(.white)
+        }
+        .alert("삭제하기", isPresented: $isShowingFailAlert, actions: {
+            Button("확인", role: .cancel) {}
+        }, message: {
+            Text("수강생이 있어 삭제가 불가능합니다.\n‘휴강하기’를 선택해주세요.")
+        })
+        .alert("삭제하기", isPresented: $isShowingDeleteAlert, actions: {
+            Button("취소", role: .cancel) {}
+            Button("확인", role: .destructive) {
+                // TODO: Remove this class
+                presentationMode.wrappedValue.dismiss()
+                Constant.shared.classes = Constant.shared.classes!.filter( { $0.ID != currentClass.ID } )
+                DataService.shared.deleteClass(classID: currentClass.ID)
+            }
+        }, message: {
+            Text("클래스를 삭제하시겠습니까?")
+        })
+        .navigationTitle("출석부")
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .task {
+            do {
+                enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
+                enrollments = enrollments.filter( { $0.paid ?? false } )
+                sortEnrollments()
+                if attendanceCount() == enrollments.count {
+                    isAllChecked = true
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    var classCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("클래스")
+                .font(.montserrat(.semibold, size: 17))
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text("Hall \(currentClass.hall?.name ?? "A")")
+                        .font(.subheadline)
+                        .foregroundColor(Color("Gray"))
+                    Spacer()
+                    Image(systemName: "ellipsis")
+                        .onTapGesture {
+                            isPresentingConfirm = true
+                        }
+                        .confirmationDialog("", isPresented: $isPresentingConfirm) {
+                            Button("수정하기", role: .none) {
+                                // TODO: Push EditClassView
+                            }
+                            Button("삭제하기", role: .none) {
+                                if enrollments.count > 0 {
+                                    isShowingFailAlert = true
+                                } else {
+                                    isShowingDeleteAlert = true
+                                }
+                            }
+                            Button("휴강하기", role: .destructive) {
+                                isNavigationLinkActive = true
+                            }
+                        }
+                }
+                HStack(spacing: 4) {
+                    Text(currentClass.instructorName ?? "")
+                        .font(.montserrat(.semibold, size: 16))
+                    Text("의 \(currentClass.title ?? "")")
+                        .font(.callout)
+                }
+                Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(Color("DarkGray"))
+            }
+            .padding(20)
+            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("Box")))
+        }
+    }
+    
+    var studentList: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("수강생")
+                .font(.montserrat(.semibold, size: 17))
+            
+            HStack {
+                attendanceStatus
+                Spacer()
+                saveButton
+                    .padding(.trailing, 20)
+                    .onTapGesture {
+                        // TODO: Toast message or something
+                        DataService.shared.updateAttendance(enrollments: enrollments)
+                    }
+            }
+            .font(.montserrat(.semibold, size: 15))
+            
+            Divider()
+                .padding(.top, 6)
+            
+            studentListHeader
+            studentListBody
+        }
+    }
+    
+    var attendanceStatus: some View {
+        HStack(spacing: 8) {
+            HStack(spacing: 0) {
+                Text("출석 ")
+                    .font(.system(size: 15))
+                Text("\(attendanceCount())")
+            }
+            HStack(spacing: 0) {
+                Text("미출석 ")
+                    .font(.system(size: 15))
+                Text("\(enrollments.count - attendanceCount())")
+            }
+            .foregroundColor(Color("Accent"))
+        }
+    }
+    
+    var saveButton: some View {
+        Text("저장")
+            .font(.system(size: 15))
+            .background(RoundedRectangle(cornerRadius: 7).frame(width: 60, height: 33).foregroundColor(Color("Box")))
+    }
+    
+    var studentListHeader: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 10) {
+                Text("No.")
+                    .frame(width: (geometry.size.width - 30) * columnRatio[0])
+                Text("성명")
+                    .frame(width: (geometry.size.width - 30) * columnRatio[1])
+                Text("연락처")
+                    .frame(width: (geometry.size.width - 30) * columnRatio[2])
+                Text("출결상태")
+                    .frame(width: (geometry.size.width - 30) * columnRatio[3])
+            }
+            .foregroundColor(Color("DarkGray"))
+            .font(.system(size: 15))
+        }
+    }
+    
+    var studentListBody: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 35) {
+                HStack(spacing: 10) {
+                    Text("All")
+                        .frame(width: (geometry.size.width - 30) * columnRatio[0])
+                        .font(.montserrat(.semibold, size: 15))
+                    Text("")
+                        .frame(width: (geometry.size.width - 30) * columnRatio[1])
+                    Text("")
+                        .frame(width: (geometry.size.width - 30) * columnRatio[2])
+                    ZStack {
+                        if isAllChecked {
+                            boxChecked
+                        } else {
+                            boxUnchecked
+                        }
+                    }
+                    .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                    .onTapGesture {
+                        isAllChecked.toggle()
+                        if isAllChecked {
+                            allChecked()
+                        } else {
+                            allUnchecked()
+                        }
+                    }
+                }
+                
+                ForEach(Array(enrollments.enumerated()), id: \.offset) { index, enrollment in
+                    HStack(spacing: 10) {
+                        Text("\(index + 1)")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[0])
+                            .font(.montserrat(.semibold, size: 15))
+                        Text(enrollment.userName ?? "")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[1])
+                        Text(enrollment.phoneNumber ?? "")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[2])
+                            .font(.montserrat(.semibold, size: 15))
+                        ZStack {
+                            if enrollment.attendance ?? false {
+                                boxChecked
+                            } else {
+                                boxUnchecked
+                            }
+                        }
+                        .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                        .onTapGesture {
+                            enrollment.attendance?.toggle()
+                            enrollments = enrollments.map { $0 }
+                            if attendanceCount() == enrollments.count {
+                                isAllChecked = true
+                            } else {
+                                isAllChecked = false
+                            }
+                        }
+                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                    }
+                    .font(.system(size: 15))
+                }
+            }
+            .padding(.top, 20)
+        }
+    }
+    
+    var boxChecked: some View {
+        Image(systemName: "checkmark.square.fill")
+            .font(.system(size: 20))
+            .foregroundColor(Color("Accent"))
+    }
+    
+    var boxUnchecked: some View {
+        Image(systemName: "square")
+            .font(.system(size: 20))
+            .foregroundColor(Color("CheckGray"))
+    }
+    
+    private func attendanceCount() -> Int {
+        if enrollments.count > 0 {
+            var count = 0
+            enrollments.forEach { enrollment in
+                if enrollment.attendance ?? false { count += 1 }
+            }
+            return count
+        }
+        return 0
+    }
+    
+    private func allChecked() {
+        enrollments.forEach { enrollment in
+            enrollment.attendance = true
+        }
+    }
+    
+    private func allUnchecked() {
+        enrollments.forEach { enrollment in
+            enrollment.attendance = false
+        }
+    }
+    
+    private func sortEnrollments() {
+        enrollments.sort(by: { $0.enrolledDate ?? Date() < $1.enrolledDate ?? Date() })
+    }
+}
+
+struct AttendanceView_Previews: PreviewProvider {
+    static var previews: some View {
+        AttendanceView(currentClass: Class(ID: "Something", studioID: "", title: "팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: 15))
+    }
+}

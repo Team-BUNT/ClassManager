@@ -32,7 +32,7 @@ struct ClassCalendarView: View {
 
                 ScrollView {
                     ForEach(classesToday, id: \.self.ID) { danceClass in
-                        NavigationLink(destination: EnrollmentListView(enrolledClass: danceClass)) { 
+                        NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
                             ClassInfoBox(danceClass: danceClass)
                         }
                     }
