@@ -18,6 +18,7 @@
 		AB3394B3291503B3001575BB /* SuspendedClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3394B2291503B3001575BB /* SuspendedClasses.swift */; };
 		AB3394B529150471001575BB /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3394B429150471001575BB /* Student.swift */; };
 		ABDABFE329169C10001B5256 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ABDABFE229169C0F001B5256 /* Montserrat-Regular.ttf */; };
+		ABDABFE529169CF2001B5256 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDABFE429169CF2001B5256 /* CustomSearchBar.swift */; };
 		C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0552C2828F69541005D0E67 /* ClassManagerApp.swift */; };
 		C0552C2D28F69542005D0E67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0552C2C28F69542005D0E67 /* Assets.xcassets */; };
 		C0552C3128F69542005D0E67 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0552C3028F69542005D0E67 /* Preview Assets.xcassets */; };
@@ -76,6 +77,7 @@
 		AB3394B2291503B3001575BB /* SuspendedClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendedClasses.swift; sourceTree = "<group>"; };
 		AB3394B429150471001575BB /* Student.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
 		ABDABFE229169C0F001B5256 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		ABDABFE429169CF2001B5256 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		C0552C2528F69541005D0E67 /* ClassManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0552C2828F69541005D0E67 /* ClassManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManagerApp.swift; sourceTree = "<group>"; };
 		C0552C2C28F69542005D0E67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				AB2A426F28F6E2D000B314B9 /* EnrollmentListView.swift */,
 				C76DC5F9291500DC004E5894 /* AttendanceView.swift */,
 				C76DC5FD29158793004E5894 /* SuspendView.swift */,
+				ABDABFE429169CF2001B5256 /* CustomSearchBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -451,6 +454,7 @@
 				C79E13C028F6B1780010C4BA /* Class.swift in Sources */,
 				C76DC5FC291547F2004E5894 /* Date.swift in Sources */,
 				C79E13CF28F6BC580010C4BA /* Constant.swift in Sources */,
+				ABDABFE529169CF2001B5256 /* CustomSearchBar.swift in Sources */,
 				C79E13D728F6BCFD0010C4BA /* FontManager.swift in Sources */,
 				AB3394B3291503B3001575BB /* SuspendedClasses.swift in Sources */,
 				C79E13CD28F6BC410010C4BA /* DataService.swift in Sources */,
