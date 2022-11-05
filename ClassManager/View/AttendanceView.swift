@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct AttendanceView: View {
-    let currentClass: Class
+    @State var currentClass: Class
     
     @State var isPresentingConfirm = false
     @State var isAllChecked = false
     @State var isShowingFailAlert = false
     @State var isShowingDeleteAlert = false
     @State var isNavigationLinkActive = false
+    @State var isShowingEditSheet = false
+    @State var isShowingToast = false
     
     @State var enrollments = [Enrollment]()
-    
+        
     let columnRatio: [Double] = [5/32, 7/32, 7/16, 3/16]
     
     @Environment(\.presentationMode) private var presentationMode
@@ -36,6 +38,10 @@ struct AttendanceView: View {
             .padding(20)
             .foregroundColor(.white)
         }
+        .onChange(of: isShowingEditSheet) { _ in
+            currentClass = Constant.shared.classes?.filter({ $0.ID == currentClass.ID }).first ?? currentClass
+        }
+        .toast(message: "클래스가 수정되었습니다", isShowing: $isShowingToast, duration: Toast.short)
         .alert("삭제하기", isPresented: $isShowingFailAlert, actions: {
             Button("확인", role: .cancel) {}
         }, message: {
@@ -44,7 +50,6 @@ struct AttendanceView: View {
         .alert("삭제하기", isPresented: $isShowingDeleteAlert, actions: {
             Button("취소", role: .cancel) {}
             Button("확인", role: .destructive) {
-                // TODO: Remove this class
                 presentationMode.wrappedValue.dismiss()
                 Constant.shared.classes = Constant.shared.classes!.filter( { $0.ID != currentClass.ID } )
                 DataService.shared.deleteClass(classID: currentClass.ID)
@@ -52,6 +57,9 @@ struct AttendanceView: View {
         }, message: {
             Text("클래스를 삭제하시겠습니까?")
         })
+        .fullScreenCover(isPresented: $isShowingEditSheet) {
+            EditClassView(isShowingEditSheet: $isShowingEditSheet, isShowingToast: $isShowingToast, title: currentClass.title ?? "", instructorName: currentClass.instructorName ?? "", date: currentClass.date ?? Date(), tenTimesDuration: (currentClass.durationMinute ?? 60) / 10, isPopUp: currentClass.isPopUp ?? false, repetition: 0, selectedHall: hallIndex(), applicantsCount: currentClass.applicantsCount ?? 0, classID: currentClass.ID)
+        }
         .navigationTitle("출석부")
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -99,7 +107,7 @@ struct AttendanceView: View {
                         }
                         .confirmationDialog("", isPresented: $isPresentingConfirm) {
                             Button("수정하기", role: .none) {
-                                // TODO: Push EditClassView
+                                isShowingEditSheet.toggle()
                             }
                             Button("삭제하기", role: .none) {
                                 if enrollments.count > 0 {
@@ -312,6 +320,15 @@ struct AttendanceView: View {
     
     private func sortEnrollments() {
         enrollments.sort(by: { $0.enrolledDate ?? Date() < $1.enrolledDate ?? Date() })
+    }
+    
+    private func hallIndex() -> Int {
+        for index in 0..<(Constant.shared.studio?.halls?.count ?? 0) {
+            if Constant.shared.studio?.halls?[index].name == currentClass.hall?.name {
+                return index
+            }
+        }
+        return 0
     }
 }
 

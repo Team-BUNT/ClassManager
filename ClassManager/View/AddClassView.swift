@@ -72,7 +72,7 @@ struct AddClassView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if !title.isEmpty && !instructorName.isEmpty {
-                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration * 10, repetition: repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall], isPopUP: isPopUp)
+                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration * 10, repetition: Constant.shared.repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall], isPopUP: isPopUp)
                             isShowingAddSheet.toggle()
                             isShowingToast.toggle()
                         } else {
@@ -94,16 +94,6 @@ struct AddClassView: View {
                     }
                 }
             }
-        }
-    }
-    
-    func repetitionNumber(repetition: Int) -> Int {
-        switch repetition {
-        case 0: return 1
-        case 1: return 2
-        case 2: return 4
-        case 3: return 8
-        default: return 0
         }
     }
 }
