@@ -26,12 +26,12 @@ struct DataService {
         }
     }
     
-    func createClass(studioID: String, title: String, instructorName: String, date: Date, durationMinute: Int, repetition: Int, hall: Hall?) {
+    func createClass(studioID: String, title: String, instructorName: String, date: Date, durationMinute: Int, repetition: Int, hall: Hall?, isPopUP: Bool) {
         do {
             for idx in 0..<repetition {
                 let classDate = Calendar.current.date(byAdding: .day, value: idx * 7, to: date)
                 let classID = instructorName + dateIdString(from: classDate) // UUID().uuidString
-                let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0)
+                let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0, isPopUp: isPopUP)
                 if Constant.shared.classes == nil {
                     Constant.shared.classes = [Class]()
                 }

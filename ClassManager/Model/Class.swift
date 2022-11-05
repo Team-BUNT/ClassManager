@@ -16,5 +16,5 @@ struct Class: Codable {
     let durationMinute: Int?
     let hall: Hall?
     let applicantsCount: Int?
-    let isPopUp: Bool? = nil
+    let isPopUp: Bool?
 }

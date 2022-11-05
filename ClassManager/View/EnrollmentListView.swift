@@ -175,7 +175,7 @@ struct EnrollmentListView: View {
 struct EnrollmentListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            EnrollmentListView(enrolledClass: Class(ID: "10725BA3-0919-47E1-A2F4-1433EF293055", studioID: "studio1111", title: "힙합 클래스", instructorName: "레이븐", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: nil))
+            EnrollmentListView(enrolledClass: Class(ID: "10725BA3-0919-47E1-A2F4-1433EF293055", studioID: "studio1111", title: "힙합 클래스", instructorName: "레이븐", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: nil, isPopUp: false))
         }
     }
 }

@@ -294,6 +294,6 @@ struct AttendanceView: View {
 
 struct AttendanceView_Previews: PreviewProvider {
     static var previews: some View {
-        AttendanceView(currentClass: Class(ID: "Something", studioID: "", title: "팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: 15))
+        AttendanceView(currentClass: Class(ID: "Something", studioID: "", title: "팝업 클래스", instructorName: "Narae", date: Date(), durationMinute: 60, hall: Hall(name: "A", capacity: 30), applicantsCount: 15, isPopUp: false))
     }
 }

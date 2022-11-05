@@ -17,6 +17,7 @@ struct AddClassView: View {
     
     @State var date: Date
     @State var tenTimesDuration = 6
+    @State var isPopUp = false
     @State var repetition = 0
     @State var selectedHall = 0
     
@@ -37,7 +38,13 @@ struct AddClassView: View {
                 .onTapGesture { hideKeyboard() }
                 
                 Section {
-                    repetitionRow(repetition: $repetition)
+                    ClassTypeRow(isPopUp: $isPopUp)
+                }
+                
+                if !isPopUp {
+                    Section {
+                        repetitionRow(repetition: $repetition)
+                    }
                 }
                 
                 Section {
@@ -47,8 +54,8 @@ struct AddClassView: View {
             .toast(message: "모든 양식을 입력해주세요", isShowing: $isShowingErrorToast, duration: Toast.short)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("NEW CLASS")
-                        .font(.custom(FontManager.Montserrat.semibold, size: 15))
+                    Text("새로운 클래스")
+                        .font(.system(size: 16))
                         .accessibilityAddTraits(.isHeader)
                 }
                 
@@ -65,7 +72,7 @@ struct AddClassView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if !title.isEmpty && !instructorName.isEmpty {
-                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration*10, repetition: repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall])
+                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration * 10, repetition: repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall], isPopUP: isPopUp)
                             isShowingAddSheet.toggle()
                             isShowingToast.toggle()
                         } else {
@@ -74,7 +81,7 @@ struct AddClassView: View {
                     } label: {
                         Text("추가")
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(Color("Del"))
+                            .foregroundColor(Color("Accent"))
                     }
                 }
                 
@@ -99,84 +106,98 @@ struct AddClassView: View {
         default: return 0
         }
     }
+}
+
+struct TextFieldRow: View {
+    let label: String
+    @Binding var value: String
     
-    struct TextFieldRow: View {
-        let label: String
-        @Binding var value: String
-        
-        var body: some View {
-            TextField(label, text: $value)
-                .textInputAutocapitalization(.never)
+    var body: some View {
+        TextField(label, text: $value)
+            .textInputAutocapitalization(.never)
+    }
+}
+
+struct StartDateRow: View {
+    @Binding var date: Date
+    
+    var body: some View {
+        HStack {
+            Text("시작")
+            Spacer()
+            DatePicker("", selection: $date)
+                .labelsHidden()
         }
     }
+}
+
+struct DurationRow: View {
+    @Binding var tenTimesDuration: Int
     
-    struct StartDateRow: View {
-        @Binding var date: Date
-        
-        var body: some View {
-            HStack {
-                Text("시작")
-                Spacer()
-                DatePicker("", selection: $date)
-                    .labelsHidden()
-            }
-        }
-    }
-    
-    struct DurationRow: View {
-        @Binding var tenTimesDuration: Int
-        
-        var body: some View {
-            HStack {
-                Text("시간")
-                Menu {
-                    Picker("picker", selection: $tenTimesDuration) {
-                        ForEach(5...12, id: \.self) { option in
-                            Text("\(option * 10)분")
-                        }
+    var body: some View {
+        HStack {
+            Text("시간")
+            Menu {
+                Picker("picker", selection: $tenTimesDuration) {
+                    ForEach(5...12, id: \.self) { option in
+                        Text("\(option * 10)분")
                     }
-                    .labelsHidden()
-                    .pickerStyle(.inline)
-                    
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text("\(tenTimesDuration * 10)분")
-                            .foregroundColor(.white)
-                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.inline)
+                
+            } label: {
+                HStack {
+                    Spacer()
+                    Text("\(tenTimesDuration * 10)분")
+                        .foregroundColor(.white)
                 }
             }
         }
     }
+}
+
+struct ClassTypeRow: View {
+    @Binding var isPopUp: Bool
     
-    struct repetitionRow: View {
-        let repetitionOptions = ["안함", "2회", "4회", "8회"]
-        
-        @Binding var repetition: Int
-        
-        var body: some View {
-            HStack {
-                Text("반복")
-                Picker("", selection: $repetition) {
-                    ForEach(0 ..< repetitionOptions.count, id: \.self) {
-                        Text(repetitionOptions[$0]).tag($0)
-                    }
+    var body: some View {
+        HStack {
+            Text("수업 형태")
+            Picker("", selection: $isPopUp) {
+                Text("정규").tag(false)
+                Text("팝업").tag(true)
+            }
+        }
+    }
+}
+
+struct repetitionRow: View {
+    let repetitionOptions = ["안함", "2회", "4회", "8회"]
+    
+    @Binding var repetition: Int
+    
+    var body: some View {
+        HStack {
+            Text("반복")
+            Picker("", selection: $repetition) {
+                ForEach(0 ..< repetitionOptions.count, id: \.self) {
+                    Text(repetitionOptions[$0]).tag($0)
                 }
             }
         }
     }
+}
+
+struct hallRow: View {
+    @Binding var selectedHall: Int
     
-    struct hallRow: View {
-        @Binding var selectedHall: Int
-        
-        var body: some View {
-            HStack {
-                Text("홀")
-                if Constant.shared.studio != nil && Constant.shared.studio!.halls != nil {
-                    Picker("", selection: $selectedHall) {
-                        ForEach(0 ..< Constant.shared.studio!.halls!.count, id: \.self) {
-                            Text(Constant.shared.studio!.halls![$0].name ?? "").tag($0)
-                        }
+    var body: some View {
+        HStack {
+            Text("홀")
+            if Constant.shared.studio != nil && Constant.shared.studio!.halls != nil {
+                Picker("", selection: $selectedHall) {
+                    ForEach(0 ..< Constant.shared.studio!.halls!.count, id: \.self) {
+                        Text(Constant.shared.studio!.halls![$0].name ?? "").tag($0)
                     }
                 }
             }
