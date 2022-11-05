@@ -88,10 +88,13 @@ struct SuspendView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     // TODO: Update Firebase data
+                    Task {
+                        await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: currentClass.studioID ?? "")
+                    }
                     // TODO: Kakaotalk messaging
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Text("추가")
+                    Text("완료")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(Color("Accent"))
                 }

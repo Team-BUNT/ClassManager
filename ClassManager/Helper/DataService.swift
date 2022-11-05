@@ -16,6 +16,7 @@ struct DataService {
     let classRef = Firestore.firestore().collection("classes")
     let linkRef = Firestore.firestore().collection("link")
     let enrollmentRef = Firestore.firestore().collection("enrollment")
+    let suspendedRef = Firestore.firestore().collection("suspended")
     
     func createStudio(ID: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
         let studio = Studio(ID: ID, name: name, location: location, notice: notice, halls: halls)
@@ -79,6 +80,12 @@ struct DataService {
         }
     }
     
+    func requestSuspendedClassesBy(studioID: String) async throws -> SuspendedClasses? {
+        let document = try await suspendedRef.document(studioID).getDocument()
+        
+        return try? document.data(as: SuspendedClasses.self)
+    }
+    
     func updateAttendance(enrollments: [Enrollment]) {
         enrollments.forEach { enrollment in
             enrollmentRef.document("\(enrollment.ID)").updateData([
@@ -88,6 +95,21 @@ struct DataService {
                     print("Error updating document: \(err)")
                 }
             }
+        }
+    }
+    
+    func updateSuspendedClasses(classID: String, studioID: String) async {
+        do {
+            let suspendedClasses = try await requestSuspendedClassesBy(studioID: studioID)
+            var ids = [String]()
+            if suspendedClasses != nil {
+                ids = suspendedClasses!.IDs ?? []
+            }
+            ids.append(classID)
+            let newSuspendedClasses = SuspendedClasses(studioID: studioID, IDs: ids)
+            try suspendedRef.document(studioID).setData(from: newSuspendedClasses)
+        } catch {
+            print(error)
         }
     }
     
