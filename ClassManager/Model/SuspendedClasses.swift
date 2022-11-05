@@ -9,5 +9,5 @@ import Foundation
 
 struct SuspendedClasses: Codable {
     let studioID: String
-    let IDs: [String]?
+    var IDs: [String]?
 }
