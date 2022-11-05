@@ -85,7 +85,6 @@ struct AddClassView: View {
                     } label: {
                         Text("완료")
                     }
-                    
                 }
             }
         }
@@ -184,15 +183,6 @@ struct AddClassView: View {
         }
     }
 }
-
-//MARK: 키보드를 내리는 메소드. View에서 사용하기 위함
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-
-
 
 struct AddClassView_Previews: PreviewProvider {
     static var previews: some View {
