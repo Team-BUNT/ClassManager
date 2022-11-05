@@ -10,11 +10,14 @@ import SwiftUI
 extension Font {
     enum Montserrat {
         case semibold
+        case regular
         
         var value: String {
             switch self {
             case .semibold:
                 return "Montserrat-SemiBold"
+            case .regular:
+                return "Montserrat-Regular"
             }
         }
     }
