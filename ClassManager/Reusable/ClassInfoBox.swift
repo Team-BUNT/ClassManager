@@ -46,6 +46,6 @@ struct ClassInfoBox: View {
 
 struct ClassInfoBox_Previews: PreviewProvider {
     static var previews: some View {
-        ClassInfoBox(danceClass: Class(ID: "", studioID: nil, title: nil, instructorName: nil, date: Date(), durationMinute: nil, hall: nil, applicantsCount: nil))
+        ClassInfoBox(danceClass: Class(ID: "", studioID: nil, title: nil, instructorName: nil, date: Date(), durationMinute: nil, hall: nil, applicantsCount: nil, isPopUp: true))
     }
 }

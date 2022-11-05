@@ -31,6 +31,8 @@
 		C76DC5FA291500DC004E5894 /* AttendanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5F9291500DC004E5894 /* AttendanceView.swift */; };
 		C76DC5FC291547F2004E5894 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5FB291547F2004E5894 /* Date.swift */; };
 		C76DC5FE29158793004E5894 /* SuspendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5FD29158793004E5894 /* SuspendView.swift */; };
+		C76DC60029163F52004E5894 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5FF29163F52004E5894 /* View.swift */; };
+		C76DC60229164889004E5894 /* EditClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC60129164889004E5894 /* EditClassView.swift */; };
 		C79E13BC28F6AF8B0010C4BA /* Studio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BB28F6AF8B0010C4BA /* Studio.swift */; };
 		C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BD28F6B0DC0010C4BA /* Notice.swift */; };
 		C79E13C028F6B1780010C4BA /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BF28F6B1780010C4BA /* Class.swift */; };
@@ -89,6 +91,8 @@
 		C76DC5F9291500DC004E5894 /* AttendanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceView.swift; sourceTree = "<group>"; };
 		C76DC5FB291547F2004E5894 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		C76DC5FD29158793004E5894 /* SuspendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendView.swift; sourceTree = "<group>"; };
+		C76DC5FF29163F52004E5894 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		C76DC60129164889004E5894 /* EditClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditClassView.swift; sourceTree = "<group>"; };
 		C79E13BB28F6AF8B0010C4BA /* Studio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Studio.swift; sourceTree = "<group>"; };
 		C79E13BD28F6B0DC0010C4BA /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		C79E13BF28F6B1780010C4BA /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 				378D4E1728F719EF0094F277 /* Color.swift */,
 				11EBAFBB2914FE4000286AFE /* Font.swift */,
 				C76DC5FB291547F2004E5894 /* Date.swift */,
+				C76DC5FF29163F52004E5894 /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -242,6 +247,7 @@
 				378D4E0E28F714690094F277 /* Onboarding */,
 				C79E13C628F6BBB00010C4BA /* ClassCalendarView.swift */,
 				C79E13C828F6BBBC0010C4BA /* AddClassView.swift */,
+				C76DC60129164889004E5894 /* EditClassView.swift */,
 				C79E13CA28F6BC010010C4BA /* OnboardingView.swift */,
 				AB2A426F28F6E2D000B314B9 /* EnrollmentListView.swift */,
 				C76DC5F9291500DC004E5894 /* AttendanceView.swift */,
@@ -421,6 +427,7 @@
 				C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */,
 				378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */,
 				C76DC5FA291500DC004E5894 /* AttendanceView.swift in Sources */,
+				C76DC60229164889004E5894 /* EditClassView.swift in Sources */,
 				378D4E1028F7147E0094F277 /* OnboardingFirst.swift in Sources */,
 				378D4E1828F719EF0094F277 /* Color.swift in Sources */,
 				C79E13D928F6BD540010C4BA /* Toast.swift in Sources */,
@@ -430,6 +437,7 @@
 				AB2A426C28F6DF5600B314B9 /* Enrollment.swift in Sources */,
 				AB3394B529150471001575BB /* Student.swift in Sources */,
 				C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */,
+				C76DC60029163F52004E5894 /* View.swift in Sources */,
 				C79E13CB28F6BC010010C4BA /* OnboardingView.swift in Sources */,
 				11EBAFBC2914FE4000286AFE /* Font.swift in Sources */,
 				AB2A427028F6E2D000B314B9 /* EnrollmentListView.swift in Sources */,

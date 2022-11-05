@@ -27,12 +27,12 @@ struct DataService {
         }
     }
     
-    func createClass(studioID: String, title: String, instructorName: String, date: Date, durationMinute: Int, repetition: Int, hall: Hall?) {
+    func createClass(studioID: String, title: String, instructorName: String, date: Date, durationMinute: Int, repetition: Int, hall: Hall?, isPopUP: Bool) {
         do {
             for idx in 0..<repetition {
                 let classDate = Calendar.current.date(byAdding: .day, value: idx * 7, to: date)
                 let classID = instructorName + dateIdString(from: classDate) // UUID().uuidString
-                let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0)
+                let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: classDate, durationMinute: durationMinute, hall: hall, applicantsCount: 0, isPopUp: isPopUP)
                 if Constant.shared.classes == nil {
                     Constant.shared.classes = [Class]()
                 }
@@ -86,6 +86,17 @@ struct DataService {
         return try? document.data(as: SuspendedClasses.self)
     }
     
+    func updateClass(classID: String, studioID: String, title: String, instructorName: String, date: Date, durationMinute: Int, repetition: Int, hall: Hall?, applicantsCount: Int, isPopUP: Bool) {
+        do {
+            let danceClass = Class(ID: classID, studioID: studioID, title: title, instructorName: instructorName, date: date, durationMinute: durationMinute, hall: hall, applicantsCount: applicantsCount, isPopUp: isPopUP)
+            Constant.shared.classes = Constant.shared.classes!.filter({ $0.ID != classID })
+            Constant.shared.classes!.append(danceClass)
+            try classRef.document("\(classID)").setData(from: danceClass)
+        } catch let error {
+            print("Error writing class to Firestore: \(error)")
+        }
+    }
+    
     func updateAttendance(enrollments: [Enrollment]) {
         enrollments.forEach { enrollment in
             enrollmentRef.document("\(enrollment.ID)").updateData([
@@ -122,6 +133,7 @@ struct DataService {
                 print("Document successfully removed!")
             }
         }
+        Constant.shared.classes = Constant.shared.classes?.filter({ $0.ID != classID })
     }
     
     private func dateIdString(from date: Date?) -> String {
