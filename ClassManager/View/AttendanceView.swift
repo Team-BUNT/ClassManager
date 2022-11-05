@@ -82,11 +82,16 @@ struct AttendanceView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("클래스")
                 .font(.montserrat(.semibold, size: 17))
+            if Constant.shared.isSuspended(classID: currentClass.ID) {
+                Text("클래스가 휴강 처리 되었습니다.")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color("DarkGray"))
+            }
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Text("Hall \(currentClass.hall?.name ?? "A")")
                         .font(.subheadline)
-                        .foregroundColor(Color("Gray"))
+                        .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : Color("Gray"))
                     Spacer()
                     Image(systemName: "ellipsis")
                         .onTapGesture {
@@ -111,9 +116,12 @@ struct AttendanceView: View {
                 HStack(spacing: 4) {
                     Text(currentClass.instructorName ?? "")
                         .font(.montserrat(.semibold, size: 16))
+                        .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
                     Text("의 \(currentClass.title ?? "")")
                         .font(.callout)
+                        .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
                 }
+                .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : .white)
                 Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
                     .font(.system(size: 15, weight: .regular))
                     .foregroundColor(Color("DarkGray"))
@@ -135,7 +143,7 @@ struct AttendanceView: View {
                     .padding(.trailing, 20)
                     .onTapGesture {
                         // TODO: Toast message or something
-                        DataService.shared.updateAttendance(enrollments: enrollments)
+                        if !Constant.shared.isSuspended(classID: currentClass.ID) { DataService.shared.updateAttendance(enrollments: enrollments) }
                     }
             }
             .font(.montserrat(.semibold, size: 15))
@@ -198,20 +206,25 @@ struct AttendanceView: View {
                         .frame(width: (geometry.size.width - 30) * columnRatio[1])
                     Text("")
                         .frame(width: (geometry.size.width - 30) * columnRatio[2])
-                    ZStack {
-                        if isAllChecked {
-                            boxChecked
-                        } else {
-                            boxUnchecked
+                    if Constant.shared.isSuspended(classID: currentClass.ID) {
+                        boxUnabled
+                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                    } else {
+                        ZStack {
+                            if isAllChecked {
+                                boxChecked
+                            } else {
+                                boxUnchecked
+                            }
                         }
-                    }
-                    .frame(width: (geometry.size.width - 30) * columnRatio[3])
-                    .onTapGesture {
-                        isAllChecked.toggle()
-                        if isAllChecked {
-                            allChecked()
-                        } else {
-                            allUnchecked()
+                        .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                        .onTapGesture {
+                            isAllChecked.toggle()
+                            if isAllChecked {
+                                allChecked()
+                            } else {
+                                allUnchecked()
+                            }
                         }
                     }
                 }
@@ -226,24 +239,28 @@ struct AttendanceView: View {
                         Text(enrollment.phoneNumber ?? "")
                             .frame(width: (geometry.size.width - 30) * columnRatio[2])
                             .font(.montserrat(.semibold, size: 15))
-                        ZStack {
-                            if enrollment.attendance ?? false {
-                                boxChecked
-                            } else {
-                                boxUnchecked
+                        if Constant.shared.isSuspended(classID: currentClass.ID) {
+                            boxUnabled
+                                .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                        } else {
+                            ZStack {
+                                if enrollment.attendance ?? false {
+                                    boxChecked
+                                } else {
+                                    boxUnchecked
+                                }
                             }
-                        }
-                        .frame(width: (geometry.size.width - 30) * columnRatio[3])
-                        .onTapGesture {
-                            enrollment.attendance?.toggle()
-                            enrollments = enrollments.map { $0 }
-                            if attendanceCount() == enrollments.count {
-                                isAllChecked = true
-                            } else {
-                                isAllChecked = false
-                            }
-                        }
                             .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                            .onTapGesture {
+                                enrollment.attendance?.toggle()
+                                enrollments = enrollments.map { $0 }
+                                if attendanceCount() == enrollments.count {
+                                    isAllChecked = true
+                                } else {
+                                    isAllChecked = false
+                                }
+                            }
+                        }
                     }
                     .font(.system(size: 15))
                 }
@@ -260,6 +277,12 @@ struct AttendanceView: View {
     
     var boxUnchecked: some View {
         Image(systemName: "square")
+            .font(.system(size: 20))
+            .foregroundColor(Color("CheckGray"))
+    }
+    
+    var boxUnabled: some View {
+        Image(systemName: "square.fill")
             .font(.system(size: 20))
             .foregroundColor(Color("CheckGray"))
     }
