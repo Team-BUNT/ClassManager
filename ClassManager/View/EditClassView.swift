@@ -59,7 +59,7 @@ struct EditClassView: View {
             .toast(message: "모든 양식을 입력해주세요", isShowing: $isShowingErrorToast, duration: Toast.short)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("새로운 클래스")
+                    Text("클래스 수정")
                         .font(.system(size: 16))
                         .accessibilityAddTraits(.isHeader)
                 }
