@@ -103,6 +103,7 @@ struct ClassCalendarView: View {
                     Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: studioID)
                     Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: studioID)
                 }
+                Constant.shared.suspendedClasses = try await DataService.shared.requestSuspendedClassesBy(studioID: studioID)
             } catch {
                 print(error)
             }
