@@ -12,4 +12,12 @@ class Constant {
     
     var studio: Studio?
     var classes: [Class]?
+    var suspendedClasses: SuspendedClasses?
+    
+    func isSuspended(classID: String) -> Bool {
+        if suspendedClasses?.IDs != nil {
+            return suspendedClasses!.IDs!.contains(classID)
+        }
+        return false
+    }
 }

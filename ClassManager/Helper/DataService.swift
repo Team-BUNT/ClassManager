@@ -108,6 +108,7 @@ struct DataService {
             ids.append(classID)
             let newSuspendedClasses = SuspendedClasses(studioID: studioID, IDs: ids)
             try suspendedRef.document(studioID).setData(from: newSuspendedClasses)
+            Constant.shared.suspendedClasses = newSuspendedClasses
         } catch {
             print(error)
         }
