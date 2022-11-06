@@ -31,14 +31,8 @@ struct CustomSearchBar: View {
                 Button {
                     searchText = ""
                 } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .foregroundColor(Color(UIColor.systemGray6))
-                        .frame(width: 8, height: 8)
-                        .background(Circle()
-                            .foregroundColor(Color(UIColor.systemGray2))
-                            .frame(width: 16, height: 16))
-                        .padding(.trailing, 4)
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(Color.gray)
                 }
                 
             }
