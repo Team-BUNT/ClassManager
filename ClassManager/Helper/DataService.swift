@@ -146,6 +146,14 @@ struct DataService {
             return "xx:xx"
         }
     }
+    
+    func requestAllEnrollments(of studioID: String) async throws -> [Enrollment]? {
+        let snapshot = try await enrollmentRef.getDocuments()
+        
+        return snapshot.documents.compactMap { document in
+            try? document.data(as: Enrollment.self)
+        }
+    }
 }
 
 extension DataService {

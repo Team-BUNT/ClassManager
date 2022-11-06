@@ -75,13 +75,14 @@ struct PaymentStatusView: View {
             .padding(.horizontal, 20)
             .font(.system(size: 15))
             .task {
-                /*do {
-                    enrollments = try await DataService.shared.requestAllEnrollments(of: "BuntStudioSample") ?? []
+                do {
+                    let enrollments = try await DataService.shared.requestAllEnrollments(of: "BuntStudioSample") ?? []
+                    groupedEnrollments = createGroupedEnrollments(from: enrollments)
                 } catch {
                     print(error)
-                }*/
+                }
                 
-                groupedEnrollments = createGroupedEnrollments(from: dummyEnrollments)
+                // groupedEnrollments = createGroupedEnrollments(from: dummyEnrollments)
             }
         }
     }
