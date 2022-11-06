@@ -26,48 +26,12 @@ struct PaymentStatusView: View {
             VStack(spacing: 0) {
                 CustomSearchBar(searchText: $searchText)
                     .padding(.vertical, 24)
+                
                 Divider()
                     .padding(.bottom, 12)
-                GeometryReader { geometry in
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 0) {
-                            Text("성명")
-                                .frame(width: 44)
-                                .padding(.trailing, (geometry.size.width - 247) * paddingRatio[0])
-                            Text("연락처")
-                                .frame(width: 112)
-                                .padding(.trailing, (geometry.size.width - 247) * paddingRatio[1])
-                            Text("결제상태")
-                                .frame(width: 60)
-                                .padding(.trailing, (geometry.size.width - 247) * paddingRatio[2])
-                        }
-                        .foregroundColor(Color("DarkGray"))
-                        .padding(.horizontal, 10)
-                        
-                        ScrollView {
-                            LazyVStack(spacing: 0) {
-                                ForEach(filteredEnrollments, id: \.[0].ID) { enrollment in
-                                    HStack(spacing: 0) {
-                                        Text(enrollment[0].userName ?? "이름")
-                                            .frame(width: 44)
-                                            .padding(.trailing, (geometry.size.width - 247) * paddingRatio[0])
-                                        Text(enrollment[0].phoneNumber ?? "xxx xxxx xxxx")
-                                            .font(.montserrat(.regular, size: 15))
-                                            .frame(width: 112)
-                                            .padding(.trailing, (geometry.size.width - 247) * paddingRatio[1])
-                                        Text((enrollment[0].paid ?? false) ? "완료" : "대기")
-                                            .frame(width: 60)
-                                            .padding(.trailing, (geometry.size.width - 247) * paddingRatio[2])
-                                        Image(systemName: "chevron.forward")
-                                            .font(.system(size: 12))
-                                            .foregroundColor(Color("DarkGray"))
-                                    }
-                                    .padding(EdgeInsets(top: 19, leading: 10, bottom: 19, trailing: 10))
-                                }
-                            }
-                        }
-                    }
-                }
+                
+                table
+                
                 Spacer()
             }
             .navigationTitle("결제 현황")
@@ -81,12 +45,59 @@ struct PaymentStatusView: View {
                 } catch {
                     print(error)
                 }
-                
-                // groupedEnrollments = createGroupedEnrollments(from: dummyEnrollments)
             }
         }
     }
     
+    // MARK: - table view
+    private var table: some View {
+        GeometryReader { geometry in
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 0) {
+                    Text("성명")
+                        .frame(width: 44)
+                        .padding(.trailing, (geometry.size.width - 247) * paddingRatio[0])
+                    Text("연락처")
+                        .frame(width: 112)
+                        .padding(.trailing, (geometry.size.width - 247) * paddingRatio[1])
+                    Text("결제상태")
+                        .frame(width: 60)
+                        .padding(.trailing, (geometry.size.width - 247) * paddingRatio[2])
+                }
+                .foregroundColor(Color("DarkGray"))
+                .padding(.horizontal, 10)
+                
+                tableRows(width: geometry.size.width)
+            }
+        }
+    }
+    
+    private func tableRows(width: CGFloat) -> some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(filteredEnrollments, id: \.[0].ID) { enrollment in
+                    HStack(spacing: 0) {
+                        Text(enrollment[0].userName ?? "이름")
+                            .frame(width: 44)
+                            .padding(.trailing, (width - 247) * paddingRatio[0])
+                        Text(enrollment[0].phoneNumber ?? "xxx xxxx xxxx")
+                            .font(.montserrat(.regular, size: 15))
+                            .frame(width: 112)
+                            .padding(.trailing, (width - 247) * paddingRatio[1])
+                        Text((enrollment[0].paid ?? false) ? "완료" : "대기")
+                            .frame(width: 60)
+                            .padding(.trailing, (width - 247) * paddingRatio[2])
+                        Image(systemName: "chevron.forward")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color("DarkGray"))
+                    }
+                    .padding(EdgeInsets(top: 19, leading: 10, bottom: 19, trailing: 10))
+                }
+            }
+        }
+    }
+    
+    // MARK: - fetch data from firebase
     private func createGroupedEnrollments(from enrollments: [Enrollment]) -> [[Enrollment]] {
         let sortedEnrollments = enrollments.sorted(by: {
             if $0.paid != $1.paid {
@@ -129,20 +140,6 @@ struct PaymentStatusView: View {
         }
         
         return groupedResult
-    }
-}
-
-extension PaymentStatusView {
-    var dummyEnrollments: [Enrollment] {
-        [
-            Enrollment(ID: "Bunt-Class1-Enroll1", classID: "Bunt-Class1", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장"),
-            Enrollment(ID: "Bunt-Class1-Enroll2", classID: "Bunt-Class1", userName: "김영희", phoneNumber: "01012340102", enrolledDate: Date(), paid: true, paymentType: "무통장"),
-            Enrollment(ID: "Bunt-Class1-Enroll3", classID: "Bunt-Class1", userName: "김지수", phoneNumber: "01012340101", enrolledDate: Date(), paid: true, paymentType: "무통장"),
-            Enrollment(ID: "Bunt-Class2-Enroll1", classID: "Bunt-Class2", userName: "손흥민", phoneNumber: "01012340201", enrolledDate: Date(), paid: true, paymentType: "현장 카드"),
-            Enrollment(ID: "Bunt-Class3-Enroll1", classID: "Bunt-Class3", userName: "레이븐", phoneNumber: "01012340301", enrolledDate: Date(), paid: true, paymentType: "현장 카드"),
-            Enrollment(ID: "Bunt-Class4-Enroll1", classID: "Bunt-Class4", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "현장 카드"),
-            Enrollment(ID: "Bunt-Class5-Enroll1", classID: "Bunt-Class5", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "현장 카드"),
-        ]
     }
 }
 
