@@ -67,6 +67,18 @@ struct PaymentStatusView: View {
                 .foregroundColor(Color("DarkGray"))
                 .padding(.horizontal, 10)
                 
+                if !searchText.isEmpty && filteredEnrollments.isEmpty {
+                    VStack {
+                        Spacer(minLength: geometry.size.height * (207/844))
+                        HStack {
+                            Spacer()
+                            Text("해당 성명의 수강생이 없습니다.")
+                                .font(.system(size: 17))
+                                .foregroundColor(Color("DarkGray"))
+                            Spacer()
+                        }
+                    }
+                }
                 tableRows(width: geometry.size.width)
             }
         }
