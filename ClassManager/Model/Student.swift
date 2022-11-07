@@ -15,7 +15,6 @@ struct Student: Codable {
     let name: String?
     let enrollments: [Enrollment]
     let coupons: [Coupon]
-    var paid: Bool = false
     
     struct Coupon: Codable {
         let studioID: String?
@@ -32,10 +31,9 @@ struct Student: Codable {
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.enrollments = try container.decode([Enrollment].self, forKey: .enrollments)
         self.coupons = try container.decode([Student.Coupon].self, forKey: .coupons)
-        self.paid = getPaymentStatus(from: self.enrollments)
     }
     
-    func getPaymentStatus(from: [Enrollment]) -> Bool {
+    var paid: Bool {
         for enrollment in enrollments {
             if !(enrollment.paid ?? false) {
                 return false
