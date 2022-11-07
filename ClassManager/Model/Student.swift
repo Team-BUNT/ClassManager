@@ -21,4 +21,16 @@ struct Student {
         let studentID: String?
         let expiredDate: Date?
     }
+    
+    lazy var paid: Bool = getPaymentStatus()
+    
+    private func getPaymentStatus() -> Bool {
+        for enrollment in enrollments {
+            if !(enrollment.paid ?? false) {
+                return false
+            }
+        }
+        
+        return true
+    }
 }
