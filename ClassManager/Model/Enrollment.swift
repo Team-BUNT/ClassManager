@@ -11,6 +11,7 @@ import FirebaseFirestore
 class Enrollment: Codable {
     let ID: String
     let classID: String?
+    let studioID: String?
     let userName: String?
     let phoneNumber: String?
     let enrolledDate: Date?
@@ -19,9 +20,10 @@ class Enrollment: Codable {
     var attendance: Bool?
     let info: String?
     
-    init(ID: String, classID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil) {
+    init(ID: String, classID: String?, studioID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil) {
         self.ID = ID
         self.classID = classID
+        self.studioID = studioID
         self.userName = userName
         self.phoneNumber = phoneNumber
         self.enrolledDate = enrolledDate
@@ -34,6 +36,7 @@ class Enrollment: Codable {
     init(documentSnapShot: DocumentSnapshot) {
         self.ID = documentSnapShot["ID"] as? String ?? ""
         self.classID = documentSnapShot["classID"] as? String
+        self.studioID = documentSnapShot["studioID"] as? String
         self.userName = documentSnapShot["userName"] as? String
         self.phoneNumber = documentSnapShot["phoneNumber"] as? String
         self.enrolledDate = (documentSnapShot["enrolledDate"] as? Timestamp)?.dateValue() ?? Date()
