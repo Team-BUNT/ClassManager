@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct Student {
+struct Student: Codable {
     let ID: String
     let studioID: String?
     let phoneNumber: String?
-    let subPhoneNumber: String? = nil
+    let subPhoneNumber: String?
     let name: String?
     let enrollments: [Enrollment]
     let coupons: [Coupon]
     
-    struct Coupon {
+    struct Coupon: Codable {
         let studioID: String?
         let studentID: String?
         let expiredDate: Date?
