@@ -10,14 +10,14 @@ import SwiftUI
 struct PaymentStatusView: View {
     @State private var searchText = ""
     private let paddingRatio: [CGFloat] = [41/107, 33/107, 33/107]
-    @State private var groupedEnrollments = [[Enrollment]]()
-    var filteredEnrollments: [[Enrollment]] {
+    @State private var students = [Student]()
+    var filteredStudents: [Student] {
         if searchText.isEmpty {
-            return groupedEnrollments
+            return students
         }
         
-        return groupedEnrollments.filter {
-            ( $0[0].userName ?? "" ).contains(searchText)
+        return students.filter {
+            ( $0.name ?? "" ).contains(searchText)
         }
     }
     
@@ -40,8 +40,7 @@ struct PaymentStatusView: View {
             .font(.system(size: 15))
             .task {
                 do {
-                    let enrollments = try await DataService.shared.requestAllEnrollments(of: "BuntStudioSample") ?? []
-                    groupedEnrollments = createGroupedEnrollments(from: enrollments)
+                    students = try await DataService.shared.requestAllStudents(of: "BuntStudioSample") ?? []
                 } catch {
                     print(error)
                 }
@@ -67,7 +66,7 @@ struct PaymentStatusView: View {
                 .foregroundColor(Color("DarkGray"))
                 .padding(.horizontal, 10)
                 
-                if !searchText.isEmpty && filteredEnrollments.isEmpty {
+                if !searchText.isEmpty && filteredStudents.isEmpty {
                     VStack {
                         Spacer(minLength: geometry.size.height * (207/844))
                         HStack {
@@ -87,16 +86,16 @@ struct PaymentStatusView: View {
     private func tableRows(width: CGFloat) -> some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                ForEach(filteredEnrollments, id: \.[0].ID) { enrollment in
+                ForEach(filteredStudents, id: \.ID) { student in
                     HStack(spacing: 0) {
-                        Text(enrollment[0].userName ?? "이름")
+                        Text(student.name ?? "이름")
                             .frame(width: 44)
                             .padding(.trailing, (width - 247) * paddingRatio[0])
-                        Text(enrollment[0].phoneNumber ?? "xxx xxxx xxxx")
+                        Text(student.phoneNumber ?? "xxx xxxx xxxx")
                             .font(.montserrat(.regular, size: 15))
                             .frame(width: 112)
                             .padding(.trailing, (width - 247) * paddingRatio[1])
-                        Text((enrollment[0].paid ?? false) ? "완료" : "대기")
+                        Text(student.paid ? "완료" : "대기")
                             .frame(width: 60)
                             .padding(.trailing, (width - 247) * paddingRatio[2])
                         Image(systemName: "chevron.forward")
@@ -107,51 +106,6 @@ struct PaymentStatusView: View {
                 }
             }
         }
-    }
-    
-    // MARK: - fetch data from firebase
-    private func createGroupedEnrollments(from enrollments: [Enrollment]) -> [[Enrollment]] {
-        let sortedEnrollments = enrollments.sorted(by: {
-            if $0.paid != $1.paid {
-                let paidToInt0 = ($0.paid ?? false) ? 1 : 0
-                let paidToInt1 = ($1.paid ?? false) ? 1 : 0
-                
-                return paidToInt0 < paidToInt1
-            }
-            
-            if $0.userName != $1.userName {
-                return $0.userName ?? "" < $1.userName ?? ""
-            }
-            
-            if $0.phoneNumber != $1.phoneNumber {
-                return $0.phoneNumber ?? "" < $1.phoneNumber ?? ""
-            }
-            
-            if $0.enrolledDate != $1.enrolledDate {
-                return $0.enrolledDate ?? Date() < $1.enrolledDate ?? Date()
-            }
-            
-            return $0.classID ?? "" < $1.classID ?? ""
-        })
-        
-        var groupedResult = [[Enrollment]]()
-        var temp = [Enrollment]()
-        for enrollment in sortedEnrollments {
-            if temp.isEmpty ||
-                (temp[0].phoneNumber == enrollment.phoneNumber
-                    && temp[0].paid == enrollment.paid) {
-                temp.append(enrollment)
-            } else {
-                groupedResult.append(temp)
-                temp = [enrollment]
-            }
-        }
-        
-        if !temp.isEmpty {
-            groupedResult.append(temp)
-        }
-        
-        return groupedResult
     }
 }
 
