@@ -8,6 +8,16 @@
 import SwiftUI
 
 struct StudentInfoView: View {
+    @State private var student: Student = Student(ID: "ddd", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [
+        Enrollment(ID: "Bunt-Class1-Sample1", classID: "Bunt-Class1", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false),
+        Enrollment(ID: "Bunt-Class4-Sample1", classID: "Bunt-Class4", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false),
+        Enrollment(ID: "Bunt-Class5-Sample1", classID: "Bunt-Class5", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false)
+    ], coupons: [
+        Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
+        Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
+        Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: true, expiredDate: Date() + 86400)
+    ])
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 38) {
             personalInfoView
@@ -29,9 +39,9 @@ struct StudentInfoView: View {
                 .font(.montserrat(.semibold, size: 17))
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("양원모")
+                    Text("\(student.name ?? "익명")")
                         .font(.subheadline)
-                    Text("01020352349")
+                    Text("\(student.phoneNumber ?? "xxxxxxxxxxx")")
                         .font(.subheadline)
                 }
                 Spacer()
@@ -49,23 +59,27 @@ struct StudentInfoView: View {
                 .font(.montserrat(.semibold, size: 17))
             ScrollView(.horizontal) {
                 HStack(spacing: 14) {
-                    couponView()
-                    couponView()
+                    ForEach(student.groupedCoupons, id: \.[0].expiredDate) { group in
+                        couponView(couponGroup: group)
+                    }
                 }
             }
         }
         .padding(.horizontal, 20)
     }
     
-    func couponView() -> some View {
-        VStack(spacing: 10) {
+    func couponView(couponGroup: [Student.Coupon]) -> some View {
+        let expiredDateString = (couponGroup[0].expiredDate ?? Date()).formattedString(format: "yyyy.MM.dd")
+        let dateGap = (couponGroup[0].expiredDate ?? Date()).dateGap(from: Date())
+        
+        return VStack(spacing: 10) {
             ZStack {
                 RoundedRectangle(cornerRadius: 6)
                     .foregroundColor(Color("InfoBox"))
                     .frame(width: 72, height: 85)
-                Text("1회")
+                Text((couponGroup[0].isFreePass ?? false) ? "프리패스" : "\(couponGroup.count)회")
             }
-            Text("22.08.02\nD-10")
+            Text("\(expiredDateString)\nD-\(dateGap)")
                 .multilineTextAlignment(.center)
                 .font(.system(size: 15))
                 .foregroundColor(Color("InfoDate"))
