@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct StudentInfoView: View {
-    @State private var student: Student = Student(ID: "BuntStudioSample 01012340101", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [], coupons: [])
+    @State private var student: Student
     
     init(student: Student) {
-        self._student.wrappedValue = student
+        self._student = State(wrappedValue: student)
     }
     
     var body: some View {
