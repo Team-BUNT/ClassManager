@@ -8,15 +8,11 @@
 import SwiftUI
 
 struct StudentInfoView: View {
-    @State private var student: Student = Student(ID: "BuntStudioSample 01012340101", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [
-        Enrollment(ID: "Bunt-Class1-Enroll1", classID: "Bunt-Class1", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장", attendance: false, info: ""),
-        Enrollment(ID: "Bunt-Class4-Enroll1", classID: "Bunt-Class4", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: true, paymentType: "무통장", attendance: false, info: ""),
-        Enrollment(ID: "Bunt-Class5-Enroll1", classID: "Bunt-Class5", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장", attendance: false, info: "")
-    ], coupons: [
-        Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
-        Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
-        Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: true, expiredDate: Date() + 86400)
-    ])
+    @State private var student: Student = Student(ID: "BuntStudioSample 01012340101", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [], coupons: [])
+    
+    init(student: Student) {
+        self._student.wrappedValue = student
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 38) {
@@ -33,10 +29,14 @@ struct StudentInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             do {
-                let classes = try await DataService.shared.requestAllClassesBy(studioIDs: student.enrollments.map { $0.classID ?? "" }) ?? []
+                if student.enrollments.isEmpty {
+                    return
+                }
+                
+                let classIDs = try await DataService.shared.requestAllClassesBy(studioIDs: student.enrollments.map { $0.classID ?? "" }) ?? []
                 
                 for i in 0..<student.enrollments.count {
-                    student.enrollments[i].findClass(in: classes)
+                    student.enrollments[i].findClass(in: classIDs)
                 }
                 
                 student.enrollments.sort {
@@ -74,8 +74,17 @@ struct StudentInfoView: View {
                 .font(.montserrat(.semibold, size: 17))
             ScrollView(.horizontal) {
                 HStack(spacing: 14) {
-                    ForEach(student.groupedCoupons, id: \.[0].expiredDate) { group in
-                        couponView(couponGroup: group)
+                    Group {
+                        if student.coupons.isEmpty {
+                            Text("구매한 쿠폰이 없습니다.")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("InfoText"))
+                                .frame(height: 140, alignment: .top)
+                        } else {
+                            ForEach(student.groupedCoupons, id: \.[0].expiredDate) { group in
+                                couponView(couponGroup: group)
+                            }
+                        }
                     }
                 }
             }
@@ -213,7 +222,7 @@ struct StudentInfoView: View {
 struct StudentInfoView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            StudentInfoView()
+            StudentInfoView(student: Student(ID: "BuntStudioSample 01012340101", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [], coupons: []))
         }
     }
 }

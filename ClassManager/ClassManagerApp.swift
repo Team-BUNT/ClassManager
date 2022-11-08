@@ -25,12 +25,11 @@ struct ClassManagerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            /*if isOnboardingActive {
+            if isOnboardingActive {
                 OnboardingMain()
             } else {
                 ClassCalendarView()
-            }*/
-            StudentInfoView()
+            }
         }
     }
 }
