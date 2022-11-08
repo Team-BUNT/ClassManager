@@ -8,17 +8,15 @@
 import SwiftUI
 
 struct StudentInfoView: View {
-    @State private var student: Student = Student(ID: "ddd", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [
-        Enrollment(ID: "Bunt-Class1-Sample1", classID: "Bunt-Class1", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장"),
-        Enrollment(ID: "Bunt-Class4-Sample1", classID: "Bunt-Class4", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: true, paymentType: "쿠폰 사용"),
-        Enrollment(ID: "Bunt-Class5-Sample1", classID: "Bunt-Class5", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장")
+    @State private var student: Student = Student(ID: "BuntStudioSample 01012340101", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [
+        Enrollment(ID: "Bunt-Class1-Enroll1", classID: "Bunt-Class1", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장", attendance: false, info: ""),
+        Enrollment(ID: "Bunt-Class4-Enroll1", classID: "Bunt-Class4", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: true, paymentType: "무통장", attendance: false, info: ""),
+        Enrollment(ID: "Bunt-Class5-Enroll1", classID: "Bunt-Class5", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장", attendance: false, info: "")
     ], coupons: [
         Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
         Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
         Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: true, expiredDate: Date() + 86400)
     ])
-    
-    @State private var enrollments = [Enrollment]()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 38) {
@@ -41,7 +39,7 @@ struct StudentInfoView: View {
                     student.enrollments[i].findClass(in: classes)
                 }
                 
-                enrollments = student.enrollments.sorted {
+                student.enrollments.sort {
                     !($0.paid ?? false) && ($1.paid ?? false)
                 }
             } catch {
@@ -110,7 +108,8 @@ struct StudentInfoView: View {
                     .font(.montserrat(.semibold, size: 17))
                 Spacer()
                 Button {
-                    
+                    DataService.shared.updatePaid(enrollments: student.enrollments)
+                    DataService.shared.updateStudentEnrollments(student: student)
                 } label: {
                     Text("저장")
                         .font(.system(size: 15))
@@ -129,14 +128,14 @@ struct StudentInfoView: View {
     var enrollmentListView: some View {
         ScrollView {
             VStack(spacing: 38) {
-                ForEach(enrollments, id: \.ID) { enrollment in
+                ForEach(student.enrollments, id: \.ID) { enrollment in
                     VStack(alignment:.leading, spacing: 15) {
                         HStack(spacing: 25) {
                             Text("클래스")
                                 .frame(width: 82, alignment: .leading)
                                 .multilineTextAlignment(.leading)
                                 .foregroundColor(Color("InfoText"))
-                            Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd")) \(enrollment.matchedClass?.instructorName ?? "") \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH.mm"))")
+                            Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd")) \(enrollment.matchedClass?.instructorName ?? "") \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH:mm"))")
                             Spacer()
                         }
                         .padding(.horizontal, 20)
@@ -166,7 +165,7 @@ struct StudentInfoView: View {
                             } else {
                                 Button {
                                     enrollment.paid?.toggle()
-                                    enrollments = enrollments.map { $0 }
+                                    student.enrollments = student.enrollments.map { $0 }
                                 } label: {
                                     if enrollment.paid ?? false {
                                         boxChecked

@@ -171,6 +171,33 @@ struct DataService {
             try? document.data(as: Class.self)
         }
     }
+    
+    func updatePaid(enrollments: [Enrollment]) {
+        enrollments.forEach { enrollment in
+            enrollmentRef.document("\(enrollment.ID)").updateData([
+                "paid": enrollment.paid ?? false
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
+        }
+    }
+    
+    func updateStudentEnrollments(student: Student) {
+        student.enrollments.forEach { $0.matchedClass = nil }
+        do {
+            studentRef.document("\(student.ID)").updateData([
+                "enrollments": try student.enrollments.encode()
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
 }
 
 extension DataService {

@@ -13,7 +13,7 @@ struct Student: Codable {
     let phoneNumber: String?
     let subPhoneNumber: String?
     let name: String?
-    let enrollments: [Enrollment]
+    var enrollments: [Enrollment]
     let coupons: [Coupon]
     
     struct Coupon: Codable, Equatable {
