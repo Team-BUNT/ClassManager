@@ -9,14 +9,16 @@ import SwiftUI
 
 struct StudentInfoView: View {
     @State private var student: Student = Student(ID: "ddd", studioID: "BuntStudioSample", phoneNumber: "01012340101", subPhoneNumber: nil, name: "김철수", enrollments: [
-        Enrollment(ID: "Bunt-Class1-Sample1", classID: "Bunt-Class1", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false),
-        Enrollment(ID: "Bunt-Class4-Sample1", classID: "Bunt-Class4", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false),
-        Enrollment(ID: "Bunt-Class5-Sample1", classID: "Bunt-Class5", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false)
+        Enrollment(ID: "Bunt-Class1-Sample1", classID: "Bunt-Class1", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장"),
+        Enrollment(ID: "Bunt-Class4-Sample1", classID: "Bunt-Class4", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: true, paymentType: "쿠폰 사용"),
+        Enrollment(ID: "Bunt-Class5-Sample1", classID: "Bunt-Class5", studioID: "BuntStudioSample", userName: "김철수", phoneNumber: "01012340101", enrolledDate: Date(), paid: false, paymentType: "무통장")
     ], coupons: [
         Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
         Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: false, expiredDate: Date()),
         Student.Coupon(studioID: "BuntStudioSample", studentID: "ddd", isFreePass: true, expiredDate: Date() + 86400)
     ])
+    
+    @State private var enrollments = [Enrollment]()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 38) {
@@ -25,12 +27,27 @@ struct StudentInfoView: View {
             
             couponsView
             
-            enrollmentsView
+            paymentView
             
             Spacer()
         }
         .navigationTitle("수강생 정보")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            do {
+                let classes = try await DataService.shared.requestAllClassesBy(studioIDs: student.enrollments.map { $0.classID ?? "" }) ?? []
+                
+                for i in 0..<student.enrollments.count {
+                    student.enrollments[i].findClass(in: classes)
+                }
+                
+                enrollments = student.enrollments.sorted {
+                    !($0.paid ?? false) && ($1.paid ?? false)
+                }
+            } catch {
+                print(error)
+            }
+        }
     }
     
     var personalInfoView: some View {
@@ -86,7 +103,7 @@ struct StudentInfoView: View {
         }
     }
     
-    var enrollmentsView: some View {
+    var paymentView: some View {
         VStack(spacing: 21) {
             HStack(alignment: .top) {
                 Text("결제 상태")
@@ -105,55 +122,67 @@ struct StudentInfoView: View {
             }
             .padding(.horizontal, 20)
             
-            
-            enrollmentRow()
-            
+            enrollmentListView
         }
     }
     
-    func enrollmentRow() -> some View {
-        VStack(alignment:.leading, spacing: 15) {
-            HStack(spacing: 25) {
-                Text("클래스")
-                    .frame(width: 82, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(Color("InfoText"))
-                Text("12.07 Narae 18:00")
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-            
-            HStack(spacing: 25) {
-                Text("결제 형태")
-                    .frame(width: 82, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(Color("InfoText"))
-                Text("쿠폰 사용")
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-            
-            HStack(spacing: 25) {
-                Text("결제 여부")
-                    .frame(width: 82, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(Color("InfoText"))
-                
-                Text("완료")
-                
-                Spacer()
-                
-                Button {
-                    
-                } label: {
-                    boxChecked
+    var enrollmentListView: some View {
+        ScrollView {
+            VStack(spacing: 38) {
+                ForEach(enrollments, id: \.ID) { enrollment in
+                    VStack(alignment:.leading, spacing: 15) {
+                        HStack(spacing: 25) {
+                            Text("클래스")
+                                .frame(width: 82, alignment: .leading)
+                                .multilineTextAlignment(.leading)
+                                .foregroundColor(Color("InfoText"))
+                            Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd")) \(enrollment.matchedClass?.instructorName ?? "") \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH.mm"))")
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        HStack(spacing: 25) {
+                            Text("결제 형태")
+                                .frame(width: 82, alignment: .leading)
+                                .multilineTextAlignment(.leading)
+                                .foregroundColor(Color("InfoText"))
+                            Text("\(enrollment.paymentType ?? "")")
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        HStack(spacing: 25) {
+                            Text("결제 여부")
+                                .frame(width: 82, alignment: .leading)
+                                .multilineTextAlignment(.leading)
+                                .foregroundColor(Color("InfoText"))
+                            
+                            Text("\((enrollment.paid ?? false) ? "완료" : "대기")")
+                            
+                            Spacer()
+                            
+                            if enrollment.paymentType == "쿠폰 사용" {
+                                boxCheckedUnabled
+                            } else {
+                                Button {
+                                    enrollment.paid?.toggle()
+                                    enrollments = enrollments.map { $0 }
+                                } label: {
+                                    if enrollment.paid ?? false {
+                                        boxChecked
+                                    } else {
+                                        boxUnchecked
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.vertical, 12)
+                        .padding(.horizontal, 20)
+                        .background(Color("InfoPayBox"))
+                        .font(.system(size: 15))
+                    }
                 }
-                
             }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 20)
-            .background(Color("InfoPayBox"))
-            .font(.system(size: 15))
         }
     }
     
@@ -173,6 +202,12 @@ struct StudentInfoView: View {
         Image(systemName: "square.fill")
             .font(.system(size: 20))
             .foregroundColor(Color("CheckGray"))
+    }
+    
+    var boxCheckedUnabled: some View {
+        Image(systemName: "square.fill")
+            .font(.system(size: 20))
+            .foregroundColor(Color("Accent"))
     }
 }
 

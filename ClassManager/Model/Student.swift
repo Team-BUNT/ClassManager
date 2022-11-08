@@ -67,7 +67,9 @@ struct Student: Codable {
             
             return !($0.isFreePass ?? false) && ($1.isFreePass ?? false)
         }) {
-            if temp.isEmpty || (temp.last! == coupon) {
+            if temp.isEmpty ||
+                (temp.last!.expiredDate?.formattedString(format: "yyyy.MM.dd") == coupon.expiredDate?.formattedString(format: "yyyy.MM.dd") &&
+                 temp.last!.isFreePass == coupon.isFreePass) {
                 temp.append(coupon)
             } else {
                 grouped.append(temp)
