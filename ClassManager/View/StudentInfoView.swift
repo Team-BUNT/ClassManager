@@ -46,7 +46,7 @@ struct StudentInfoView: View {
                     return
                 }
                 
-                let classIDs = try await DataService.shared.requestAllClassesBy(studioIDs: student.enrollments.map { $0.classID ?? "" }) ?? []
+                let classIDs = try await DataService.shared.requestAllClassesBy(classIDs: student.enrollments.map { $0.classID ?? "" }) ?? []
                 
                 for i in 0..<student.enrollments.count {
                     student.enrollments[i].findClass(in: classIDs)

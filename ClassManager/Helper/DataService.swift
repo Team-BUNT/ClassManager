@@ -164,8 +164,8 @@ struct DataService {
         }
     }
     
-    func requestAllClassesBy(studioIDs: [String]) async throws -> [Class]? {
-        let snapshot = try await classRef.whereField("ID", in: studioIDs).getDocuments()
+    func requestAllClassesBy(classIDs: [String]) async throws -> [Class]? {
+        let snapshot = try await classRef.whereField("ID", in: classIDs).getDocuments()
         
         return snapshot.documents.compactMap { document in
             try? document.data(as: Class.self)
