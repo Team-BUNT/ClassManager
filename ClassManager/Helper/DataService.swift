@@ -157,8 +157,11 @@ struct DataService {
     }
     
     func requestAllStudents(of studioID: String) async throws -> [Student]? {
-        let snapshot = try await studentRef.whereField("studioID", isEqualTo: studioID).getDocuments()
-        
+        let snapshot = try await studentRef
+            .whereField("studioID", isEqualTo: studioID)
+            .order(by: "name")
+            .getDocuments()
+            
         return snapshot.documents.compactMap { document in
             try? document.data(as: Student.self)
         }
