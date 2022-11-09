@@ -12,16 +12,32 @@ struct ContainerView: View {
         TabView {
             ClassCalendarView()
                 .tabItem {
-                    Text("클래스")
+                    VStack {
+                        Image("Door")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 24.06, height: 24.79)
+                            .padding(.top, 10)
+                        Text("클래스")
+                    }
                 }
+            
             PaymentStatusView()
                 .tabItem {
-                    Text("결제")
+                    VStack {
+                        Image("Card")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 26, height: 20)
+                            .padding(.top, 10)
+                        Text("결제")
+                    }
                 }
         }
         .onAppear {
             UITabBar.appearance().backgroundColor = UIColor(named: "TabBarBackground")
         }
+        .tint(.accent)
     }
 }
 
