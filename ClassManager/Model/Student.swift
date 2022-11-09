@@ -13,12 +13,13 @@ struct Student: Codable {
     let phoneNumber: String?
     let subPhoneNumber: String?
     let name: String?
-    let enrollments: [Enrollment]
+    var enrollments: [Enrollment]
     let coupons: [Coupon]
     
-    struct Coupon: Codable {
+    struct Coupon: Codable, Equatable {
         let studioID: String?
         let studentID: String?
+        let isFreePass: Bool?
         let expiredDate: Date?
     }
     
@@ -33,6 +34,17 @@ struct Student: Codable {
         self.coupons = try container.decode([Student.Coupon].self, forKey: .coupons)
     }
     
+    init(ID: String, studioID: String?, phoneNumber: String?, subPhoneNumber: String?, name: String?, enrollments: [Enrollment]?, coupons: [Coupon]?) {
+        self.ID = ID
+        self.studioID = studioID
+        self.phoneNumber = phoneNumber
+        self.subPhoneNumber = subPhoneNumber
+        self.name = name
+        self.enrollments = enrollments ?? []
+        self.coupons = coupons ?? []
+    }
+    
+    // MARK: enrollment 중 단 하나라도 paid가 false라면 false 반환
     var paid: Bool {
         for enrollment in enrollments {
             if !(enrollment.paid ?? false) {
@@ -41,5 +53,34 @@ struct Student: Codable {
         }
         
         return true
+    }
+    
+    // MARK: coupon을 날짜와 프리패스 여부가 같은 것끼리 grouping함
+    var groupedCoupons: [[Coupon]] {
+        var grouped = [[Coupon]]()
+        var temp = [Coupon]()
+        
+        for coupon in coupons.sorted(by: {
+            if $0.expiredDate != $1.expiredDate {
+                return $0.expiredDate ?? Date() < $1.expiredDate ?? Date()
+            }
+            
+            return !($0.isFreePass ?? false) && ($1.isFreePass ?? false)
+        }) {
+            if temp.isEmpty ||
+                (temp.last!.expiredDate?.formattedString(format: "yyyy.MM.dd") == coupon.expiredDate?.formattedString(format: "yyyy.MM.dd") &&
+                 temp.last!.isFreePass == coupon.isFreePass) {
+                temp.append(coupon)
+            } else {
+                grouped.append(temp)
+                temp = [coupon]
+            }
+        }
+        
+        if !temp.isEmpty {
+            grouped.append(temp)
+        }
+        
+        return grouped
     }
 }

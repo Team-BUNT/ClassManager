@@ -19,6 +19,7 @@ class Enrollment: Codable {
     let paymentType: String?
     var attendance: Bool?
     let info: String?
+    var matchedClass: Class? = nil
     
     init(ID: String, classID: String?, studioID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil) {
         self.ID = ID
@@ -44,5 +45,9 @@ class Enrollment: Codable {
         self.paymentType = documentSnapShot["paymentType"] as? String
         self.attendance = documentSnapShot["attendance"] as? Bool
         self.info = documentSnapShot["info"] as? String
+    }
+    
+    func findClass(in classes: [Class]) {
+        matchedClass = classes.filter { $0.ID == self.classID }.first
     }
 }

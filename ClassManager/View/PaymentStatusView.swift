@@ -87,22 +87,28 @@ struct PaymentStatusView: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(filteredStudents, id: \.ID) { student in
-                    HStack(spacing: 0) {
-                        Text(student.name ?? "이름")
-                            .frame(width: 44)
-                            .padding(.trailing, (width - 247) * paddingRatio[0])
-                        Text(student.phoneNumber ?? "xxx xxxx xxxx")
-                            .font(.montserrat(.regular, size: 15))
-                            .frame(width: 112)
-                            .padding(.trailing, (width - 247) * paddingRatio[1])
-                        Text(student.paid ? "완료" : "대기")
-                            .frame(width: 60)
-                            .padding(.trailing, (width - 247) * paddingRatio[2])
-                        Image(systemName: "chevron.forward")
-                            .font(.system(size: 12))
-                            .foregroundColor(Color("DarkGray"))
+                    NavigationLink {
+                        StudentInfoView(student: student)
+                    } label: {
+                        HStack(spacing: 0) {
+                            Text(student.name ?? "이름")
+                                .frame(width: 44)
+                                .padding(.trailing, (width - 247) * paddingRatio[0])
+                            Text(student.phoneNumber ?? "xxx xxxx xxxx")
+                                .font(.montserrat(.regular, size: 15))
+                                .frame(width: 112)
+                                .padding(.trailing, (width - 247) * paddingRatio[1])
+                            Text(student.paid ? "완료" : "대기")
+                                .frame(width: 60)
+                                .padding(.trailing, (width - 247) * paddingRatio[2])
+                            Image(systemName: "chevron.forward")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color("DarkGray"))
+                        }
+                        .padding(EdgeInsets(top: 19, leading: 10, bottom: 19, trailing: 10))
+                        .foregroundColor(Color(.label))
                     }
-                    .padding(EdgeInsets(top: 19, leading: 10, bottom: 19, trailing: 10))
+
                 }
             }
         }

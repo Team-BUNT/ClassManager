@@ -18,4 +18,20 @@ extension Date {
         
         return "\(startTime) - \(endTime)"
     }
+    
+    // MARK: 원하는 format만 주입하면 string 반환
+    func formattedString(format: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    // MARK: "일" 단위 까지만 비교하여 날짜 간격 계산
+    func dateGap(from start: Date) -> Int {
+        let timeInterval = Int(self.timeIntervalSince1970 / 86400)
+        let startTimeInterval = Int(start.timeIntervalSince1970 / 86400)
+        
+        return timeInterval - startTimeInterval
+    }
 }
