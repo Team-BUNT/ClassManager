@@ -38,7 +38,11 @@ struct ClassCalendarView: View {
                     }
                 }
                 .padding(.horizontal, 24)
-
+                .onAppear {
+                    if Constant.shared.classes != nil {
+                        classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+                    }
+                }
                 Spacer()
             }
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
