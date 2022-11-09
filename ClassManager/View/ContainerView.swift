@@ -14,10 +14,6 @@ struct ContainerView: View {
                 .tabItem {
                     VStack {
                         Image("Door")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24.06, height: 24.79)
-                            .padding(.top, 10)
                         Text("클래스")
                     }
                 }
@@ -26,10 +22,6 @@ struct ContainerView: View {
                 .tabItem {
                     VStack {
                         Image("Card")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 26, height: 20)
-                            .padding(.top, 10)
                         Text("결제")
                     }
                 }
