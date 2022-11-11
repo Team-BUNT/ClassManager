@@ -152,7 +152,7 @@ struct AttendanceView: View {
                     .padding(.trailing, 20)
                     .onTapGesture {
                         // TODO: Toast message or something
-                        if !Constant.shared.isSuspended(classID: currentClass.ID) {
+                        if !Constant.shared.isSuspended(classID: currentClass.ID) && isChanged {
                             DataService.shared.updateAttendance(enrollments: enrollments)
                             isChanged = false
                         }
