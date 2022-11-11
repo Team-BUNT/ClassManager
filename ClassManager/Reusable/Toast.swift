@@ -10,7 +10,7 @@ import SwiftUI
 struct Toast: ViewModifier {
     // these correspond to Android values f
     // or DURATION_SHORT and DURATION_LONG
-    static let short: TimeInterval = 1
+    static let short: TimeInterval = 2
     static let long: TimeInterval = 3.5
     
     let message: String
