@@ -134,7 +134,7 @@ struct AttendanceView: View {
                         Button("수정하기", role: .none) {
                             isShowingEditSheet.toggle()
                         }
-                        Button("삭제하기", role: .none) {
+                        Button("삭제하기", role: .destructive) {
                             if enrollments.count > 0 {
                                 isShowingFailAlert = true
                             } else {
