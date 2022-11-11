@@ -218,38 +218,39 @@ struct AttendanceView: View {
     var studentListBody: some View {
         GeometryReader { geometry in
             VStack(spacing: 35) {
-                HStack(spacing: 10) {
-                    Text("All")
-                        .frame(width: (geometry.size.width - 30) * columnRatio[0])
-                        .font(.montserrat(.semibold, size: 15))
-                    Text("")
-                        .frame(width: (geometry.size.width - 30) * columnRatio[1])
-                    Text("")
-                        .frame(width: (geometry.size.width - 30) * columnRatio[2])
-                    if Constant.shared.isSuspended(classID: currentClass.ID) {
-                        boxUnabled
-                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
-                    } else {
-                        ZStack {
-                            if isAllChecked {
-                                boxChecked
-                            } else {
-                                boxUnchecked
+                if enrollments.count > 0 {
+                    HStack(spacing: 10) {
+                        Text("All")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[0])
+                            .font(.montserrat(.semibold, size: 15))
+                        Text("")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[1])
+                        Text("")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[2])
+                        if Constant.shared.isSuspended(classID: currentClass.ID) {
+                            boxUnabled
+                                .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                        } else {
+                            ZStack {
+                                if isAllChecked {
+                                    boxChecked
+                                } else {
+                                    boxUnchecked
+                                }
                             }
-                        }
-                        .frame(width: (geometry.size.width - 30) * columnRatio[3])
-                        .onTapGesture {
-                            isChanged = true
-                            isAllChecked.toggle()
-                            if isAllChecked {
-                                allChecked()
-                            } else {
-                                allUnchecked()
+                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                            .onTapGesture {
+                                isChanged = true
+                                isAllChecked.toggle()
+                                if isAllChecked {
+                                    allChecked()
+                                } else {
+                                    allUnchecked()
+                                }
                             }
                         }
                     }
                 }
-                
                 ForEach(Array(enrollments.enumerated()), id: \.offset) { index, enrollment in
                     HStack(spacing: 10) {
                         Text("\(index + 1)")
