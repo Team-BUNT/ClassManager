@@ -17,6 +17,7 @@ struct AttendanceView: View {
     @State var isNavigationLinkActive = false
     @State var isShowingEditSheet = false
     @State var isShowingToast = false
+    @State var isChanged = false
     
     @State var enrollments = [Enrollment]()
         
@@ -151,7 +152,10 @@ struct AttendanceView: View {
                     .padding(.trailing, 20)
                     .onTapGesture {
                         // TODO: Toast message or something
-                        if !Constant.shared.isSuspended(classID: currentClass.ID) { DataService.shared.updateAttendance(enrollments: enrollments) }
+                        if !Constant.shared.isSuspended(classID: currentClass.ID) {
+                            DataService.shared.updateAttendance(enrollments: enrollments)
+                            isChanged = false
+                        }
                     }
             }
             .font(.montserrat(.semibold, size: 15))
@@ -183,7 +187,8 @@ struct AttendanceView: View {
     var saveButton: some View {
         Text("저장")
             .font(.system(size: 15))
-            .background(RoundedRectangle(cornerRadius: 7).frame(width: 60, height: 33).foregroundColor(Color("Box")))
+            .foregroundColor(isChanged ? .black : .white)
+            .background(RoundedRectangle(cornerRadius: 7).frame(width: 60, height: 33).foregroundColor(isChanged ? Color("Accent") : Color("Box")))
     }
     
     var studentListHeader: some View {
@@ -227,6 +232,7 @@ struct AttendanceView: View {
                         }
                         .frame(width: (geometry.size.width - 30) * columnRatio[3])
                         .onTapGesture {
+                            isChanged = true
                             isAllChecked.toggle()
                             if isAllChecked {
                                 allChecked()
@@ -260,6 +266,7 @@ struct AttendanceView: View {
                             }
                             .frame(width: (geometry.size.width - 30) * columnRatio[3])
                             .onTapGesture {
+                                isChanged = true
                                 enrollment.attendance?.toggle()
                                 enrollments = enrollments.map { $0 }
                                 if attendanceCount() == enrollments.count {
