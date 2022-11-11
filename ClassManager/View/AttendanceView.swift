@@ -96,47 +96,54 @@ struct AttendanceView: View {
                     .font(.system(size: 14))
                     .foregroundColor(Color("DarkGray"))
             }
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("Hall \(currentClass.hall?.name ?? "A")")
-                        .font(.subheadline)
-                        .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : Color("Gray"))
-                    Spacer()
-                    Image(systemName: "ellipsis")
-                        .onTapGesture {
-                            isPresentingConfirm = true
-                        }
-                        .confirmationDialog("", isPresented: $isPresentingConfirm) {
-                            Button("수정하기", role: .none) {
-                                isShowingEditSheet.toggle()
-                            }
-                            Button("삭제하기", role: .none) {
-                                if enrollments.count > 0 {
-                                    isShowingFailAlert = true
-                                } else {
-                                    isShowingDeleteAlert = true
-                                }
-                            }
-                            Button("휴강하기", role: .destructive) {
-                                isNavigationLinkActive = true
-                            }
-                        }
+            ZStack(alignment: .topTrailing) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Hall \(currentClass.hall?.name ?? "A")")
+                            .font(.subheadline)
+                            .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : Color("Gray"))
+                        Spacer()
+                    }
+                    HStack(spacing: 4) {
+                        Text(currentClass.instructorName ?? "")
+                            .font(.montserrat(.semibold, size: 16))
+                            .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
+                        Text("의 \(currentClass.title ?? "")")
+                            .font(.callout)
+                            .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
+                    }
+                    .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : .white)
+                    Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(Color("DarkGray"))
                 }
-                HStack(spacing: 4) {
-                    Text(currentClass.instructorName ?? "")
-                        .font(.montserrat(.semibold, size: 16))
-                        .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
-                    Text("의 \(currentClass.title ?? "")")
-                        .font(.callout)
-                        .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
-                }
-                .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : .white)
-                Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
-                    .font(.system(size: 15, weight: .regular))
-                    .foregroundColor(Color("DarkGray"))
+                .padding(20)
+                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("Box")))
+                
+                Image(systemName: "ellipsis")
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .padding(.top, 5)
+                    .padding(.trailing, 5)
+                    .onTapGesture {
+                        isPresentingConfirm = true
+                    }
+                    .confirmationDialog("", isPresented: $isPresentingConfirm) {
+                        Button("수정하기", role: .none) {
+                            isShowingEditSheet.toggle()
+                        }
+                        Button("삭제하기", role: .none) {
+                            if enrollments.count > 0 {
+                                isShowingFailAlert = true
+                            } else {
+                                isShowingDeleteAlert = true
+                            }
+                        }
+                        Button("휴강하기", role: .destructive) {
+                            isNavigationLinkActive = true
+                        }
+                    }
             }
-            .padding(20)
-            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("Box")))
         }
     }
     
