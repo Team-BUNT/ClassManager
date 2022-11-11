@@ -17,6 +17,7 @@ struct AttendanceView: View {
     @State var isNavigationLinkActive = false
     @State var isShowingEditSheet = false
     @State var isShowingToast = false
+    @State var isShowingUpdateToast = false
     @State var isChanged = false
     
     @State var enrollments = [Enrollment]()
@@ -43,6 +44,7 @@ struct AttendanceView: View {
             currentClass = Constant.shared.classes?.filter({ $0.ID == currentClass.ID }).first ?? currentClass
         }
         .toast(message: "클래스가 수정되었습니다", isShowing: $isShowingToast, duration: Toast.short)
+        .toast(message: "현재 출결 상태가 저장되었습니다.", isShowing: $isShowingUpdateToast, duration: Toast.short)
         .alert("삭제하기", isPresented: $isShowingFailAlert, actions: {
             Button("확인", role: .cancel) {}
         }, message: {
@@ -162,6 +164,7 @@ struct AttendanceView: View {
                         if !Constant.shared.isSuspended(classID: currentClass.ID) && isChanged {
                             DataService.shared.updateAttendance(enrollments: enrollments)
                             isChanged = false
+                            isShowingUpdateToast.toggle()
                         }
                     }
             }
