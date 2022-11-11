@@ -53,7 +53,7 @@ struct ClassCalendarView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("CLASS 관리")
+                    Text("클래스 관리")
                         .font(.custom(FontManager.Montserrat.semibold, size: 15))
                         .accessibilityAddTraits(.isHeader)
                 }
