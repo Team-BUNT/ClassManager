@@ -11,39 +11,25 @@ struct StudentInfoView: View {
     @State private var student: Student
     @State private var isChanged = false
     @State private var isShowingSaveToast = false
-    
-//    @Environment(\.presentationMode) private var presentationMode
-    
+        
     init(student: Student) {
         self._student = State(wrappedValue: student)
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 38) {
-            personalInfoView
-                .padding(.top, 20)
-            
-            couponsView
-            
-            paymentView
-            
-            Spacer()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 38) {
+                personalInfoView
+                    .padding(.top, 20)
+                
+                couponsView
+                
+                paymentView
+                
+                Spacer()
+            }
         }
         .toast(message: "현재 결제 상태가 저장되었습니다.", isShowing: $isShowingSaveToast, duration: Toast.short)
-//        .navigationTitle("수강생 정보")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                Button {
-//                    presentationMode.wrappedValue.dismiss()
-//                } label: {
-//                    Image(systemName: "chevron.backward")
-//                        .foregroundColor(Color(.label))
-//                }
-//
-//            }
-//        }
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("수강생 정보")
@@ -76,15 +62,16 @@ struct StudentInfoView: View {
             Text("개인 정보")
                 .font(.montserrat(.semibold, size: 17))
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text("\(student.name ?? "익명")")
                         .font(.subheadline)
                     Text("\(student.phoneNumber ?? "xxxxxxxxxxx")")
+                        .kerning(0.3)
                         .font(.subheadline)
                 }
                 Spacer()
             }
-            .padding(.vertical, 14)
+            .padding(.vertical, 18)
             .padding(.horizontal, 20)
             .background(RoundedRectangle(cornerRadius: 8).foregroundColor(Color("InfoBox")))
         }
@@ -95,6 +82,7 @@ struct StudentInfoView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("잔여 쿠폰")
                 .font(.montserrat(.semibold, size: 17))
+                .padding(.horizontal, 20)
             ScrollView(.horizontal) {
                 HStack(spacing: 14) {
                     Group {
@@ -110,9 +98,9 @@ struct StudentInfoView: View {
                         }
                     }
                 }
+                .padding(.horizontal, 20)
             }
         }
-        .padding(.horizontal, 20)
     }
     
     func couponView(couponGroup: [Student.Coupon]) -> some View {
@@ -161,63 +149,61 @@ struct StudentInfoView: View {
     }
     
     var enrollmentListView: some View {
-        ScrollView {
-            VStack(spacing: 38) {
-                ForEach(student.enrollments, id: \.ID) { enrollment in
-                    VStack(alignment:.leading, spacing: 15) {
-                        HStack(spacing: 25) {
-                            Text("클래스")
-                                .frame(width: 82, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .foregroundColor(Color("InfoText"))
-                            Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd")) \(enrollment.matchedClass?.instructorName ?? "") \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH:mm"))")
-                            Spacer()
-                        }
-                        .padding(.horizontal, 20)
+        VStack(spacing: 38) {
+            ForEach(student.enrollments, id: \.ID) { enrollment in
+                VStack(alignment:.leading, spacing: 15) {
+                    HStack(spacing: 25) {
+                        Text("클래스")
+                            .frame(width: 82, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(Color("InfoText"))
+                        Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd")) \(enrollment.matchedClass?.instructorName ?? "") \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH:mm"))")
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    HStack(spacing: 25) {
+                        Text("결제 형태")
+                            .frame(width: 82, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(Color("InfoText"))
+                        Text("\(enrollment.paymentType ?? "")")
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    HStack(spacing: 25) {
+                        Text("결제 여부")
+                            .frame(width: 82, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(Color("InfoText"))
                         
-                        HStack(spacing: 25) {
-                            Text("결제 형태")
-                                .frame(width: 82, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .foregroundColor(Color("InfoText"))
-                            Text("\(enrollment.paymentType ?? "")")
-                            Spacer()
-                        }
-                        .padding(.horizontal, 20)
+                        Text("\((enrollment.paid ?? false) ? "완료" : "대기")")
                         
-                        HStack(spacing: 25) {
-                            Text("결제 여부")
-                                .frame(width: 82, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .foregroundColor(Color("InfoText"))
-                            
-                            Text("\((enrollment.paid ?? false) ? "완료" : "대기")")
-                            
-                            Spacer()
-                            
-                            if enrollment.paymentType == "쿠폰 사용" {
-                                boxCheckedUnabled
-                            } else {
-                                ZStack {
-                                    if enrollment.paid ?? false {
-                                        boxChecked
-                                    } else {
-                                        boxUnchecked
-                                    }
-                                }
-                                .onTapGesture {
-                                    enrollment.paid?.toggle()
-                                    student.enrollments = student.enrollments.map { $0 }
-                                    isChanged = true
+                        Spacer()
+                        
+                        if enrollment.paymentType == "쿠폰 사용" {
+                            boxCheckedUnabled
+                        } else {
+                            ZStack {
+                                if enrollment.paid ?? false {
+                                    boxChecked
+                                } else {
+                                    boxUnchecked
                                 }
                             }
+                            .onTapGesture {
+                                enrollment.paid?.toggle()
+                                student.enrollments = student.enrollments.map { $0 }
+                                isChanged = true
+                            }
                         }
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 20)
-                        .background(Color("InfoPayBox"))
-                        .font(.system(size: 15))
                     }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 20)
+                    .background(Color("InfoPayBox"))
                 }
+                .font(.system(size: 15))
             }
         }
     }

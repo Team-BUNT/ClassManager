@@ -64,17 +64,6 @@ struct AttendanceView: View {
             EditClassView(isShowingEditSheet: $isShowingEditSheet, isShowingToast: $isShowingToast, title: currentClass.title ?? "", instructorName: currentClass.instructorName ?? "", date: currentClass.date ?? Date(), tenTimesDuration: (currentClass.durationMinute ?? 60) / 10, isPopUp: currentClass.isPopUp ?? false, repetition: 0, selectedHall: hallIndex(), applicantsCount: currentClass.applicantsCount ?? 0, classID: currentClass.ID)
         }
         .navigationTitle("출석부")
-//        .navigationBarBackButtonHidden(true)
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                Button {
-//                    presentationMode.wrappedValue.dismiss()
-//                } label: {
-//                    Image(systemName: "chevron.backward")
-//                        .foregroundColor(.white)
-//                }
-//            }
-//        }
         .task {
             do {
                 enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
