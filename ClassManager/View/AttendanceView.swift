@@ -160,7 +160,6 @@ struct AttendanceView: View {
                 saveButton
                     .padding(.trailing, 20)
                     .onTapGesture {
-                        // TODO: Toast message or something
                         if !Constant.shared.isSuspended(classID: currentClass.ID) && isChanged {
                             DataService.shared.updateAttendance(enrollments: enrollments)
                             isChanged = false
@@ -256,7 +255,7 @@ struct AttendanceView: View {
                 }
                 ForEach(Array(enrollments.enumerated()), id: \.offset) { index, enrollment in
                     HStack(spacing: 10) {
-                        Text("\(index + 1)")
+                        Text("\(enrollments.count - index)")
                             .frame(width: (geometry.size.width - 30) * columnRatio[0])
                             .font(.montserrat(.semibold, size: 15))
                         Text(enrollment.userName ?? "")
@@ -337,7 +336,7 @@ struct AttendanceView: View {
     }
     
     private func sortEnrollments() {
-        enrollments.sort(by: { $0.enrolledDate ?? Date() < $1.enrolledDate ?? Date() })
+        enrollments.sort(by: { $0.enrolledDate ?? Date() > $1.enrolledDate ?? Date() })
     }
     
     private func hallIndex() -> Int {
