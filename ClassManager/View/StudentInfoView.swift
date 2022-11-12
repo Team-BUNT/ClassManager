@@ -132,21 +132,20 @@ struct StudentInfoView: View {
                 Text("결제 상태")
                     .font(.montserrat(.semibold, size: 17))
                 Spacer()
-                Button {
-                    if isChanged {
-                        DataService.shared.updatePaid(enrollments: student.enrollments)
-                        DataService.shared.updateStudentEnrollments(student: student)
-                        isChanged = false
-                        isShowingSaveToast.toggle()
+                Text("저장")
+                    .font(.system(size: 15))
+                    .frame(width: 60, height: 33)
+                    .background(isChanged ? Color("Accent") : Color("InfoBox"))
+                    .cornerRadius(7)
+                    .foregroundColor(isChanged ? .black : Color(.label))
+                    .onTapGesture {
+                        if isChanged {
+                            DataService.shared.updatePaid(enrollments: student.enrollments)
+                            DataService.shared.updateStudentEnrollments(student: student)
+                            isChanged = false
+                            isShowingSaveToast.toggle()
+                        }
                     }
-                } label: {
-                    Text("저장")
-                        .font(.system(size: 15))
-                        .frame(width: 60, height: 33)
-                        .background(isChanged ? Color("Accent") : Color("InfoBox"))
-                        .cornerRadius(7)
-                        .foregroundColor(isChanged ? .black : Color(.label))
-                }
             }
             .padding(.horizontal, 20)
             
@@ -192,16 +191,17 @@ struct StudentInfoView: View {
                             if enrollment.paymentType == "쿠폰 사용" {
                                 boxCheckedUnabled
                             } else {
-                                Button {
-                                    enrollment.paid?.toggle()
-                                    student.enrollments = student.enrollments.map { $0 }
-                                    isChanged = true
-                                } label: {
+                                ZStack {
                                     if enrollment.paid ?? false {
                                         boxChecked
                                     } else {
                                         boxUnchecked
                                     }
+                                }
+                                .onTapGesture {
+                                    enrollment.paid?.toggle()
+                                    student.enrollments = student.enrollments.map { $0 }
+                                    isChanged = true
                                 }
                             }
                         }
