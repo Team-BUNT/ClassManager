@@ -54,6 +54,9 @@ struct PaymentStatusView: View {
                 }
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
         .accentColor(.white)
     }
     
