@@ -51,6 +51,7 @@ struct ClassCalendarView: View {
                 AddClassView(isShowingAddSheet: $isShowingAddSheet, isShowingToast: $isShowingSaveToast, date: selectedDate)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("클래스 관리")
@@ -80,6 +81,7 @@ struct ClassCalendarView: View {
                 }
             }
         }
+        .accentColor(.white)
         .onAppear {
             if Constant.shared.classes != nil {
                 classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
