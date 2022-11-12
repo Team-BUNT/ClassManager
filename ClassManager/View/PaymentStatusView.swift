@@ -34,7 +34,13 @@ struct PaymentStatusView: View {
                 
                 Spacer()
             }
-            .navigationTitle("결제 현황")
+            .navigationTitle("")
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("결제 현황")
+                        .font(.system(size: 16, weight: .regular))
+                }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .padding(.horizontal, 20)
             .font(.system(size: 15))
@@ -46,6 +52,7 @@ struct PaymentStatusView: View {
                 }
             }
         }
+        .accentColor(.white)
     }
     
     // MARK: - table view

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StudentInfoView: View {
     @State private var student: Student
-    @Environment(\.presentationMode) private var presentationMode
+//    @Environment(\.presentationMode) private var presentationMode
     
     init(student: Student) {
         self._student = State(wrappedValue: student)
@@ -28,18 +28,18 @@ struct StudentInfoView: View {
         }
         .navigationTitle("수강생 정보")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundColor(Color(.label))
-                }
-
-            }
-        }
+//        .navigationBarBackButtonHidden(true)
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                Button {
+//                    presentationMode.wrappedValue.dismiss()
+//                } label: {
+//                    Image(systemName: "chevron.backward")
+//                        .foregroundColor(Color(.label))
+//                }
+//
+//            }
+//        }
         .task {
             do {
                 if student.enrollments.isEmpty {
