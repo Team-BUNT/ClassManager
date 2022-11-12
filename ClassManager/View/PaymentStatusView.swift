@@ -9,8 +9,10 @@ import SwiftUI
 
 struct PaymentStatusView: View {
     @State private var searchText = ""
-    private let paddingRatio: [CGFloat] = [41/107, 33/107, 33/107]
     @State private var students = [Student]()
+    
+    private let paddingRatio: [CGFloat] = [41/107, 33/107, 33/107]
+    
     var filteredStudents: [Student] {
         if searchText.isEmpty {
             return students

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StudentInfoView: View {
     @State private var student: Student
+    @State private var isChanged = false
 //    @Environment(\.presentationMode) private var presentationMode
     
     init(student: Student) {
@@ -130,15 +131,18 @@ struct StudentInfoView: View {
                     .font(.montserrat(.semibold, size: 17))
                 Spacer()
                 Button {
-                    DataService.shared.updatePaid(enrollments: student.enrollments)
-                    DataService.shared.updateStudentEnrollments(student: student)
+                    if isChanged {
+                        DataService.shared.updatePaid(enrollments: student.enrollments)
+                        DataService.shared.updateStudentEnrollments(student: student)
+                        isChanged = false
+                    }
                 } label: {
                     Text("저장")
                         .font(.system(size: 15))
                         .frame(width: 60, height: 33)
-                        .background(Color("InfoBox"))
+                        .background(isChanged ? Color("Accent") : Color("InfoBox"))
                         .cornerRadius(7)
-                        .foregroundColor(Color(.label))
+                        .foregroundColor(isChanged ? .black : Color(.label))
                 }
             }
             .padding(.horizontal, 20)
@@ -188,6 +192,7 @@ struct StudentInfoView: View {
                                 Button {
                                     enrollment.paid?.toggle()
                                     student.enrollments = student.enrollments.map { $0 }
+                                    isChanged = true
                                 } label: {
                                     if enrollment.paid ?? false {
                                         boxChecked
