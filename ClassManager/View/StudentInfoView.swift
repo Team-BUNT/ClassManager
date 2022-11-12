@@ -11,6 +11,7 @@ struct StudentInfoView: View {
     @State private var student: Student
     @State private var isChanged = false
     @State private var isShowingSaveToast = false
+    
 //    @Environment(\.presentationMode) private var presentationMode
     
     init(student: Student) {
@@ -29,8 +30,8 @@ struct StudentInfoView: View {
             Spacer()
         }
         .toast(message: "현재 결제 상태가 저장되었습니다.", isShowing: $isShowingSaveToast, duration: Toast.short)
-        .navigationTitle("수강생 정보")
-        .navigationBarTitleDisplayMode(.inline)
+//        .navigationTitle("수강생 정보")
+//        .navigationBarTitleDisplayMode(.inline)
 //        .navigationBarBackButtonHidden(true)
 //        .toolbar {
 //            ToolbarItem(placement: .navigationBarLeading) {
@@ -43,6 +44,12 @@ struct StudentInfoView: View {
 //
 //            }
 //        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("수강생 정보")
+                    .font(.system(size: 16))
+            }
+        }
         .task {
             do {
                 if student.enrollments.isEmpty {

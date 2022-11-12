@@ -27,23 +27,34 @@ struct PaymentStatusView: View {
         NavigationView {
             VStack(spacing: 0) {
                 CustomSearchBar(searchText: $searchText)
-                    .padding(.vertical, 24)
+                    .padding(.top, 24)
+                    .padding(.bottom, 28)
                 
                 Divider()
                     .padding(.bottom, 12)
                 
                 table
-                
-                Spacer()
             }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                hideKeyboard()
+            }
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("결제 현황")
-                        .font(.system(size: 16, weight: .regular))
+                    GeometryReader { proxy in
+                        Text("결제 현황")
+                            .font(.system(size: 16, weight: .regular))
+                            .frame(width: proxy.size.width)
+                            .contentShape(Rectangle())
+                            .offset(y: 12)
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
+                    }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
             .padding(.horizontal, 20)
             .font(.system(size: 15))
             .task {
@@ -53,9 +64,6 @@ struct PaymentStatusView: View {
                     print(error)
                 }
             }
-        }
-        .onTapGesture {
-            hideKeyboard()
         }
         .accentColor(.white)
     }
