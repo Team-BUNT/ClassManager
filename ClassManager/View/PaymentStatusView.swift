@@ -123,6 +123,7 @@ struct PaymentStatusView: View {
                             Text(student.paid ? "완료" : "대기")
                                 .frame(width: 60)
                                 .padding(.trailing, (width - 247) * paddingRatio[2])
+                                .foregroundColor(student.paid ? Color(.label) : Color("Accent"))
                             Image(systemName: "chevron.forward")
                                 .font(.system(size: 12))
                                 .foregroundColor(Color("ChevronGray"))
