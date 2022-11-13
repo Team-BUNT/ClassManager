@@ -99,7 +99,7 @@ struct AttendanceView: View {
                         Text(currentClass.instructorName ?? "")
                             .font(.montserrat(.semibold, size: 16))
                             .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
-                        Text("의 \(currentClass.title ?? "")")
+                        Text("\(currentClass.title ?? "")")
                             .font(.callout)
                             .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
                     }
@@ -257,9 +257,9 @@ struct AttendanceView: View {
                             .font(.montserrat(.semibold, size: 15))
                         Text(enrollment.userName ?? "")
                             .frame(width: (geometry.size.width - 30) * columnRatio[1])
-                        Text(enrollment.phoneNumber ?? "")
+                        Text(enrollment.phoneNumber?.toPhoneNumberFormat() ?? "")
                             .frame(width: (geometry.size.width - 30) * columnRatio[2])
-                            .font(.montserrat(.semibold, size: 15))
+                            .font(.montserrat(.regular, size: 15))
                         if Constant.shared.isSuspended(classID: currentClass.ID) {
                             boxUnabled
                                 .frame(width: (geometry.size.width - 30) * columnRatio[3])
