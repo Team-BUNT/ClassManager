@@ -18,7 +18,7 @@ struct AddClassView: View {
     @State var date: Date
     @State var tenTimesDuration = 6
     @State var isPopUp = false
-    @State var repetition = 0
+    @State var repetition = 2
     @State var selectedHall = 0
     
     var body: some View {
@@ -51,6 +51,7 @@ struct AddClassView: View {
                     hallRow(selectedHall: $selectedHall)
                 }
             }
+            .padding(.top, -34)
             .toast(message: "모든 양식을 입력해주세요", isShowing: $isShowingErrorToast, duration: Toast.short)
             .toolbar {
                 ToolbarItem(placement: .principal) {
