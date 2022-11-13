@@ -18,6 +18,7 @@ struct AttendanceView: View {
     @State var isShowingEditSheet = false
     @State var isShowingToast = false
     @State var isShowingUpdateToast = false
+    @State var isShowingSuspendToast = false
     @State var isChanged = false
     
     @State var enrollments = [Enrollment]()
@@ -28,7 +29,7 @@ struct AttendanceView: View {
     
     var body: some View {
         if isNavigationLinkActive {
-            NavigationLink("", destination: SuspendView(currentClass: currentClass), isActive: $isNavigationLinkActive)
+            NavigationLink("", destination: SuspendView(currentClass: currentClass, isShowingToast: $isShowingSuspendToast), isActive: $isNavigationLinkActive)
         }
         
         ScrollView {
@@ -45,6 +46,7 @@ struct AttendanceView: View {
         }
         .toast(message: "클래스가 수정되었습니다", isShowing: $isShowingToast, duration: Toast.short)
         .toast(message: "현재 출결 상태가 저장되었습니다.", isShowing: $isShowingUpdateToast, duration: Toast.short)
+        .toast(message: "수강생들에게 휴강 안내 메세지가 전송되었습니다.", isShowing: $isShowingSuspendToast, duration: Toast.short)
         .alert("삭제하기", isPresented: $isShowingFailAlert, actions: {
             Button("확인", role: .cancel) {}
         }, message: {
