@@ -65,7 +65,7 @@ struct StudentInfoView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("\(student.name ?? "익명")")
                         .font(.subheadline)
-                    Text("\(student.phoneNumber ?? "xxxxxxxxxxx")")
+                    Text("\(student.phoneNumber?.toPhoneNumberFormat() ?? "xxx xxxx xxxx")")
                         .kerning(0.3)
                         .font(.subheadline)
                 }
@@ -157,7 +157,7 @@ struct StudentInfoView: View {
                             .frame(width: 82, alignment: .leading)
                             .multilineTextAlignment(.leading)
                             .foregroundColor(Color("InfoText"))
-                        Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd")) \(enrollment.matchedClass?.instructorName ?? "") \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH:mm"))")
+                        Text("\((enrollment.matchedClass?.date ?? Date()).formattedString(format: "MM.dd"))  \(enrollment.matchedClass?.instructorName ?? "")  \((enrollment.matchedClass?.date ?? Date()).formattedString(format: "HH:mm"))")
                         Spacer()
                     }
                     .padding(.horizontal, 20)
