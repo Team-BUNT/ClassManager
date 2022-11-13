@@ -93,7 +93,9 @@ struct StudentInfoView: View {
                                 .frame(height: 140, alignment: .top)
                         } else {
                             ForEach(student.groupedCoupons, id: \.[0].expiredDate) { group in
-                                couponView(couponGroup: group)
+                                if group[0].expiredDate != nil && group[0].expiredDate!.dateGap(from: Date()) >= 0 {
+                                    couponView(couponGroup: group)
+                                }
                             }
                         }
                     }

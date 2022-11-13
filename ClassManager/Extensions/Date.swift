@@ -32,6 +32,6 @@ extension Date {
         let timeInterval = Int(self.timeIntervalSince1970 / 86400)
         let startTimeInterval = Int(start.timeIntervalSince1970 / 86400)
         
-        return timeInterval - startTimeInterval
+        return timeInterval - startTimeInterval + 1
     }
 }
