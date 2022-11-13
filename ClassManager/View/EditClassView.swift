@@ -43,13 +43,7 @@ struct EditClassView: View {
                 .onTapGesture { hideKeyboard() }
                 
                 Section {
-                    ClassTypeRow(isPopUp: $isPopUp)
-                }
-                
-                if !isPopUp {
-                    Section {
-                        repetitionRow(repetition: $repetition)
-                    }
+                    ClassTypeRow(isPopUp: $isPopUp, isDisabled: true)
                 }
                 
                 Section {

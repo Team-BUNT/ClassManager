@@ -150,6 +150,7 @@ struct DurationRow: View {
 
 struct ClassTypeRow: View {
     @Binding var isPopUp: Bool
+    var isDisabled = false
     
     var body: some View {
         HStack {
@@ -158,6 +159,7 @@ struct ClassTypeRow: View {
                 Text("정규").tag(false)
                 Text("팝업").tag(true)
             }
+            .disabled(isDisabled)
         }
     }
 }
