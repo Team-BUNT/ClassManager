@@ -120,18 +120,24 @@ struct AttendanceView: View {
                         isPresentingConfirm = true
                     }
                     .confirmationDialog("", isPresented: $isPresentingConfirm) {
+                        Button("취소", role: .cancel) {
+                        }
                         Button("수정하기", role: .none) {
                             isShowingEditSheet.toggle()
                         }
-                        Button("삭제하기", role: .destructive) {
-                            if enrollments.count > 0 {
-                                isShowingFailAlert = true
-                            } else {
-                                isShowingDeleteAlert = true
+                        if enrollments.isEmpty {
+                            Button("삭제하기", role: .destructive) {
+                                if enrollments.count > 0 {
+                                    isShowingFailAlert = true
+                                } else {
+                                    isShowingDeleteAlert = true
+                                }
                             }
                         }
-                        Button("휴강하기", role: .destructive) {
-                            isNavigationLinkActive = true
+                        else {
+                            Button("휴강하기", role: .destructive) {
+                                isNavigationLinkActive = true
+                            }
                         }
                     }
             }
