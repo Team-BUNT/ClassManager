@@ -22,7 +22,7 @@ struct ClassInfoBox: View {
                     Text(danceClass.instructorName ?? "")
                         .font(.montserrat(.semibold, size: 16))
                         .strikethrough(isSuspended)
-                    Text("의 \(danceClass.title ?? "")")
+                    Text("\(danceClass.title ?? "")")
                         .font(.callout)
                         .strikethrough(isSuspended)
                 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct Toast: ViewModifier {
     // these correspond to Android values f
     // or DURATION_SHORT and DURATION_LONG
-    static let short: TimeInterval = 1
+    static let short: TimeInterval = 2
     static let long: TimeInterval = 3.5
     
     let message: String
@@ -65,9 +65,9 @@ struct Toast: ViewModifier {
         let transition: AnyTransition
         let animation: Animation
         
-        init(textColor: Color = .white,
-             font: Font = .system(size: 14, weight: .semibold),
-             backgroundColor: Color = Color("Toast"),
+        init(textColor: Color = Color("Accent"),
+             font: Font = .system(size: 14, weight: .regular),
+             backgroundColor: Color = Color("ToastBackground"),
              duration: TimeInterval = Toast.short,
              transition: AnyTransition = .opacity,
              animation: Animation = .linear(duration: 0.3)) {

@@ -12,12 +12,14 @@ struct SuspendView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     
+    @Binding var isShowingToast: Bool
+    
     @State var selectedReason = ""
-    @State var selectedIndex = 0
+    @State var selectedIndex: Int?
     
     @State var otherReason = ""
     
-    let reasons = ["건강 이슈", "외부 일정", "외부 스케줄", "개인 사정", "기타"]
+    let reasons = ["건강 이슈", "외부 일정", "개인 사정", "스튜디오 사정", "기타"]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
@@ -87,16 +89,18 @@ struct SuspendView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    // TODO: Update Firebase data
-                    Task {
-                        await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: currentClass.studioID ?? "")
+                    if selectedIndex != nil {
+                        Task {
+                            await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: currentClass.studioID ?? "")
+                        }
+                        // TODO: Kakaotalk messaging
+                        isShowingToast.toggle()
+                        presentationMode.wrappedValue.dismiss()
                     }
-                    // TODO: Kakaotalk messaging
-                    presentationMode.wrappedValue.dismiss()
                 } label: {
                     Text("완료")
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(Color("Accent"))
+                        .foregroundColor(selectedIndex != nil ? Color("Accent") : Color("Gray"))
                 }
             }
         }

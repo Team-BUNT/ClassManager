@@ -9,8 +9,10 @@ import SwiftUI
 
 struct PaymentStatusView: View {
     @State private var searchText = ""
-    private let paddingRatio: [CGFloat] = [41/107, 33/107, 33/107]
     @State private var students = [Student]()
+    
+    private let paddingRatio: [CGFloat] = [41/107, 33/107, 33/107]
+    
     var filteredStudents: [Student] {
         if searchText.isEmpty {
             return students
@@ -25,17 +27,34 @@ struct PaymentStatusView: View {
         NavigationView {
             VStack(spacing: 0) {
                 CustomSearchBar(searchText: $searchText)
-                    .padding(.vertical, 24)
+                    .padding(.top, 24)
+                    .padding(.bottom, 28)
                 
                 Divider()
                     .padding(.bottom, 12)
                 
                 table
-                
-                Spacer()
             }
-            .navigationTitle("결제 현황")
+            .contentShape(Rectangle())
+            .onTapGesture {
+                hideKeyboard()
+            }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("")
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    GeometryReader { proxy in
+                        Text("결제 현황")
+                            .font(.system(size: 16, weight: .regular))
+                            .frame(width: proxy.size.width)
+                            .contentShape(Rectangle())
+                            .offset(y: 12)
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
+                    }
+                }
+            }
             .padding(.horizontal, 20)
             .font(.system(size: 15))
             .task {
@@ -46,6 +65,7 @@ struct PaymentStatusView: View {
                 }
             }
         }
+        .accentColor(.white)
     }
     
     // MARK: - table view
@@ -94,16 +114,19 @@ struct PaymentStatusView: View {
                             Text(student.name ?? "이름")
                                 .frame(width: 44)
                                 .padding(.trailing, (width - 247) * paddingRatio[0])
-                            Text(student.phoneNumber ?? "xxx xxxx xxxx")
+                            Text(student.phoneNumber?.toPhoneNumberFormat() ?? "xxx xxxx xxxx")
+                                .kerning(0.3)
                                 .font(.montserrat(.regular, size: 15))
                                 .frame(width: 112)
                                 .padding(.trailing, (width - 247) * paddingRatio[1])
+                                
                             Text(student.paid ? "완료" : "대기")
                                 .frame(width: 60)
                                 .padding(.trailing, (width - 247) * paddingRatio[2])
+                                .foregroundColor(student.paid ? Color(.label) : Color("Accent"))
                             Image(systemName: "chevron.forward")
                                 .font(.system(size: 12))
-                                .foregroundColor(Color("DarkGray"))
+                                .foregroundColor(Color("ChevronGray"))
                         }
                         .padding(EdgeInsets(top: 19, leading: 10, bottom: 19, trailing: 10))
                         .foregroundColor(Color(.label))

@@ -30,6 +30,7 @@ struct ContainerView: View {
             UITabBar.appearance().backgroundColor = UIColor(named: "TabBarBackground")
         }
         .tint(.accent)
+        .accentColor(Color("Accent"))
     }
 }
 

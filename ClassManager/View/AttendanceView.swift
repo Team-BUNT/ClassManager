@@ -17,6 +17,9 @@ struct AttendanceView: View {
     @State var isNavigationLinkActive = false
     @State var isShowingEditSheet = false
     @State var isShowingToast = false
+    @State var isShowingUpdateToast = false
+    @State var isShowingSuspendToast = false
+    @State var isChanged = false
     
     @State var enrollments = [Enrollment]()
         
@@ -26,7 +29,7 @@ struct AttendanceView: View {
     
     var body: some View {
         if isNavigationLinkActive {
-            NavigationLink("", destination: SuspendView(currentClass: currentClass), isActive: $isNavigationLinkActive)
+            NavigationLink("", destination: SuspendView(currentClass: currentClass, isShowingToast: $isShowingSuspendToast), isActive: $isNavigationLinkActive)
         }
         
         ScrollView {
@@ -42,6 +45,8 @@ struct AttendanceView: View {
             currentClass = Constant.shared.classes?.filter({ $0.ID == currentClass.ID }).first ?? currentClass
         }
         .toast(message: "클래스가 수정되었습니다", isShowing: $isShowingToast, duration: Toast.short)
+        .toast(message: "현재 출결 상태가 저장되었습니다.", isShowing: $isShowingUpdateToast, duration: Toast.short)
+        .toast(message: "수강생들에게 휴강 안내 메세지가 전송되었습니다.", isShowing: $isShowingSuspendToast, duration: Toast.short)
         .alert("삭제하기", isPresented: $isShowingFailAlert, actions: {
             Button("확인", role: .cancel) {}
         }, message: {
@@ -61,17 +66,6 @@ struct AttendanceView: View {
             EditClassView(isShowingEditSheet: $isShowingEditSheet, isShowingToast: $isShowingToast, title: currentClass.title ?? "", instructorName: currentClass.instructorName ?? "", date: currentClass.date ?? Date(), tenTimesDuration: (currentClass.durationMinute ?? 60) / 10, isPopUp: currentClass.isPopUp ?? false, repetition: 0, selectedHall: hallIndex(), applicantsCount: currentClass.applicantsCount ?? 0, classID: currentClass.ID)
         }
         .navigationTitle("출석부")
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundColor(.white)
-                }
-            }
-        }
         .task {
             do {
                 enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
@@ -95,47 +89,62 @@ struct AttendanceView: View {
                     .font(.system(size: 14))
                     .foregroundColor(Color("DarkGray"))
             }
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("Hall \(currentClass.hall?.name ?? "A")")
-                        .font(.subheadline)
-                        .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : Color("Gray"))
-                    Spacer()
+            ZStack(alignment: .topTrailing) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Hall \(currentClass.hall?.name ?? "A")")
+                            .font(.subheadline)
+                            .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : Color("Gray"))
+                        Spacer()
+                    }
+                    HStack(spacing: 4) {
+                        Text(currentClass.instructorName ?? "")
+                            .font(.montserrat(.semibold, size: 16))
+                            .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
+                        Text("\(currentClass.title ?? "")")
+                            .font(.callout)
+                            .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
+                    }
+                    .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : .white)
+                    Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(Color("DarkGray"))
+                }
+                .padding(20)
+                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("Box")))
+                
+                if !Constant.shared.isSuspended(classID: currentClass.ID) {
                     Image(systemName: "ellipsis")
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                        .padding(.top, 5)
+                        .padding(.trailing, 5)
                         .onTapGesture {
                             isPresentingConfirm = true
                         }
                         .confirmationDialog("", isPresented: $isPresentingConfirm) {
+                            Button("취소", role: .cancel) {
+                            }
                             Button("수정하기", role: .none) {
                                 isShowingEditSheet.toggle()
                             }
-                            Button("삭제하기", role: .none) {
-                                if enrollments.count > 0 {
-                                    isShowingFailAlert = true
-                                } else {
-                                    isShowingDeleteAlert = true
+                            if enrollments.isEmpty {
+                                Button("삭제하기", role: .destructive) {
+                                    if enrollments.count > 0 {
+                                        isShowingFailAlert = true
+                                    } else {
+                                        isShowingDeleteAlert = true
+                                    }
                                 }
                             }
-                            Button("휴강하기", role: .destructive) {
-                                isNavigationLinkActive = true
+                            else {
+                                Button("휴강하기", role: .destructive) {
+                                    isNavigationLinkActive = true
+                                }
                             }
                         }
                 }
-                HStack(spacing: 4) {
-                    Text(currentClass.instructorName ?? "")
-                        .font(.montserrat(.semibold, size: 16))
-                        .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
-                    Text("의 \(currentClass.title ?? "")")
-                        .font(.callout)
-                        .strikethrough(Constant.shared.isSuspended(classID: currentClass.ID))
-                }
-                .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : .white)
-                Text(currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "")
-                    .font(.system(size: 15, weight: .regular))
-                    .foregroundColor(Color("DarkGray"))
             }
-            .padding(20)
-            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("Box")))
         }
     }
     
@@ -150,8 +159,11 @@ struct AttendanceView: View {
                 saveButton
                     .padding(.trailing, 20)
                     .onTapGesture {
-                        // TODO: Toast message or something
-                        if !Constant.shared.isSuspended(classID: currentClass.ID) { DataService.shared.updateAttendance(enrollments: enrollments) }
+                        if !Constant.shared.isSuspended(classID: currentClass.ID) && isChanged {
+                            DataService.shared.updateAttendance(enrollments: enrollments)
+                            isChanged = false
+                            isShowingUpdateToast.toggle()
+                        }
                     }
             }
             .font(.montserrat(.semibold, size: 15))
@@ -183,7 +195,8 @@ struct AttendanceView: View {
     var saveButton: some View {
         Text("저장")
             .font(.system(size: 15))
-            .background(RoundedRectangle(cornerRadius: 7).frame(width: 60, height: 33).foregroundColor(Color("Box")))
+            .foregroundColor(isChanged ? .black : .white)
+            .background(RoundedRectangle(cornerRadius: 7).frame(width: 60, height: 33).foregroundColor(isChanged ? Color("Accent") : Color("Box")))
     }
     
     var studentListHeader: some View {
@@ -206,47 +219,49 @@ struct AttendanceView: View {
     var studentListBody: some View {
         GeometryReader { geometry in
             VStack(spacing: 35) {
-                HStack(spacing: 10) {
-                    Text("All")
-                        .frame(width: (geometry.size.width - 30) * columnRatio[0])
-                        .font(.montserrat(.semibold, size: 15))
-                    Text("")
-                        .frame(width: (geometry.size.width - 30) * columnRatio[1])
-                    Text("")
-                        .frame(width: (geometry.size.width - 30) * columnRatio[2])
-                    if Constant.shared.isSuspended(classID: currentClass.ID) {
-                        boxUnabled
-                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
-                    } else {
-                        ZStack {
-                            if isAllChecked {
-                                boxChecked
-                            } else {
-                                boxUnchecked
+                if enrollments.count > 0 {
+                    HStack(spacing: 10) {
+                        Text("All")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[0])
+                            .font(.montserrat(.semibold, size: 15))
+                        Text("")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[1])
+                        Text("")
+                            .frame(width: (geometry.size.width - 30) * columnRatio[2])
+                        if Constant.shared.isSuspended(classID: currentClass.ID) {
+                            boxUnabled
+                                .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                        } else {
+                            ZStack {
+                                if isAllChecked {
+                                    boxChecked
+                                } else {
+                                    boxUnchecked
+                                }
                             }
-                        }
-                        .frame(width: (geometry.size.width - 30) * columnRatio[3])
-                        .onTapGesture {
-                            isAllChecked.toggle()
-                            if isAllChecked {
-                                allChecked()
-                            } else {
-                                allUnchecked()
+                            .frame(width: (geometry.size.width - 30) * columnRatio[3])
+                            .onTapGesture {
+                                isChanged = true
+                                isAllChecked.toggle()
+                                if isAllChecked {
+                                    allChecked()
+                                } else {
+                                    allUnchecked()
+                                }
                             }
                         }
                     }
                 }
-                
                 ForEach(Array(enrollments.enumerated()), id: \.offset) { index, enrollment in
                     HStack(spacing: 10) {
-                        Text("\(index + 1)")
+                        Text("\(enrollments.count - index)")
                             .frame(width: (geometry.size.width - 30) * columnRatio[0])
                             .font(.montserrat(.semibold, size: 15))
                         Text(enrollment.userName ?? "")
                             .frame(width: (geometry.size.width - 30) * columnRatio[1])
-                        Text(enrollment.phoneNumber ?? "")
+                        Text(enrollment.phoneNumber?.toPhoneNumberFormat() ?? "")
                             .frame(width: (geometry.size.width - 30) * columnRatio[2])
-                            .font(.montserrat(.semibold, size: 15))
+                            .font(.montserrat(.regular, size: 15))
                         if Constant.shared.isSuspended(classID: currentClass.ID) {
                             boxUnabled
                                 .frame(width: (geometry.size.width - 30) * columnRatio[3])
@@ -260,6 +275,7 @@ struct AttendanceView: View {
                             }
                             .frame(width: (geometry.size.width - 30) * columnRatio[3])
                             .onTapGesture {
+                                isChanged = true
                                 enrollment.attendance?.toggle()
                                 enrollments = enrollments.map { $0 }
                                 if attendanceCount() == enrollments.count {
@@ -319,7 +335,7 @@ struct AttendanceView: View {
     }
     
     private func sortEnrollments() {
-        enrollments.sort(by: { $0.enrolledDate ?? Date() < $1.enrolledDate ?? Date() })
+        enrollments.sort(by: { $0.enrolledDate ?? Date() > $1.enrolledDate ?? Date() })
     }
     
     private func hallIndex() -> Int {

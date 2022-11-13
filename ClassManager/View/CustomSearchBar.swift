@@ -9,17 +9,15 @@ import SwiftUI
 
 struct CustomSearchBar: View {
     @Binding var searchText: String
-    private let placeholderText = "수강생 이름을 검색하세요."
+    private let placeholderText = "수강생의 이름을 검색하세요."
     
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(Color(.systemBackground))
             ZStack {
                 if searchText.isEmpty {
                     HStack {
                         Text(placeholderText)
-                            .foregroundColor(Color("SearchText"))
                             .font(.system(size: 15))
                         Spacer()
                     }
@@ -32,14 +30,14 @@ struct CustomSearchBar: View {
                     searchText = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color.gray)
                 }
                 
             }
         }
         .padding(.vertical, 7)
         .padding(.horizontal, 8)
-        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("SearchBox")).opacity(0.24))
+        .foregroundColor(Color("DarkGray"))
+        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("SearchBox")).opacity(0.24).frame(height: 48))
     }
 }
 
