@@ -111,35 +111,37 @@ struct AttendanceView: View {
                 .padding(20)
                 .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("Box")))
                 
-                Image(systemName: "ellipsis")
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
-                    .padding(.top, 5)
-                    .padding(.trailing, 5)
-                    .onTapGesture {
-                        isPresentingConfirm = true
-                    }
-                    .confirmationDialog("", isPresented: $isPresentingConfirm) {
-                        Button("취소", role: .cancel) {
+                if !Constant.shared.isSuspended(classID: currentClass.ID) {
+                    Image(systemName: "ellipsis")
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                        .padding(.top, 5)
+                        .padding(.trailing, 5)
+                        .onTapGesture {
+                            isPresentingConfirm = true
                         }
-                        Button("수정하기", role: .none) {
-                            isShowingEditSheet.toggle()
-                        }
-                        if enrollments.isEmpty {
-                            Button("삭제하기", role: .destructive) {
-                                if enrollments.count > 0 {
-                                    isShowingFailAlert = true
-                                } else {
-                                    isShowingDeleteAlert = true
+                        .confirmationDialog("", isPresented: $isPresentingConfirm) {
+                            Button("취소", role: .cancel) {
+                            }
+                            Button("수정하기", role: .none) {
+                                isShowingEditSheet.toggle()
+                            }
+                            if enrollments.isEmpty {
+                                Button("삭제하기", role: .destructive) {
+                                    if enrollments.count > 0 {
+                                        isShowingFailAlert = true
+                                    } else {
+                                        isShowingDeleteAlert = true
+                                    }
+                                }
+                            }
+                            else {
+                                Button("휴강하기", role: .destructive) {
+                                    isNavigationLinkActive = true
                                 }
                             }
                         }
-                        else {
-                            Button("휴강하기", role: .destructive) {
-                                isNavigationLinkActive = true
-                            }
-                        }
-                    }
+                }
             }
         }
     }
