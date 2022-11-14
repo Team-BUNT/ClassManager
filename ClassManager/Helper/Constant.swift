@@ -34,7 +34,7 @@ class Constant {
         }
     }
     
-    func isTimeRedundant(startTime: Date, interval: Int, hallName: String) -> Bool {
+    func isClassRedundant(startTime: Date, interval: Int, hallName: String) -> Bool {
         if classes != nil {
             var filteredClasses = classes!.filter({ $0.date != nil && ((startTime > $0.date! && startTime < $0.date!.endTime(interval: $0.durationMinute ?? 0)) || (startTime.endTime(interval: interval) > $0.date! && startTime.endTime(interval: interval) < $0.date!.endTime(interval: $0.durationMinute ?? 0)) || (startTime < $0.date! && startTime.endTime(interval: interval) > $0.date!.endTime(interval: $0.durationMinute ?? 0))) })
             filteredClasses = filteredClasses.filter({ $0.hall != nil && $0.hall!.name == hallName && !isSuspended(classID: $0.ID) })

@@ -77,7 +77,7 @@ struct EditClassView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if isChanged {
-                            if Constant.shared.isTimeRedundant(startTime: date, interval: tenTimesDuration * 10, hallName: Constant.shared.studio?.halls?[selectedHall].name ?? "") {
+                            if Constant.shared.isClassRedundant(startTime: date, interval: tenTimesDuration * 10, hallName: Constant.shared.studio?.halls?[selectedHall].name ?? "") {
                                 isShowingRedundantAlert.toggle()
                             }
                             else if !title.isEmpty && !instructorName.isEmpty {
