@@ -34,4 +34,9 @@ extension Date {
         
         return timeInterval - startTimeInterval + 1
     }
+    
+    // MARK: interval 분 뒤의 date 객체 반환
+    func endTime(interval: Int) -> Date {
+        return Calendar.current.date(byAdding: .minute, value: interval, to: self) ?? self
+    }
 }

@@ -91,10 +91,15 @@ struct AttendanceView: View {
             }
             ZStack(alignment: .topTrailing) {
                 VStack(alignment: .leading, spacing: 10) {
-                    HStack {
+                    HStack(spacing: 8) {
                         Text("Hall \(currentClass.hall?.name ?? "A")")
                             .font(.subheadline)
                             .foregroundColor(Constant.shared.isSuspended(classID: currentClass.ID) ? Color("DarkGray") : Color("Gray"))
+                        if currentClass.isPopUp != nil && currentClass.isPopUp! {
+                            Text("POP-UP")
+                                .font(.subheadline)
+                                .foregroundColor(Color("Accent"))
+                        }
                         Spacer()
                     }
                     HStack(spacing: 4) {

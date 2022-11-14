@@ -15,9 +15,16 @@ struct ClassInfoBox: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Hall \(danceClass.hall?.name ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(isSuspended ? Color("DarkGray") : Color("Gray"))
+                HStack(spacing: 8) {
+                    Text("Hall \(danceClass.hall?.name ?? "")")
+                        .font(.subheadline)
+                        .foregroundColor(isSuspended ? Color("DarkGray") : Color("Gray"))
+                    if danceClass.isPopUp != nil && danceClass.isPopUp! {
+                        Text("POP-UP")
+                            .font(.subheadline)
+                            .foregroundColor(Color("Accent"))
+                    }
+                }
                 HStack(spacing: 3) {
                     Text(danceClass.instructorName ?? "")
                         .font(.montserrat(.semibold, size: 16))
