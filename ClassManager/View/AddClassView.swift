@@ -165,7 +165,7 @@ struct ClassTypeRow: View {
 }
 
 struct repetitionRow: View {
-    let repetitionOptions = ["2주", "3주", "4주", "5주", "6주"]
+    let repetitionOptions = ["2주", "3주", "4주", "5주", "6주", "7주", "8주"]
     
     @Binding var repetition: Int
     
