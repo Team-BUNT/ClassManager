@@ -11,6 +11,7 @@ struct AddClassView: View {
     @Binding var isShowingAddSheet: Bool
     @Binding var isShowingToast: Bool
     @State var isShowingErrorToast = false
+    @State var isShowingRedundantAlert = false
     
     @State var title = ""
     @State var instructorName = ""
@@ -51,8 +52,12 @@ struct AddClassView: View {
                     hallRow(selectedHall: $selectedHall)
                 }
             }
-            .padding(.top, -34)
             .toast(message: "모든 양식을 입력해주세요", isShowing: $isShowingErrorToast, duration: Toast.short)
+            .alert("클래스 추가 불가", isPresented: $isShowingRedundantAlert, actions: {
+                Button("확인", role: .cancel) {}
+            }, message: {
+                Text("선택한 시간에 이미 존재하는 클래스가 있습니다. 시간을 변경해 주세요.")
+            })
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("새로운 클래스")
@@ -72,7 +77,10 @@ struct AddClassView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        if !title.isEmpty && !instructorName.isEmpty {
+                        if Constant.shared.isTimeRedundant(startTime: date, interval: tenTimesDuration * 10, hallName: Constant.shared.studio?.halls?[selectedHall].name ?? "") {
+                            isShowingRedundantAlert.toggle()
+                        }
+                        else if !title.isEmpty && !instructorName.isEmpty {
                             DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration * 10, repetition: Constant.shared.repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall], isPopUP: isPopUp)
                             isShowingAddSheet.toggle()
                             isShowingToast.toggle()
