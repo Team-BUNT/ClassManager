@@ -104,7 +104,7 @@ struct PaymentStatusView: View {
     }
     
     private func tableRows(width: CGFloat) -> some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
                 ForEach(filteredStudents, id: \.ID) { student in
                     NavigationLink {
