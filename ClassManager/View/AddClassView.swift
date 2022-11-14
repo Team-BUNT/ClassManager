@@ -165,13 +165,13 @@ struct ClassTypeRow: View {
 }
 
 struct repetitionRow: View {
-    let repetitionOptions = ["안함", "2회", "4회", "8회"]
+    let repetitionOptions = ["2주", "3주", "4주", "5주", "6주", "7주", "8주"]
     
     @Binding var repetition: Int
     
     var body: some View {
         HStack {
-            Text("반복")
+            Text("반복 (1주 1회)")
             Picker("", selection: $repetition) {
                 ForEach(0 ..< repetitionOptions.count, id: \.self) {
                     Text(repetitionOptions[$0]).tag($0)
