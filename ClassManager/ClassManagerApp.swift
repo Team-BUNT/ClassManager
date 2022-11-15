@@ -21,15 +21,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct ClassManagerApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @AppStorage("onboarding") var isOnboardingActive: Bool = true
     
     var body: some Scene {
         WindowGroup {
-            if isOnboardingActive {
-                OnboardingMain()
-            } else {
-                ContainerView()
-            }
+            LaunchScreenView()
         }
     }
 }
