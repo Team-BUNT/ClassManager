@@ -39,4 +39,13 @@ extension Date {
     func endTime(interval: Int) -> Date {
         return Calendar.current.date(byAdding: .minute, value: interval, to: self) ?? self
     }
+    
+    // MARK: 캘린더의 컴포넌트를 가져오는 extension(eg. Date().get(.month) -> 오늘 날짜에 해당하는 월 반환)
+    func get(_ components: Calendar.Component..., calendar: Calendar = Calendar.current) -> DateComponents {
+        return calendar.dateComponents(Set(components), from: self)
+    }
+    
+    func get(_ component: Calendar.Component, calendar: Calendar = Calendar.current) -> Int {
+        return calendar.component(component, from: self)
+    }
 }
