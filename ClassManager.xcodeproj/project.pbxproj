@@ -40,6 +40,7 @@
 		C76DC60029163F52004E5894 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5FF29163F52004E5894 /* View.swift */; };
 		C76DC60229164889004E5894 /* EditClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC60129164889004E5894 /* EditClassView.swift */; };
 		C76DC624291FC451004E5894 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC623291FC451004E5894 /* String.swift */; };
+		C76DC6282923B3AC004E5894 /* WeeklyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC6272923B3AC004E5894 /* WeeklyCalendarView.swift */; };
 		C79E13BC28F6AF8B0010C4BA /* Studio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BB28F6AF8B0010C4BA /* Studio.swift */; };
 		C79E13BE28F6B0DC0010C4BA /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BD28F6B0DC0010C4BA /* Notice.swift */; };
 		C79E13C028F6B1780010C4BA /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79E13BF28F6B1780010C4BA /* Class.swift */; };
@@ -107,6 +108,7 @@
 		C76DC5FF29163F52004E5894 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		C76DC60129164889004E5894 /* EditClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditClassView.swift; sourceTree = "<group>"; };
 		C76DC623291FC451004E5894 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		C76DC6272923B3AC004E5894 /* WeeklyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyCalendarView.swift; sourceTree = "<group>"; };
 		C79E13BB28F6AF8B0010C4BA /* Studio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Studio.swift; sourceTree = "<group>"; };
 		C79E13BD28F6B0DC0010C4BA /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		C79E13BF28F6B1780010C4BA /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				ABDABFE629169D8C001B5256 /* PaymentStatusView.swift */,
 				AB97798729195F8500C01549 /* StudentInfoView.swift */,
 				AB904816291AAD4F004567AA /* ContainerView.swift */,
+				C76DC6272923B3AC004E5894 /* WeeklyCalendarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */,
 				378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */,
 				C76DC5FA291500DC004E5894 /* AttendanceView.swift in Sources */,
+				C76DC6282923B3AC004E5894 /* WeeklyCalendarView.swift in Sources */,
 				C76DC60229164889004E5894 /* EditClassView.swift in Sources */,
 				378D4E1028F7147E0094F277 /* OnboardingFirst.swift in Sources */,
 				AB904815291A8796004567AA /* Encodable.swift in Sources */,

@@ -19,31 +19,40 @@ struct ClassCalendarView: View {
     @State var link = "https://this.is.sample.link"
     @State var studioID = ""
     
+    @State var isMonthly = true
+    @State var toolbarItemTitle = "주간"
+    
     var body: some View {
         NavigationView {
-            VStack {
-                DatePicker("", selection: $selectedDate, displayedComponents: [.date])
-                    .padding(16)
-                    .datePickerStyle(.graphical)
-                    .accentColor(Color("Del"))
-                    .background(RoundedRectangle(cornerRadius: 13).foregroundColor(Color("Box")))
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 10)
+            ZStack {
+                if isMonthly {
+                    VStack {
+                        DatePicker("", selection: $selectedDate, displayedComponents: [.date])
+                            .padding(16)
+                            .datePickerStyle(.graphical)
+                            .accentColor(Color("Del"))
+                            .background(RoundedRectangle(cornerRadius: 13).foregroundColor(Color("Box")))
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
 
-                ScrollView {
-                    ForEach(classesToday, id: \.self.ID) { danceClass in
-                        NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
-                            ClassInfoBox(danceClass: danceClass)
+                        ScrollView {
+                            ForEach(classesToday, id: \.self.ID) { danceClass in
+                                NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
+                                    ClassInfoBox(danceClass: danceClass)
+                                }
+                            }
                         }
+                        .padding(.horizontal, 24)
+                        .onAppear {
+                            if Constant.shared.classes != nil {
+                                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+                            }
+                        }
+                        Spacer()
                     }
+                } else {
+                    WeeklyCalendarView()
                 }
-                .padding(.horizontal, 24)
-                .onAppear {
-                    if Constant.shared.classes != nil {
-                        classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
-                    }
-                }
-                Spacer()
             }
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
             .toast(message: "신청폼 링크가 복사되었습니다", isShowing: $isShowingLinkToast, duration: Toast.short)
@@ -67,6 +76,16 @@ struct ClassCalendarView: View {
                         Image(systemName: "link")
                             .foregroundColor(.white)
                             .padding(.leading, 14)
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isMonthly.toggle()
+                        toolbarItemTitle = isMonthly ? "주간" : "월간"
+                    } label: {
+                        Text(toolbarItemTitle)
+                            .foregroundColor(.white)
                     }
                 }
 
