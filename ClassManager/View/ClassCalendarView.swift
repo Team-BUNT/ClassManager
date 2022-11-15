@@ -16,8 +16,8 @@ struct ClassCalendarView: View {
     @State private var classesToday = [Class]()
     
     // TODO: 신청폼 링크 실제 데이터로 교체
-    @State var link = "https://this.is.sample.link"
-    @State var studioID = ""
+    let link: String
+    let studioID: String
     
     var body: some View {
         NavigationView {
@@ -98,21 +98,6 @@ struct ClassCalendarView: View {
             }
         }
         .task {
-            do {
-                // 임시 테스트 플라이트용 함수
-                let linkStruct = try await DataService.shared.requestLink()
-                if linkStruct != nil {
-                    link = linkStruct!.link!
-                    studioID = linkStruct!.studioID!
-                }
-                if !studioID.isEmpty {
-                    Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: studioID)
-                    Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: studioID)
-                }
-                Constant.shared.suspendedClasses = try await DataService.shared.requestSuspendedClassesBy(studioID: studioID)
-            } catch {
-                print(error)
-            }
             classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
             }
         }
@@ -121,6 +106,6 @@ struct ClassCalendarView: View {
 
 struct ClassCalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        ClassCalendarView()
+        ClassCalendarView(link: "", studioID: "")
     }
 }

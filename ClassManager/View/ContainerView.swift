@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct ContainerView: View {
+    let link: String
+    let studioID: String
+    
     var body: some View {
         TabView {
-            ClassCalendarView()
+            ClassCalendarView(link: self.link, studioID: self.studioID)
                 .tabItem {
                     VStack {
                         Image("Door")
@@ -36,6 +39,6 @@ struct ContainerView: View {
 
 struct ContainerView_Previews: PreviewProvider {
     static var previews: some View {
-        ContainerView()
+        ContainerView(link: "", studioID: "")
     }
 }
