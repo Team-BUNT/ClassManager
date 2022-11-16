@@ -98,7 +98,9 @@ struct ClassCalendarView: View {
             }
         }
         .task {
-            classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
+            if Constant.shared.classes != nil {
+                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
+                }
             }
         }
     }
