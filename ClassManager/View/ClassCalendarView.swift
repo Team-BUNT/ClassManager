@@ -44,8 +44,8 @@ struct ClassCalendarView: View {
                         }
                         .padding(.horizontal, 24)
                         .onAppear {
-                            if Constant.shared.classes != nil {
-                                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+                            if let classes = Constant.shared.classes {
+                                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
                             }
                         }
                         Spacer()
@@ -102,24 +102,23 @@ struct ClassCalendarView: View {
         }
         .accentColor(.white)
         .onAppear {
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .onChange(of: selectedDate) { date in
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .onChange(of: isShowingAddSheet) { _ in
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .task {
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
-                }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
     }
