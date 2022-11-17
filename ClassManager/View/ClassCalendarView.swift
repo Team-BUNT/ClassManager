@@ -20,7 +20,7 @@ struct ClassCalendarView: View {
     let studioID: String
     
     @State var isMonthly = true
-    @State var toolbarItemTitle = "주간"
+    @State var toolbarItemImageName = "note.text"
     
     var body: some View {
         NavigationView {
@@ -51,7 +51,7 @@ struct ClassCalendarView: View {
                         Spacer()
                     }
                 } else {
-                    WeeklyCalendarView()
+                    WeeklyCalendarView(date: $selectedDate, isShowingSheet: $isShowingAddSheet)
                 }
             }
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
@@ -82,9 +82,9 @@ struct ClassCalendarView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         isMonthly.toggle()
-                        toolbarItemTitle = isMonthly ? "주간" : "월간"
+                        toolbarItemImageName = isMonthly ? "note.text" : "calendar"
                     } label: {
-                        Text(toolbarItemTitle)
+                        Image(systemName: toolbarItemImageName)
                             .foregroundColor(.white)
                     }
                 }

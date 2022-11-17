@@ -81,7 +81,7 @@ struct AddClassView: View {
                             isShowingRedundantAlert.toggle()
                         }
                         else if !title.isEmpty && !instructorName.isEmpty {
-                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration * 10, repetition: Constant.shared.repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall], isPopUP: isPopUp)
+                            DataService.shared.createClass(studioID: Constant.shared.studio?.ID ?? "Undefined", title: title, instructorName: instructorName, date: date, durationMinute: tenTimesDuration * 10, repetition: isPopUp ? 1 : Constant.shared.repetitionNumber(repetition: repetition), hall: Constant.shared.studio?.halls?[selectedHall], isPopUP: isPopUp)
                             isShowingAddSheet.toggle()
                             isShowingToast.toggle()
                         } else {

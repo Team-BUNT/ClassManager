@@ -7,6 +7,21 @@
 import Foundation
 
 extension Date {
+    public var monthName: String {
+        let nameFormatter = DateFormatter()
+        nameFormatter.dateFormat = "MMMM" // format January, February, March, ...
+        return nameFormatter.string(from: self)
+    }
+    
+    // MARK: "현재 시간" string 반환 함수
+    func timeString() -> String {
+        let dateFormatter = DateFormatter() // Date 포맷 객체 선언
+        dateFormatter.locale = Locale(identifier: "ko") // 한국 지정
+        dateFormatter.dateFormat = "HH:mm" // 24:00 시간
+
+        return dateFormatter.string(from: self)
+    }
+    
     // MARK: "현재 시간 - 현재 시간 + n분" string 반환 함수
     func timeRangeString(interval: Int) -> String {
         let dateFormatter = DateFormatter() // Date 포맷 객체 선언

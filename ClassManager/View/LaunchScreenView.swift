@@ -30,7 +30,7 @@ struct LaunchScreenView: View {
                 .scaledToFit()
                 .frame(width: 150, height: 150)
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         self.isActive = true
                     }
                 }

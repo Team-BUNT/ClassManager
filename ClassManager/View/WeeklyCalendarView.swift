@@ -8,72 +8,110 @@
 import SwiftUI
 
 struct WeeklyCalendarView: View {
-    @State var date = Date()
-    @State var month = 13
+    @Binding var date: Date
     
-    let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
+    let weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     
-    let classes = Constant.shared.classes
+    @State var classes = Constant.shared.classes
+    @Binding var isShowingSheet: Bool
     
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 0) {
+            viewHeader
+            GeometryReader { proxy in
+                HStack(alignment: .top) {
+                    VStack {
+                        ForEach(0..<7, id: \.self) { idx in
+                            VStack(spacing: 8) {
+                                Text(weekdays[idx])
+                                    .font(.montserrat(.regular, size: 14))
+                                Text(dayNumberString(weekday: idx))
+                                    .kerning(1.6)
+                                    .font(.montserrat(.semibold, size: 16))
+                            }
+                            .frame(height: (proxy.size.height - 14 * 6) / 7)
+                        }
+                    }
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(0..<7, id: \.self) { idx in
+                                if let dayClasses = classesOnDay(day: dayOfWeek(weekday: idx)) {
+                                    HStack(spacing: 14) {
+                                        if dayClasses.count > 0 {
+                                            ForEach(dayClasses, id: \.self.ID) { danceClass in
+                                                NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
+                                                    classCardView(danceClass: danceClass)
+                                                        .frame(height: (proxy.size.height - 14 * 6) / 7)
+                                                }
+                                            }
+                                        } else {
+                                            Rectangle()
+                                                .frame(height: (proxy.size.height - 14 * 6) / 7)
+                                                .foregroundColor(Color("Box"))
+                                        }
+                                    }
+                                    .padding(.horizontal, 16)
+                                }
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+                }
+                .padding(.leading, 19)
+            }
+            .padding(.bottom, -16)
+        }
+        .padding(.top, 4)
+        .padding(.leading, 18)
+        .background(RoundedRectangle(cornerRadius: 14).padding(.leading, 18).padding(.trailing, -18).padding(.top, 4).foregroundColor(Color("Box")))
+        .onAppear {
+            classes = Constant.shared.classes
+            date = dayOfWeek(weekday: 0)
+        }
+        .onChange(of: isShowingSheet) { _ in
+            classes = Constant.shared.classes
+        }
+    }
+    
+    var viewHeader: some View {
+        VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center, spacing: 12) {
-                Text("\(month)월")
-                    .font(.montserrat(.semibold, size: 28))
+                Text("\(dayOfWeek(weekday: 6).monthName) \(String(dayOfWeek(weekday: 6).get(.year)))")
+                    .font(.title3)
+                    .fontWeight(.bold)
                 Spacer()
                 Image(systemName: "chevron.backward")
                     .contentShape(Rectangle())
                     .onTapGesture {
                         date = Calendar.current.date(byAdding: .day, value: -7, to: date)!
-                        month = monthNumber()
+                        date = dayOfWeek(weekday: 0)
                     }
                 Image(systemName: "chevron.forward")
+                    .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
+                    .padding(.trailing, 10)
                     .onTapGesture {
                         date = Calendar.current.date(byAdding: .day, value: 7, to: date)!
-                        month = monthNumber()
+                        date = dayOfWeek(weekday: 0)
                     }
             }
+            .padding(.leading, 18)
+            .padding(.top, 10)
             .font(.system(size: 20))
-            HStack(alignment: .top) {
-                VStack {
-                    ForEach(0..<7, id: \.self) { idx in
-                        VStack {
-                            Text(weekdays[idx])
-                            Text(dayNumberString(weekday: idx))
-                        }
-                        Spacer()
-                    }
-                }
-                .padding(.vertical)
-                ScrollView(.horizontal) {
-                    VStack(alignment: .leading, spacing: 27) {
-                        ForEach(0..<7, id: \.self) { idx in
-                            HStack {
-                                if let dayClasses = classesOnDay(day: dayOfWeek(weekday: idx)) {
-                                    ForEach(dayClasses, id: \.self.ID) { danceClass in
-                                        NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
-                                            VStack {
-                                                Text(danceClass.title ?? "")
-                                                Text(danceClass.instructorName ?? "")
-                                            }
-                                            .frame(height: 60)
-                                        }
-                                    }
-                                } else {
-                                    Rectangle()
-                                        .foregroundColor(.green)
-                                        .frame(width: 60, height: 60)
-                                }
-                            }
-                        }
-                    }
-                }
+            
+            HStack(spacing: 6) {
+                Text("POP-UP")
+                    .font(.system(size: 13))
+                popupTag
             }
+            .padding(.leading, 19)
+            .padding(.bottom, 12)
         }
-        .onAppear {
-            month = monthNumber()
-        }
+    }
+    
+    var popupTag: some View {
+        Circle().foregroundColor(Color("Accent")).frame(width: 9, height: 9)
     }
     
     private func dayOfWeek(weekday: Int) -> Date {
@@ -82,7 +120,8 @@ struct WeeklyCalendarView: View {
     }
     
     private func dayNumberString(weekday: Int) -> String {
-        return String(dayOfWeek(weekday: weekday).get(.day))
+        let dayNum = dayOfWeek(weekday: weekday).get(.day)
+        return dayNum < 10 ? "0" + String(dayNum) : String(dayNum)
     }
     
     private func monthNumber() -> Int {
@@ -92,12 +131,38 @@ struct WeeklyCalendarView: View {
     }
     
     private func classesOnDay(day: Date) -> [Class] {
-        return classes?.filter({ Calendar.current.isDate($0.date ?? Date(), inSameDayAs: day) }) ?? [Class]()
+        var filteredClasses = classes?.filter({ Calendar.current.isDate($0.date ?? Date(), inSameDayAs: day) }) ?? [Class]()
+        filteredClasses.sort { $0.date ?? Date() < $1.date ?? Date() }
+        return filteredClasses
     }
-}
-
-struct WeeklyCalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        WeeklyCalendarView()
+    
+    struct classCardView: View {
+        let danceClass: Class
+        
+        var body: some View {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Hall \(danceClass.hall?.name ?? "")")
+                            .foregroundColor(Color("Gray"))
+                        Spacer()
+                        Text(danceClass.date?.timeString() ?? "")
+                            .foregroundColor(Color("DarkGray"))
+                    }
+                    .font(.system(size: 15))
+                    Spacer()
+                    HStack {
+                        Text(danceClass.instructorName ?? "")
+                            .font(.montserrat(.semibold, size: 16))
+                            .foregroundColor(Constant.shared.isSuspended(classID: danceClass.ID) ? Color("DarkGray") : .white)
+                            .strikethrough(Constant.shared.isSuspended(classID: danceClass.ID))
+                        if danceClass.isPopUp ?? false {
+                            Circle().foregroundColor(Color("Accent")).frame(width: 9, height: 9)
+                        }
+                    }
+                }
+                .padding(15)
+                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.black).frame(width: 119))
+                .frame(width: 119)
+        }
     }
 }
