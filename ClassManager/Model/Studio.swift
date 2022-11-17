@@ -9,9 +9,9 @@ import Foundation
 
 struct Studio: Codable {
     let ID: String
+    let email: String
     let name: String?
     let location: String?
     let notice: Notice?
     let halls: [Hall]?
-    let email: String?
 }
