@@ -19,31 +19,40 @@ struct ClassCalendarView: View {
     let link: String
     let studioID: String
     
+    @State var isMonthly = true
+    @State var toolbarItemImageName = "note.text"
+    
     var body: some View {
         NavigationView {
-            VStack {
-                DatePicker("", selection: $selectedDate, displayedComponents: [.date])
-                    .padding(16)
-                    .datePickerStyle(.graphical)
-                    .accentColor(Color("Del"))
-                    .background(RoundedRectangle(cornerRadius: 13).foregroundColor(Color("Box")))
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 10)
+            ZStack {
+                if isMonthly {
+                    VStack {
+                        DatePicker("", selection: $selectedDate, displayedComponents: [.date])
+                            .padding(16)
+                            .datePickerStyle(.graphical)
+                            .accentColor(Color("Del"))
+                            .background(RoundedRectangle(cornerRadius: 13).foregroundColor(Color("Box")))
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
 
-                ScrollView {
-                    ForEach(classesToday, id: \.self.ID) { danceClass in
-                        NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
-                            ClassInfoBox(danceClass: danceClass)
+                        ScrollView {
+                            ForEach(classesToday, id: \.self.ID) { danceClass in
+                                NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
+                                    ClassInfoBox(danceClass: danceClass)
+                                }
+                            }
                         }
+                        .padding(.horizontal, 24)
+                        .onAppear {
+                            if let classes = Constant.shared.classes {
+                                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+                            }
+                        }
+                        Spacer()
                     }
+                } else {
+                    WeeklyCalendarView(date: $selectedDate, isShowingSheet: $isShowingAddSheet)
                 }
-                .padding(.horizontal, 24)
-                .onAppear {
-                    if Constant.shared.classes != nil {
-                        classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
-                    }
-                }
-                Spacer()
             }
             .toast(message: "클래스가 추가되었습니다", isShowing: $isShowingSaveToast, duration: Toast.short)
             .toast(message: "신청폼 링크가 복사되었습니다", isShowing: $isShowingLinkToast, duration: Toast.short)
@@ -69,6 +78,16 @@ struct ClassCalendarView: View {
                             .padding(.leading, 14)
                     }
                 }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isMonthly.toggle()
+                        toolbarItemImageName = isMonthly ? "note.text" : "calendar"
+                    } label: {
+                        Image(systemName: toolbarItemImageName)
+                            .foregroundColor(.white)
+                    }
+                }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -83,24 +102,23 @@ struct ClassCalendarView: View {
         }
         .accentColor(.white)
         .onAppear {
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .onChange(of: selectedDate) { date in
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .onChange(of: isShowingAddSheet) { _ in
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
         .task {
-            if Constant.shared.classes != nil {
-                classesToday = Constant.shared.classes!.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate)
-                }
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
         }
     }
