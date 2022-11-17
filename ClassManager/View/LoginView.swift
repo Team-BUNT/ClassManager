@@ -39,9 +39,14 @@ struct LoginView: View {
                 LoginTextField(placeHolder: "비밀번호를 입력하세요.", isPassword: true, text: $passwordInput, focused: $typingPassword)
             }
             .font(.system(size: 15))
-            .padding(.bottom, 131)
+            
+            Rectangle()
+                .frame(height: 131)
+                .foregroundColor(Color(.systemBackground))
             
             Button {
+                typingEmail = false
+                typingPassword = false
                 // TODO: 로그인 로직
             } label: {
                 Text("로그인")
@@ -50,12 +55,14 @@ struct LoginView: View {
                     .padding(.vertical, 17)
                     .foregroundColor(.black)
                     .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accent))
-                    .padding(.bottom, 19)
-                    
             }
-
+            .padding(.bottom, 19)
         }
         .padding(.horizontal, 20)
+        .onTapGesture {
+            typingEmail = false
+            typingPassword = false
+        }
     }
 }
 
