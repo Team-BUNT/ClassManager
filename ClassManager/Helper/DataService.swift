@@ -12,6 +12,8 @@ import FirebaseFirestoreSwift
 struct DataService {
     static let shared = DataService()
     
+    private init() {}
+    
     let studioRef = Firestore.firestore().collection("studios")
     let classRef = Firestore.firestore().collection("classes")
     let linkRef = Firestore.firestore().collection("link")
@@ -19,8 +21,8 @@ struct DataService {
     let suspendedRef = Firestore.firestore().collection("suspended")
     let studentRef = Firestore.firestore().collection("student")
     
-    func createStudio(ID: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
-        let studio = Studio(ID: ID, name: name, location: location, notice: notice, halls: halls)
+    func createStudio(ID: String, email: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
+        let studio = Studio(ID: ID, email: email, name: name, location: location, notice: notice, halls: halls)
         do {
             try studioRef.document("\(ID)").setData(from: studio)
         } catch let error {
