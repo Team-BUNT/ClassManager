@@ -16,7 +16,7 @@ struct WeeklyCalendarView: View {
     let classes = Constant.shared.classes
     
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 10) {
             HStack(alignment: .center, spacing: 12) {
                 Text("\(month)월")
                     .font(.montserrat(.semibold, size: 28))
@@ -35,7 +35,7 @@ struct WeeklyCalendarView: View {
                     }
             }
             .font(.system(size: 20))
-            HStack {
+            HStack(alignment: .top) {
                 VStack {
                     ForEach(0..<7, id: \.self) { idx in
                         VStack {
@@ -47,14 +47,23 @@ struct WeeklyCalendarView: View {
                 }
                 .padding(.vertical)
                 ScrollView(.horizontal) {
-                    VStack(alignment: .leading, spacing: 40) {
+                    VStack(alignment: .leading, spacing: 27) {
                         ForEach(0..<7, id: \.self) { idx in
                             HStack {
-                                ForEach(classesOnDay(day: dayOfWeek(weekday: idx)), id: \.self.ID) { danceClass in
-                                    VStack {
-                                        Text(danceClass.title ?? "")
-                                        Text(danceClass.instructorName ?? "")
+                                if let dayClasses = classesOnDay(day: dayOfWeek(weekday: idx)) {
+                                    ForEach(dayClasses, id: \.self.ID) { danceClass in
+                                        NavigationLink(destination: AttendanceView(currentClass: danceClass)) {
+                                            VStack {
+                                                Text(danceClass.title ?? "")
+                                                Text(danceClass.instructorName ?? "")
+                                            }
+                                            .frame(height: 60)
+                                        }
                                     }
+                                } else {
+                                    Rectangle()
+                                        .foregroundColor(.green)
+                                        .frame(width: 60, height: 60)
                                 }
                             }
                         }
