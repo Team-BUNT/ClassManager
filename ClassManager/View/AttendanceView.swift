@@ -69,7 +69,7 @@ struct AttendanceView: View {
         .task {
             do {
                 enrollments = try await DataService.shared.requestEnrollmentsBy(classID: currentClass.ID) ?? []
-                enrollments = enrollments.filter( { $0.paid ?? false } )
+                enrollments = enrollments.filter( { $0.paid ?? false && !($0.isRefunded ?? false) } )
                 sortEnrollments()
                 if attendanceCount() == enrollments.count {
                     isAllChecked = true
