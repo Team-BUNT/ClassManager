@@ -86,13 +86,14 @@ struct LoginTextField: View {
             Group {
                 if isPassword {
                     SecureField(placeHolder, text: $text)
+                        
                 } else {
                     TextField(placeHolder, text: $text)
                 }
             }
+            .textInputAutocapitalization(.never)
             .padding(15)
             .focused(focused)
-            .textInputAutocapitalization(.none)
         }
     }
 }
