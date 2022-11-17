@@ -154,7 +154,7 @@ struct StudentInfoView: View {
     }
     
     var enrollmentListView: some View {
-        VStack(spacing: 38) {
+        VStack(spacing: 52) {
             ForEach(Array(student.enrollments.enumerated()), id: \.offset) { idx, enrollment in
                 VStack(alignment:.leading, spacing: 15) {
                     HStack(spacing: 25) {
@@ -255,7 +255,7 @@ struct StudentInfoView: View {
                             Text("사유")
                                 .foregroundColor(Color("InfoText"))
                                 .padding(.leading, 20)
-                            if reasons.count >= idx {
+                            if reasons.count == student.enrollments.count {
                                 TextField("공백 포함 18자 이내로 입력해 주세요.", text: $reasons[idx])
                                     .onChange(of: reasons[idx]) { _ in
                                         isChanged = true
