@@ -19,8 +19,8 @@ struct DataService {
     let suspendedRef = Firestore.firestore().collection("suspended")
     let studentRef = Firestore.firestore().collection("student")
     
-    func createStudio(ID: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
-        let studio = Studio(ID: ID, name: name, location: location, notice: notice, halls: halls)
+    func createStudio(ID: String, name: String, location: String?, notice: Notice?, halls: [Hall], email: String?) {
+        let studio = Studio(ID: ID, name: name, location: location, notice: notice, halls: halls, email: email)
         do {
             try studioRef.document("\(ID)").setData(from: studio)
         } catch let error {

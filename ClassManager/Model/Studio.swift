@@ -13,4 +13,5 @@ struct Studio: Codable {
     let location: String?
     let notice: Notice?
     let halls: [Hall]?
+    let email: String?
 }
