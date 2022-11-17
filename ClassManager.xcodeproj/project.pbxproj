@@ -17,6 +17,7 @@
 		AB2A427028F6E2D000B314B9 /* EnrollmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2A426F28F6E2D000B314B9 /* EnrollmentListView.swift */; };
 		AB3394B3291503B3001575BB /* SuspendedClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3394B2291503B3001575BB /* SuspendedClasses.swift */; };
 		AB3394B529150471001575BB /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3394B429150471001575BB /* Student.swift */; };
+		AB7C6BCE29260F0B0097CD02 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7C6BCD29260F0B0097CD02 /* LoginView.swift */; };
 		AB904815291A8796004567AA /* Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB904814291A8796004567AA /* Encodable.swift */; };
 		AB904817291AAD4F004567AA /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB904816291AAD4F004567AA /* ContainerView.swift */; };
 		AB97798829195F8500C01549 /* StudentInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB97798729195F8500C01549 /* StudentInfoView.swift */; };
@@ -82,6 +83,7 @@
 		AB2A426F28F6E2D000B314B9 /* EnrollmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollmentListView.swift; sourceTree = "<group>"; };
 		AB3394B2291503B3001575BB /* SuspendedClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendedClasses.swift; sourceTree = "<group>"; };
 		AB3394B429150471001575BB /* Student.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
+		AB7C6BCD29260F0B0097CD02 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		AB904814291A8796004567AA /* Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encodable.swift; sourceTree = "<group>"; };
 		AB904816291AAD4F004567AA /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
 		AB97798729195F8500C01549 /* StudentInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentInfoView.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				AB97798729195F8500C01549 /* StudentInfoView.swift */,
 				AB904816291AAD4F004567AA /* ContainerView.swift */,
 				C76DC6252922A984004E5894 /* LaunchScreenView.swift */,
+				AB7C6BCD29260F0B0097CD02 /* LoginView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				C79E13C028F6B1780010C4BA /* Class.swift in Sources */,
 				C76DC5FC291547F2004E5894 /* Date.swift in Sources */,
 				C79E13CF28F6BC580010C4BA /* Constant.swift in Sources */,
+				AB7C6BCE29260F0B0097CD02 /* LoginView.swift in Sources */,
 				ABDABFE529169CF2001B5256 /* CustomSearchBar.swift in Sources */,
 				C79E13D728F6BCFD0010C4BA /* FontManager.swift in Sources */,
 				ABDABFE729169D8C001B5256 /* PaymentStatusView.swift in Sources */,
