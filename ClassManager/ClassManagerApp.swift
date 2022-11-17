@@ -24,7 +24,7 @@ struct ClassManagerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LaunchScreenView()
+            LoginView()
         }
     }
 }

@@ -10,6 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @State private var emailInput = ""
     @State private var passwordInput = ""
+    @FocusState private var typingEmail: Bool
+    @FocusState private var typingPassword: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -33,8 +35,8 @@ struct LoginView: View {
             .padding(.bottom, 27)
             
             VStack(spacing: 18) {
-                LoginTextField(placeHolder: "이메일을 입력하세요.", isPassword: false, text: $emailInput)
-                LoginTextField(placeHolder: "비밀번호를 입력하세요.", isPassword: true, text: $passwordInput)
+                LoginTextField(placeHolder: "이메일을 입력하세요.", isPassword: false, text: $emailInput, focused: $typingEmail)
+                LoginTextField(placeHolder: "비밀번호를 입력하세요.", isPassword: true, text: $passwordInput, focused: $typingPassword)
             }
             .font(.system(size: 15))
             .padding(.bottom, 131)
@@ -61,18 +63,37 @@ struct LoginTextField: View {
     let placeHolder: String
     let isPassword: Bool
     @Binding var text: String
+    var focused: FocusState<Bool>.Binding {
+        didSet {
+            print(focused.wrappedValue)
+        }
+    }
     
     var body: some View {
-        Group {
-            if isPassword {
-                SecureField(placeHolder, text: $text)
-            } else {
-                TextField(placeHolder, text: $text)
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color("ToastBackground"))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(focused.wrappedValue ? .white : Color("ToastBackground"), lineWidth: 1)
+                        .frame(height: 50)
+                }
+                .frame(height: 50)
+                .onTapGesture {
+                    focused.projectedValue.wrappedValue = true
+                }
+            
+            Group {
+                if isPassword {
+                    SecureField(placeHolder, text: $text)
+                } else {
+                    TextField(placeHolder, text: $text)
+                }
             }
+            .padding(15)
+            .focused(focused)
+            .textInputAutocapitalization(.none)
         }
-        .textInputAutocapitalization(.none)
-        .padding(15)
-        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color("ToastBackground")))
     }
 }
 
