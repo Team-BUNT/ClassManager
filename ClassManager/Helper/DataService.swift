@@ -175,10 +175,12 @@ struct DataService {
         }
     }
     
-    func updatePaid(enrollments: [Enrollment]) {
+    func updateEnrollments(enrollments: [Enrollment]) {
         enrollments.forEach { enrollment in
             enrollmentRef.document("\(enrollment.ID)").updateData([
-                "paid": enrollment.paid ?? false
+                "paid": enrollment.paid ?? false,
+                "isRefunded": enrollment.isRefunded ?? false,
+                "refundReason": enrollment.refundReason
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")

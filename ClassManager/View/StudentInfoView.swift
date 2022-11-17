@@ -139,7 +139,8 @@ struct StudentInfoView: View {
                     .foregroundColor(isChanged ? .black : Color(.label))
                     .onTapGesture {
                         if isChanged {
-                            DataService.shared.updatePaid(enrollments: student.enrollments)
+                            updateRefundReason()
+                            DataService.shared.updateEnrollments(enrollments: student.enrollments)
                             DataService.shared.updateStudentEnrollments(student: student)
                             isChanged = false
                             isShowingSaveToast.toggle()
@@ -226,6 +227,7 @@ struct StudentInfoView: View {
                                 }
                                 .padding(.trailing, 20)
                                 .onTapGesture {
+                                    isChanged = true
                                     if enrollment.isRefunded == nil {
                                         enrollment.isRefunded = false
                                     }
@@ -255,6 +257,9 @@ struct StudentInfoView: View {
                                 .padding(.leading, 20)
                             if reasons.count >= idx {
                                 TextField("공백 포함 18자 이내로 입력해 주세요.", text: $reasons[idx])
+                                    .onChange(of: reasons[idx]) { _ in
+                                        isChanged = true
+                                    }
                             }
                         }
                         .frame(height: 44)
@@ -289,6 +294,14 @@ struct StudentInfoView: View {
         Image(systemName: "square.fill")
             .font(.system(size: 20))
             .foregroundColor(Color("Accent"))
+    }
+    
+    func updateRefundReason() {
+        if student.enrollments.count == reasons.count {
+            for idx in 0..<reasons.count {
+                student.enrollments[idx].refundReason = reasons[idx]
+            }
+        }
     }
 }
 
