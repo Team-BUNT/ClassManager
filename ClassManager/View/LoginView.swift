@@ -82,6 +82,7 @@ struct LoginView: View {
     func login() async {
         do {
             let _ = try await FirebaseAuth.Auth.auth().signIn(withEmail: emailInput, password: passwordInput)
+            studioID = try await DataService.shared.requestStudioBy(email: emailInput)?.ID
         } catch {
             isLoginAlertPresented = true
         }
