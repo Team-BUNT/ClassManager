@@ -12,6 +12,8 @@ import FirebaseFirestoreSwift
 struct DataService {
     static let shared = DataService()
     
+    private init() {}
+    
     let studioRef = Firestore.firestore().collection("studios")
     let classRef = Firestore.firestore().collection("classes")
     let linkRef = Firestore.firestore().collection("link")
@@ -20,7 +22,7 @@ struct DataService {
     let studentRef = Firestore.firestore().collection("student")
     
     func createStudio(ID: String, email: String, name: String, location: String?, notice: Notice?, halls: [Hall]) {
-            let studio = Studio(ID: ID, email: email, name: name, location: location, notice: notice, halls: halls)
+        let studio = Studio(ID: ID, email: email, name: name, location: location, notice: notice, halls: halls)
         do {
             try studioRef.document("\(ID)").setData(from: studio)
         } catch let error {
@@ -43,6 +45,14 @@ struct DataService {
         } catch let error {
             print("Error writing class to Firestore: \(error)")
         }
+    }
+    
+    func requestStudioBy(email: String) async throws -> Studio? {
+        let snapshot = try await studioRef.whereField("email", isEqualTo: email).getDocuments()
+        
+        return try snapshot.documents.compactMap { document in
+            try document.data(as: Studio.self)
+        }.first
     }
     
     func requestStudioBy(studioID: String) async throws -> Studio? {
@@ -175,12 +185,10 @@ struct DataService {
         }
     }
     
-    func updateEnrollments(enrollments: [Enrollment]) {
+    func updatePaid(enrollments: [Enrollment]) {
         enrollments.forEach { enrollment in
             enrollmentRef.document("\(enrollment.ID)").updateData([
-                "paid": enrollment.paid ?? false,
-                "isRefunded": enrollment.isRefunded ?? false,
-                "refundReason": enrollment.refundReason
+                "paid": enrollment.paid ?? false
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
