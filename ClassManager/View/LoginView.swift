@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
     @State private var emailInput = ""
     @State private var passwordInput = ""
+    @State private var isLoginAlertPresented = false
     @FocusState private var typingEmail: Bool
     @FocusState private var typingPassword: Bool
+    @AppStorage("studioID") private var studioID: String?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -48,6 +51,9 @@ struct LoginView: View {
                 typingEmail = false
                 typingPassword = false
                 // TODO: 로그인 로직
+                Task {
+                    await login()
+                }
             } label: {
                 Text("로그인")
                     .font(.system(size: 17, weight: .semibold))
@@ -62,6 +68,22 @@ struct LoginView: View {
         .onTapGesture {
             typingEmail = false
             typingPassword = false
+        }
+        .alert("이메일•비밀번호", isPresented: $isLoginAlertPresented) {
+            Button("OK") {
+                isLoginAlertPresented = false
+            }
+        } message: {
+            Text("존재하지 않는 이메일 또는 비밀번호입니다.\n다시 시도하거나 기술지원팀에 연락하세요.")
+        }
+
+    }
+    
+    func login() async {
+        do {
+            let _ = try await FirebaseAuth.Auth.auth().signIn(withEmail: emailInput, password: passwordInput)
+        } catch {
+            isLoginAlertPresented = true
         }
     }
 }

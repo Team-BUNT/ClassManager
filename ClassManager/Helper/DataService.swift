@@ -47,6 +47,14 @@ struct DataService {
         }
     }
     
+    func requestStudioBy(email: String) async throws -> Studio? {
+        let snapshot = try await studioRef.whereField("email", isEqualTo: email).getDocuments()
+        
+        return try snapshot.documents.compactMap { document in
+            try document.data(as: Studio.self)
+        }.first
+    }
+    
     func requestStudioBy(studioID: String) async throws -> Studio? {
         let document = try await studioRef.document(studioID).getDocument()
         
