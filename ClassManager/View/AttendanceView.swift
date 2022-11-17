@@ -32,7 +32,7 @@ struct AttendanceView: View {
             NavigationLink("", destination: SuspendView(currentClass: currentClass, isShowingToast: $isShowingSuspendToast), isActive: $isNavigationLinkActive)
         }
         
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 classCard
                 studentList
@@ -296,6 +296,7 @@ struct AttendanceView: View {
             }
             .padding(.top, 20)
         }
+        .frame(height: CGFloat(enrollments.count + 1) * 60)
     }
     
     var boxChecked: some View {
