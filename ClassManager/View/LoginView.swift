@@ -16,6 +16,8 @@ struct LoginView: View {
     @FocusState private var typingPassword: Bool
     @AppStorage("studioID") private var studioID: String?
     
+    @Binding var link: String
+    
     var body: some View {
         VStack(spacing: 0) {
             Image("Logo")
@@ -50,7 +52,6 @@ struct LoginView: View {
             Button {
                 typingEmail = false
                 typingPassword = false
-                // TODO: 로그인 로직
                 Task {
                     await login()
                 }
@@ -83,7 +84,11 @@ struct LoginView: View {
         do {
             let _ = try await FirebaseAuth.Auth.auth().signIn(withEmail: emailInput, password: passwordInput)
             studioID = try await DataService.shared.requestStudioBy(email: emailInput)?.ID
+            if let id = studioID {
+                link = await Constant.shared.fetchLink(id: id)
+            }
         } catch {
+            print(error)
             isLoginAlertPresented = true
         }
     }
@@ -130,6 +135,6 @@ struct LoginTextField: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(link: .constant(""))
     }
 }

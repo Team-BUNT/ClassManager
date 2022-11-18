@@ -13,16 +13,20 @@ struct LaunchScreenView: View {
     @State private var opacity = 0.5
     
     @AppStorage("onboarding") var isOnboardingActive: Bool = true
+    @AppStorage("studioID") private var studioID: String?
     
     @State var link = "https://this.is.sample.link"
-    @State var studioID = ""
     
     var body: some View {
         if isActive {
             if isOnboardingActive {
                 OnboardingMain()
             } else {
-                ContainerView(link: self.link, studioID: self.studioID)
+                if let id = studioID {
+                    ContainerView(link: self.link, studioID: id)
+                } else {
+                    LoginView(link: $link)
+                }
             }
         } else {
             Image("Logo")
@@ -35,20 +39,8 @@ struct LaunchScreenView: View {
                     }
                 }
                 .task {
-                    do {
-                        // 임시 테스트 플라이트용 함수
-                        let linkStruct = try await DataService.shared.requestLink()
-                        if linkStruct != nil {
-                            link = linkStruct!.link!
-                            studioID = linkStruct!.studioID!
-                        }
-                        if !studioID.isEmpty {
-                            Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: studioID)
-                            Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: studioID)
-                        }
-                        Constant.shared.suspendedClasses = try await DataService.shared.requestSuspendedClassesBy(studioID: studioID)
-                    } catch {
-                        print(error)
+                    if let id = studioID {
+                        link = await Constant.shared.fetchLink(id: id)
                     }
                 }
         }

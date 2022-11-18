@@ -77,8 +77,8 @@ struct DataService {
         }
     }
     
-    func requestLink() async throws -> Link? {
-        let document = try await linkRef.document("sampleLink").getDocument()
+    func requestLink(studioID: String) async throws -> Link? {
+        let document = try await linkRef.document(studioID).getDocument()
         
         return try? document.data(as: Link.self)
     }
@@ -190,7 +190,7 @@ struct DataService {
             enrollmentRef.document("\(enrollment.ID)").updateData([
                 "paid": enrollment.paid ?? false,
                 "isRefunded": enrollment.isRefunded ?? false,
-                "refundReason": enrollment.refundReason
+                "refundReason": enrollment.refundReason ?? ""
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")

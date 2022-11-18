@@ -15,7 +15,6 @@ struct ClassCalendarView: View {
     @State private var selectedDate = Date()
     @State private var classesToday = [Class]()
     
-    // TODO: 신청폼 링크 실제 데이터로 교체
     let link: String
     let studioID: String
     
@@ -112,6 +111,11 @@ struct ClassCalendarView: View {
             }
         }
         .onChange(of: isShowingAddSheet) { _ in
+            if let classes = Constant.shared.classes {
+                classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
+            }
+        }
+        .onChange(of: Constant.shared.classes?.count) { _ in
             if let classes = Constant.shared.classes {
                 classesToday = classes.filter{ $0.date != nil && Calendar.current.isDate($0.date!, inSameDayAs: selectedDate) }
             }
