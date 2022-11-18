@@ -11,6 +11,7 @@ struct StudentInfoView: View {
     @State private var student: Student
     @State private var isChanged = false
     @State private var isShowingSaveToast = false
+    @State private var reasons = [String]()
         
     init(student: Student) {
         self._student = State(wrappedValue: student)
@@ -46,6 +47,7 @@ struct StudentInfoView: View {
                 
                 for i in 0..<student.enrollments.count {
                     student.enrollments[i].findClass(in: classIDs)
+                    reasons.append(student.enrollments[i].refundReason ?? "")
                 }
                 
                 student.enrollments.sort {
@@ -137,7 +139,8 @@ struct StudentInfoView: View {
                     .foregroundColor(isChanged ? .black : Color(.label))
                     .onTapGesture {
                         if isChanged {
-                            DataService.shared.updatePaid(enrollments: student.enrollments)
+                            updateRefundReason()
+                            DataService.shared.updateEnrollments(enrollments: student.enrollments)
                             DataService.shared.updateStudentEnrollments(student: student)
                             isChanged = false
                             isShowingSaveToast.toggle()
@@ -151,8 +154,8 @@ struct StudentInfoView: View {
     }
     
     var enrollmentListView: some View {
-        VStack(spacing: 38) {
-            ForEach(student.enrollments, id: \.ID) { enrollment in
+        VStack(spacing: 52) {
+            ForEach(Array(student.enrollments.enumerated()), id: \.offset) { idx, enrollment in
                 VStack(alignment:.leading, spacing: 15) {
                     HStack(spacing: 25) {
                         Text("클래스")
@@ -198,12 +201,71 @@ struct StudentInfoView: View {
                                 enrollment.paid?.toggle()
                                 student.enrollments = student.enrollments.map { $0 }
                                 isChanged = true
+                                if enrollment.paid == false {
+                                    enrollment.isRefunded = false
+                                }
                             }
                         }
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal, 20)
                     .background(Color("InfoPayBox"))
+                    
+                    if enrollment.paid ?? false {
+                        ZStack(alignment: .leading) {
+                            HStack {
+                                Text("환불")
+                                    .foregroundColor(Color("InfoText"))
+                                    .padding(.leading, 20)
+                                Spacer()
+                                ZStack {
+                                    if enrollment.isRefunded ?? false {
+                                        boxChecked
+                                    } else {
+                                        boxUnchecked
+                                    }
+                                }
+                                .padding(.trailing, 20)
+                                .onTapGesture {
+                                    isChanged = true
+                                    if enrollment.isRefunded == nil {
+                                        enrollment.isRefunded = false
+                                    }
+                                    enrollment.isRefunded!.toggle()
+                                    if enrollment.isRefunded == false {
+                                        enrollment.refundReason = nil
+                                    }
+                                    student.enrollments = student.enrollments.map { $0 }
+                                }
+                            }
+                            .frame(height: 44)
+                            .background(Rectangle().foregroundColor(Color("InfoPayBox")))
+                            
+                            if enrollment.isRefunded ?? false {
+                                Text("완료")
+                                    .foregroundColor(.white)
+                                    .padding(.leading, 127)
+                            }
+                        }
+                        .padding(.top, -15)
+                    }
+                    
+                    if enrollment.isRefunded ?? false {
+                        HStack(spacing: 80) {
+                            Text("사유")
+                                .foregroundColor(Color("InfoText"))
+                                .padding(.leading, 20)
+                            if reasons.count == student.enrollments.count {
+                                TextField("공백 포함 18자 이내로 입력해 주세요.", text: $reasons[idx])
+                                    .onChange(of: reasons[idx]) { _ in
+                                        isChanged = true
+                                    }
+                            }
+                        }
+                        .frame(height: 44)
+                        .background(Rectangle().foregroundColor(Color("InfoPayBox")))
+                        .padding(.top, -15)
+                    }
                 }
                 .font(.system(size: 15))
             }
@@ -232,6 +294,14 @@ struct StudentInfoView: View {
         Image(systemName: "square.fill")
             .font(.system(size: 20))
             .foregroundColor(Color("Accent"))
+    }
+    
+    func updateRefundReason() {
+        if student.enrollments.count == reasons.count {
+            for idx in 0..<reasons.count {
+                student.enrollments[idx].refundReason = reasons[idx]
+            }
+        }
     }
 }
 

@@ -20,8 +20,10 @@ class Enrollment: Codable {
     var attendance: Bool?
     let info: String?
     var matchedClass: Class? = nil
+    var isRefunded: Bool?
+    var refundReason: String?
     
-    init(ID: String, classID: String?, studioID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil) {
+    init(ID: String, classID: String?, studioID: String?, userName: String?, phoneNumber: String?, enrolledDate: Date?, paid: Bool?, paymentType: String? = nil, attendance: Bool? = nil, info: String? = nil, isRefunded: Bool?, refundReason: String?) {
         self.ID = ID
         self.classID = classID
         self.studioID = studioID
@@ -32,6 +34,8 @@ class Enrollment: Codable {
         self.paymentType = paymentType
         self.attendance = attendance
         self.info = info
+        self.isRefunded = isRefunded
+        self.refundReason = refundReason
     }
     
     init(documentSnapShot: DocumentSnapshot) {
