@@ -190,7 +190,7 @@ struct DataService {
             enrollmentRef.document("\(enrollment.ID)").updateData([
                 "paid": enrollment.paid ?? false,
                 "isRefunded": enrollment.isRefunded ?? false,
-                "refundReason": enrollment.refundReason
+                "refundReason": enrollment.refundReason ?? ""
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
