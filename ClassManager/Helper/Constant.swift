@@ -51,8 +51,8 @@ class Constant {
             Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: id)
             Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: id)
             Constant.shared.suspendedClasses = try await DataService.shared.requestSuspendedClassesBy(studioID: id)
-            if linkStruct != nil {
-                return linkStruct!.link!
+            if let linkStruct, let link = linkStruct.link {
+                return link
             }
         } catch {
             print(error)
