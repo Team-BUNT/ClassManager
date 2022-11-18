@@ -77,8 +77,8 @@ struct DataService {
         }
     }
     
-    func requestLink() async throws -> Link? {
-        let document = try await linkRef.document("sampleLink").getDocument()
+    func requestLink(studioID: String) async throws -> Link? {
+        let document = try await linkRef.document(studioID).getDocument()
         
         return try? document.data(as: Link.self)
     }

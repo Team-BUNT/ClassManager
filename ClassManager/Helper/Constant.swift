@@ -44,4 +44,19 @@ class Constant {
         }
         return false
     }
+    
+    func fetchLink(id: String) async -> String {
+        do {
+            let linkStruct = try await DataService.shared.requestLink(studioID: id)
+            Constant.shared.studio = try await DataService.shared.requestStudioBy(studioID: id)
+            Constant.shared.classes = try await DataService.shared.requestAllClassesBy(studioID: id)
+            Constant.shared.suspendedClasses = try await DataService.shared.requestSuspendedClassesBy(studioID: id)
+            if linkStruct != nil {
+                return linkStruct!.link!
+            }
+        } catch {
+            print(error)
+        }
+        return ""
+    }
 }
