@@ -255,11 +255,14 @@ struct StudentInfoView: View {
                             Text("사유")
                                 .foregroundColor(Color("InfoText"))
                                 .padding(.leading, 20)
-                            if reasons.count == student.enrollments.count {
-                                TextField("공백 포함 18자 이내로 입력해 주세요.", text: $reasons[idx])
-                                    .onChange(of: reasons[idx]) { _ in
-                                        isChanged = true
-                                    }
+                            ZStack(alignment: .bottom) {
+                                if reasons.count == student.enrollments.count {
+                                    TextField("공백 포함 18자 이내로 입력해 주세요.", text: $reasons[idx])
+                                        .limitText($reasons[idx], to: 18)
+                                        .onChange(of: reasons[idx]) { _ in
+                                            isChanged = true
+                                        }
+                                }
                             }
                         }
                         .frame(height: 44)
