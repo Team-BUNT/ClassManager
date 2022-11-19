@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFunctions
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
@@ -190,7 +191,7 @@ struct DataService {
             enrollmentRef.document("\(enrollment.ID)").updateData([
                 "paid": enrollment.paid ?? false,
                 "isRefunded": enrollment.isRefunded ?? false,
-                "refundReason": enrollment.refundReason
+                "refundReason": enrollment.refundReason ?? ""
             ]) { err in
                 if let err = err {
                     print("Error updating document: \(err)")
@@ -213,6 +214,41 @@ struct DataService {
             print(error)
         }
     }
+    
+    func requestSuspendedAlimTalk(to: String, disableSms: Bool, from: String, studioName: String, studentName: String, instructorName: String, genre: String, time: String, suspended: String, studioPhoneNumber: String) {
+        
+        let data : [String : Any] = [
+            "to" : to,
+            "disableSms" : disableSms,
+            "from" : from,
+            "studioName" : studioName,
+            "studentName" : studentName,
+            "instructorName" : instructorName,
+            "genre" : genre,
+            "time" : time,
+            "suspended" : suspended,
+            "studioPhoneNumber" : studioPhoneNumber,
+        ]
+        
+        lazy var functions = Functions.functions(region: "us-central1")
+        
+        functions.httpsCallable("sendSolapiRequest").call(data) { (result, error) in
+            
+            if let error = error as NSError? {
+                if error.domain == FunctionsErrorDomain {
+                    let code = FunctionsErrorCode(rawValue: error.code)
+                    let message = error.localizedDescription
+                    print(code?.rawValue ?? -1)
+                    print(message)
+                }
+            }
+            
+            if let res = result {
+                let resdic = res.data as? [String:Any]
+                print(resdic?["logger"] ?? "")
+            }
+        }
+    }
 }
 
 extension DataService {
@@ -220,5 +256,27 @@ extension DataService {
         static let notice = Notice(imageURL: "dummyimageURL", description: "sampledescription", bankAccount: nil)
         static let halls = [Hall(name: "hall A", capacity: 20), Hall(name: "hall B", capacity: 40)]
         static let hall = Hall(name: "hall A", capacity: 20)
+    }
+}
+
+extension DataService {
+    enum StudioID: String {
+        case BonafideSample
+        case MovidicSample
+        case NewFlareSample
+        case BuntStudioSample
+        
+        func getStudioName() -> String {
+            switch self {
+            case .BonafideSample:
+                return "보나파이드 스튜디오"
+            case .MovidicSample:
+                return "모비딕 스튜디오"
+            case .NewFlareSample:
+                return "뉴플레어 댄스학원"
+            case .BuntStudioSample:
+                return "번트 스튜디오"
+            }
+        }
     }
 }
