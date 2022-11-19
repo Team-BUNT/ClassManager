@@ -12,6 +12,8 @@ struct StudentInfoView: View {
     @State private var isChanged = false
     @State private var isShowingSaveToast = false
     @State private var reasons = [String]()
+    
+    @FocusState private var focusField: Int?
         
     init(student: Student) {
         self._student = State(wrappedValue: student)
@@ -256,8 +258,15 @@ struct StudentInfoView: View {
                                 .foregroundColor(Color("InfoText"))
                                 .padding(.leading, 20)
                             ZStack(alignment: .bottom) {
+                                if focusField == idx {
+                                    Rectangle()
+                                        .foregroundColor(Color("DarkGray"))
+                                        .frame(height: 1)
+                                        .padding(.trailing, 20)
+                                }
                                 if reasons.count == student.enrollments.count {
                                     TextField("공백 포함 18자 이내로 입력해 주세요.", text: $reasons[idx])
+                                        .focused($focusField, equals: idx)
                                         .limitText($reasons[idx], to: 18)
                                         .onChange(of: reasons[idx]) { _ in
                                             isChanged = true
