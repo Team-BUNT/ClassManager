@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SuspendView: View {
     let currentClass: Class
+    let enrollments: [Enrollment]
     
     @Environment(\.presentationMode) private var presentationMode
     
@@ -17,7 +18,7 @@ struct SuspendView: View {
     @State var selectedReason = ""
     @State var selectedIndex: Int?
     
-    @State var otherReason = ""
+    @State var suspendedReason = ""
     
     let reasons = ["건강 이슈", "외부 일정", "개인 사정", "스튜디오 사정", "기타"]
     
@@ -42,6 +43,7 @@ struct SuspendView: View {
                 }
                 .onTapGesture {
                     selectedIndex = index
+                    suspendedReason = reason
                 }
             }
             if selectedIndex == 4 {
@@ -49,19 +51,19 @@ struct SuspendView: View {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(height: 106)
                         .foregroundColor(Color("Box"))
-                    if otherReason.isEmpty {
+                    if suspendedReason.isEmpty {
                         Text("수강생에게 전달될 휴강 사유를 직접 입력해주세요.")
                             .font(.system(size: 15, weight: .medium))
                             .foregroundColor(Color("DarkGray"))
                             .padding(12)
                     }
                     if #available(iOS 16.0, *) {
-                        TextEditor(text: $otherReason)
+                        TextEditor(text: $suspendedReason)
                             .scrollContentBackground(.hidden)
                             .padding(.leading, 6)
                             .padding(.top, 1)
                     } else {
-                        TextEditor(text: $otherReason)
+                        TextEditor(text: $suspendedReason)
                             .padding(.leading, 6)
                             .padding(.top, 1)
                     }
@@ -89,14 +91,38 @@ struct SuspendView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if selectedIndex != nil {
-                        Task {
-                            await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: currentClass.studioID ?? "")
+                    guard let instructorName = currentClass.instructorName,
+                          let date = currentClass.date,
+                          let studioID = currentClass.studioID,
+                          let durationMinute = currentClass.durationMinute,
+                          let title = currentClass.title,
+                          let _ = selectedIndex else { return }
+                        
+                    Task {
+                        await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: studioID)
+
+                        for enrollment in enrollments {
+                            guard let studioName = DataService.StudioName(rawValue: studioID),
+                                  let phoneNumber = enrollment.phoneNumber,
+                                  let userName = enrollment.userName else { return }
+                            
+                             DataService.shared.requestSuspendedAlimTalk(
+                                to: phoneNumber,
+                                disableSms: true,
+                                from: "01024405830",
+                                studioName: studioName.getStudioName(),
+                                studentName: userName,
+                                instructorName: instructorName,
+                                genre: title,
+                                time: date.timeRangeString(interval: durationMinute),
+                                suspended: suspendedReason,
+                                studioPhoneNumber: studioName.getStudioPhoneNumber()
+                             )
                         }
-                        // TODO: Kakaotalk messaging
-                        isShowingToast.toggle()
-                        presentationMode.wrappedValue.dismiss()
                     }
+                    isShowingToast.toggle()
+                    presentationMode.wrappedValue.dismiss()
+                    
                 } label: {
                     Text("완료")
                         .font(.system(size: 15, weight: .semibold))

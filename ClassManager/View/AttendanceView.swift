@@ -29,7 +29,7 @@ struct AttendanceView: View {
     
     var body: some View {
         if isNavigationLinkActive {
-            NavigationLink("", destination: SuspendView(currentClass: currentClass, isShowingToast: $isShowingSuspendToast), isActive: $isNavigationLinkActive)
+            NavigationLink("", destination: SuspendView(currentClass: currentClass, enrollments: enrollments, isShowingToast: $isShowingSuspendToast), isActive: $isNavigationLinkActive)
         }
         
         ScrollView(showsIndicators: false) {
