@@ -116,7 +116,7 @@ struct SuspendView: View {
                                 genre: title,
                                 time: date.timeRangeString(interval: durationMinute),
                                 suspended: suspendedReason,
-                                studioPhoneNumber: "1577-1577"
+                                studioPhoneNumber: studioName.getStudioPhoneNumber()
                              )
                         }
                     }

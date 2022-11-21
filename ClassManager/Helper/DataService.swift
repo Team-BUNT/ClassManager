@@ -278,5 +278,18 @@ extension DataService {
                 return "번트 스튜디오"
             }
         }
+        
+        func getStudioPhoneNumber() -> String {
+            switch self {
+            case .BonafideSample:
+                return "010-4375-0530"
+            case .MovidicSample:
+                return "010-8566-4646 / 070-7499-1955"
+            case .NewFlareSample:
+                return "010-6504-6603"
+            case .BuntStudioSample:
+                return "010-2440-5830"
+            }
+        }
     }
 }
