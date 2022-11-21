@@ -21,6 +21,7 @@ struct Student: Codable {
         let studentID: String?
         let isFreePass: Bool?
         let expiredDate: Date?
+        let classID: String?
     }
     
     init(from decoder: Decoder) throws {
