@@ -260,7 +260,7 @@ extension DataService {
 }
 
 extension DataService {
-    enum StudioID: String {
+    enum StudioName: String {
         case BonafideSample
         case MovidicSample
         case NewFlareSample
