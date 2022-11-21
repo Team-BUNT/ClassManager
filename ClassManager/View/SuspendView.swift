@@ -91,28 +91,38 @@ struct SuspendView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if selectedIndex != nil {
-                        Task {
-                            await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: currentClass.studioID ?? "")
+                    guard let instructorName = currentClass.instructorName,
+                          let date = currentClass.date,
+                          let studioID = currentClass.studioID,
+                          let durationMinute = currentClass.durationMinute,
+                          let title = currentClass.title,
+                          let _ = selectedIndex else { return }
+                        
+                    Task {
+                        await DataService.shared.updateSuspendedClasses(classID: currentClass.ID, studioID: studioID)
 
-                            for enrollment in enrollments {
-                                 DataService.shared.requestSuspendedAlimTalk(
-                                    to: enrollment.phoneNumber!,
-                                    disableSms: true,
-                                    from: "01024405830",
-                                    studioName: DataService.StudioID(rawValue: currentClass.studioID!)!.getStudioName(),
-                                    studentName: enrollment.userName!,
-                                    instructorName: currentClass.instructorName!,
-                                    genre: currentClass.title!,
-                                    time: currentClass.date?.timeRangeString(interval: currentClass.durationMinute ?? 0) ?? "",
-                                    suspended: suspendedReason,
-                                    studioPhoneNumber: "1577-1577"
-                                 )
-                            }
+                        for enrollment in enrollments {
+                            guard let studioName = DataService.StudioName(rawValue: studioID),
+                                  let phoneNumber = enrollment.phoneNumber,
+                                  let userName = enrollment.userName else { return }
+                            
+                             DataService.shared.requestSuspendedAlimTalk(
+                                to: phoneNumber,
+                                disableSms: true,
+                                from: "01024405830",
+                                studioName: studioName.getStudioName(),
+                                studentName: userName,
+                                instructorName: instructorName,
+                                genre: title,
+                                time: date.timeRangeString(interval: durationMinute),
+                                suspended: suspendedReason,
+                                studioPhoneNumber: "1577-1577"
+                             )
                         }
-                        isShowingToast.toggle()
-                        presentationMode.wrappedValue.dismiss()
                     }
+                    isShowingToast.toggle()
+                    presentationMode.wrappedValue.dismiss()
+                    
                 } label: {
                     Text("완료")
                         .font(.system(size: 15, weight: .semibold))
