@@ -186,6 +186,12 @@ struct DataService {
         }
     }
     
+    func updateEnrollment(enrollment: Enrollment) {
+        enrollmentRef.document(enrollment.ID).updateData([
+            "isRefunded": enrollment.isRefunded ?? false
+        ])
+    }
+    
     func updateEnrollments(enrollments: [Enrollment]) {
         enrollments.forEach { enrollment in
             enrollmentRef.document("\(enrollment.ID)").updateData([
@@ -212,6 +218,16 @@ struct DataService {
             }
         } catch {
             print(error)
+        }
+    }
+    
+    func updateStudentCoupons(student: Student, coupons: [Coupon]) {
+        studentRef.document("\(student.ID)").updateData([
+            "coupons": coupons
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            }
         }
     }
     

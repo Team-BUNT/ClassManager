@@ -11,6 +11,8 @@ struct SuspendView: View {
     let currentClass: Class
     let enrollments: [Enrollment]
     
+    @State var students = [Student]()
+    
     @Environment(\.presentationMode) private var presentationMode
     
     @Binding var isShowingToast: Bool
@@ -76,6 +78,13 @@ struct SuspendView: View {
         .onAppear {
             UITextView.appearance().backgroundColor = .clear
         }
+        .task {
+            do {
+                students = try await DataService.shared.requestAllStudents(of: currentClass.studioID ?? "") ?? [Student]()
+                students = students.filter({ $0.coupons.contains(where: { $0.classID == currentClass.ID }) })
+            } catch {
+            }
+        }
         .navigationBarBackButtonHidden(true)
         .navigationTitle("휴강 사유")
         .toolbar {
@@ -120,6 +129,7 @@ struct SuspendView: View {
                              )
                         }
                     }
+                    refundCoupons()
                     isShowingToast.toggle()
                     presentationMode.wrappedValue.dismiss()
                     
@@ -140,5 +150,37 @@ struct SuspendView: View {
     var unselected: some View {
         Image(systemName: "circle")
             .foregroundColor(Color("Radio"))
+    }
+    
+    func refundCoupons() {
+        // update coupon
+        for student in students {
+            for coupon in student.coupons {
+                if coupon.classID == currentClass.ID {
+                    coupon.classID = nil
+                    DataService.shared.updateStudentCoupons(student: student, coupons: student.coupons)
+                }
+            }
+        }
+        
+        // update enrollment
+        for enrollment in enrollments {
+            if enrollment.paymentType == "쿠폰 결제" || enrollment.paymentType == "쿠폰 사용" {
+                enrollment.isRefunded = true
+                
+                // update enrollment
+                DataService.shared.updateEnrollment(enrollment: enrollment)
+                
+                // update enrollments in student
+                if let student = students.filter({ $0.enrollments.contains(where: { $0.ID == enrollment.ID }) }).first {
+                    for enrolment in student.enrollments {
+                        if enrolment.classID == currentClass.ID {
+                            enrolment.isRefunded = true
+                            DataService.shared.updateStudentEnrollments(student: student)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
