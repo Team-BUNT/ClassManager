@@ -37,6 +37,7 @@
 		C0552C5428F6965A005D0E67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0552C5328F6965A005D0E67 /* GoogleService-Info.plist */; };
 		C701B4BB28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */; };
 		C701B4BD28F8037200C94DE3 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = C701B4BC28F8037200C94DE3 /* Link.swift */; };
+		C7355589292CA1FC008E30F9 /* Coupon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7355588292CA1FC008E30F9 /* Coupon.swift */; };
 		C76DC5FA291500DC004E5894 /* AttendanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5F9291500DC004E5894 /* AttendanceView.swift */; };
 		C76DC5FC291547F2004E5894 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5FB291547F2004E5894 /* Date.swift */; };
 		C76DC5FE29158793004E5894 /* SuspendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DC5FD29158793004E5894 /* SuspendView.swift */; };
@@ -107,6 +108,7 @@
 		C0552C5A28F69973005D0E67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C701B4BA28F7EC4500C94DE3 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		C701B4BC28F8037200C94DE3 /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
+		C7355588292CA1FC008E30F9 /* Coupon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coupon.swift; sourceTree = "<group>"; };
 		C76DC5F9291500DC004E5894 /* AttendanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceView.swift; sourceTree = "<group>"; };
 		C76DC5FB291547F2004E5894 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		C76DC5FD29158793004E5894 /* SuspendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendView.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				C701B4BC28F8037200C94DE3 /* Link.swift */,
 				AB3394B2291503B3001575BB /* SuspendedClasses.swift */,
 				AB3394B429150471001575BB /* Student.swift */,
+				C7355588292CA1FC008E30F9 /* Coupon.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -460,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				378D4E1228F7148B0094F277 /* OnboardingSecond.swift in Sources */,
+				C7355589292CA1FC008E30F9 /* Coupon.swift in Sources */,
 				C76DC5FE29158793004E5894 /* SuspendView.swift in Sources */,
 				C0552C2928F69541005D0E67 /* ClassManagerApp.swift in Sources */,
 				378D4E1528F714990094F277 /* OnboardingMain.swift in Sources */,

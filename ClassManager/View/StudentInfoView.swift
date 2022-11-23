@@ -107,7 +107,7 @@ struct StudentInfoView: View {
         }
     }
     
-    func couponView(couponGroup: [Student.Coupon]) -> some View {
+    func couponView(couponGroup: [Coupon]) -> some View {
         let expiredDateString = (couponGroup[0].expiredDate ?? Date()).formattedString(format: "yyyy.MM.dd")
         let dateGap = (couponGroup[0].expiredDate ?? Date()).dateGap(from: Date())
         

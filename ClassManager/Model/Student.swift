@@ -14,15 +14,7 @@ struct Student: Codable {
     let subPhoneNumber: String?
     let name: String?
     var enrollments: [Enrollment]
-    let coupons: [Coupon]
-    
-    struct Coupon: Codable, Equatable {
-        let studioID: String?
-        let studentID: String?
-        let isFreePass: Bool?
-        let expiredDate: Date?
-        let classID: String?
-    }
+    var coupons: [Coupon]
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -32,7 +24,7 @@ struct Student: Codable {
         self.subPhoneNumber = try container.decodeIfPresent(String.self, forKey: .subPhoneNumber)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.enrollments = try container.decode([Enrollment].self, forKey: .enrollments)
-        self.coupons = try container.decode([Student.Coupon].self, forKey: .coupons)
+        self.coupons = try container.decode([Coupon].self, forKey: .coupons)
     }
     
     init(ID: String, studioID: String?, phoneNumber: String?, subPhoneNumber: String?, name: String?, enrollments: [Enrollment]?, coupons: [Coupon]?) {
