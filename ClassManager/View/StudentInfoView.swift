@@ -90,16 +90,14 @@ struct StudentInfoView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 14) {
                     Group {
-                        if student.coupons.isEmpty {
+                        if student.availableCoupons.isEmpty {
                             Text("구매한 쿠폰이 없습니다.")
                                 .font(.system(size: 15))
                                 .foregroundColor(Color("InfoText"))
                                 .frame(height: 140, alignment: .top)
                         } else {
                             ForEach(student.groupedCoupons, id: \.[0].expiredDate) { group in
-                                if group[0].expiredDate != nil && group[0].expiredDate!.dateGap(from: Date()) >= 0 {
-                                    couponView(couponGroup: group)
-                                }
+                                couponView(couponGroup: group)
                             }
                         }
                     }

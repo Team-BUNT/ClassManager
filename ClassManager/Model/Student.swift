@@ -48,18 +48,31 @@ struct Student: Codable {
         return true
     }
     
+    // MARK: 기한이 지나지 않고 클래스 신청에 사용되지 않은 coupon들을 리턴
+    var availableCoupons: [Coupon] {
+        coupons
+            .filter({
+                guard let date = $0.expiredDate, date.dateGap(from: .now) >= 0 else {
+                    return false
+                }
+                
+                return $0.classID == nil
+            })
+            .sorted(by: {
+                if $0.expiredDate != $1.expiredDate {
+                    return $0.expiredDate ?? Date() < $1.expiredDate ?? Date()
+                }
+                
+                return !($0.isFreePass ?? false) && ($1.isFreePass ?? false)
+            })
+    }
+    
     // MARK: coupon을 날짜와 프리패스 여부가 같은 것끼리 grouping함
     var groupedCoupons: [[Coupon]] {
         var grouped = [[Coupon]]()
         var temp = [Coupon]()
         
-        for coupon in coupons.sorted(by: {
-            if $0.expiredDate != $1.expiredDate {
-                return $0.expiredDate ?? Date() < $1.expiredDate ?? Date()
-            }
-            
-            return !($0.isFreePass ?? false) && ($1.isFreePass ?? false)
-        }) {
+        for coupon in availableCoupons {
             if temp.isEmpty ||
                 (temp.last!.expiredDate?.formattedString(format: "yyyy.MM.dd") == coupon.expiredDate?.formattedString(format: "yyyy.MM.dd") &&
                  temp.last!.isFreePass == coupon.isFreePass) {
