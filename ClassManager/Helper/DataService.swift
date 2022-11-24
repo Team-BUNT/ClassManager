@@ -222,12 +222,16 @@ struct DataService {
     }
     
     func updateStudentCoupons(student: Student, coupons: [Coupon]) {
-        studentRef.document("\(student.ID)").updateData([
-            "coupons": coupons
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
+        do {
+            studentRef.document("\(student.ID)").updateData([
+                "coupons": try coupons.encode()
+            ]) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                }
             }
+        } catch {
+            print(error)
         }
     }
     
