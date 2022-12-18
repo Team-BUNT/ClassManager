@@ -144,6 +144,32 @@ struct StudentInfoView: View {
                             DataService.shared.updateStudentEnrollments(student: student)
                             isChanged = false
                             isShowingSaveToast.toggle()
+                            
+                            if student.enrollments.isEmpty {
+                                return
+                            }
+                            
+                            for i in 0..<student.enrollments.count {
+                                // 환불 처리되는 enrollments에 대해서만 coupon 정보를 수정
+                                if !(student.enrollments[i].isRefunded ?? false) {
+                                    continue
+                                }
+                                                                
+                                for j in 0..<student.coupons.count {
+                                    // 저장 버튼을 누른 시점에서만 쿠폰의 classID를 nil로 만들어서 회복시킴
+                                    // enrollment에서 사용한 쿠폰을 찾아서 classID 값을 nil로 바꿈
+                                    if student.coupons[j].classID != student.enrollments[i].classID {
+                                        continue
+                                    }
+                                    
+                                    student.coupons[j].classID = nil
+                                    break
+                                }
+                            }
+                            
+                            // 저장 버튼을 누를 때에만 쿠폰 정보를 업데이트함
+                            DataService.shared.updateStudentCoupons(student: student, coupons: student.coupons)
+                            student.coupons = student.coupons.map { $0 }
                         }
                     }
             }
@@ -227,6 +253,11 @@ struct StudentInfoView: View {
                                 }
                                 .padding(.trailing, 20)
                                 .onTapGesture {
+                                    // firebase에서도 환불 상태인 경우 환불 취소를 못하게 함
+                                    if enrollment.isRefundedInServer(coupons: student.coupons) {
+                                        return
+                                    }
+                                    
                                     isChanged = true
                                     if enrollment.isRefunded == nil {
                                         enrollment.isRefunded = false

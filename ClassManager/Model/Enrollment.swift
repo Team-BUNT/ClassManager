@@ -54,4 +54,8 @@ class Enrollment: Codable {
     func findClass(in classes: [Class]) {
         matchedClass = classes.filter { $0.ID == self.classID }.first
     }
+    
+    func isRefundedInServer(coupons: [Coupon]) -> Bool {
+        coupons.filter { $0.classID == self.classID }.isEmpty
+    }
 }
